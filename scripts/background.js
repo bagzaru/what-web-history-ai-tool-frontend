@@ -15,26 +15,45 @@ const frame = {
     pageData: ""
 }
 
-//
-function pushToLocalHistory({ title, url, innerText, ...others }) {
-    chrome.storage.local.get(['localHistoryDB'], (result) => {
-        let currentArray = result.localHistoryDB || [];
+let localHistoryData = [];
+let tabIdHistoryMap = {};      //
 
-        let temp = { ...frame };
-        temp.visitTime = new Date();
-        temp.title = title;
-        temp.url = url;
-        temp.innerText = innerText;
-        temp.timer = 0;
+async function loadLocalHistoryDB() {
+    const key = 'localHistoryDB';
 
-        currentArray.push(temp);
-
-        chrome.storage.local.set({ localHistoryDB: currentArray }, () => {
-            //console.log("배열에 저장 완료");
+    //load하여 localHistoryData 배열에 저장.
+    localHistoryData = await new Promise((resolve, reject) => {
+        chrome.storage.local.get([key], (result) => {
+            if (chrome.runtime.lastError) {
+                return reject(chrome.runtime.lastError);
+            }
+            resolve(result[key]);
         })
-        console.log("WHAT Ext: local storage: " + result);
-    })
+    });
 }
+
+function pushToLocalHistory({ title, url, innerText, ...others }) {
+
+    let temp = { ...frame };
+    temp.visitTime = new Date().getTime();
+    temp.title = title;
+    temp.url = url;
+    temp.innerText = innerText;
+    temp.timer = 0;
+
+    //현재 context에 push
+    localHistoryData.push(temp);
+
+    //context의 값을 데이터에도 갱신
+    chrome.storage.local.set({ localHistoryDB: localHistoryData }, () => { });
+
+    //TODO: 서버에 전송
+
+    //TODO: 타이머 적용
+}
+
+//데이터 로드
+loadLocalHistoryDB();
 
 //content, popup 등에서 전송된 Message 값 처리
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -50,17 +69,3 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         return false;
     }
 });
-
-
-
-
-//이전 코드
-//Update가 완료되면 실행된다.
-// chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-//     if (changeInfo.status == 'complete' && /^https?:\/\//.test(tab.url)) {
-//         chrome.scripting.executeScript({
-//             target: { tabId: tabId },
-//             func: getInnerText
-//         });
-//     }
-// });
