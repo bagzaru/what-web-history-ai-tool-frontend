@@ -7,7 +7,7 @@
 //  - timer check 
 
 //localHistoryDB에 저장할 것들
-const frame = {
+const historyFrame = {
     visitTime: "",
     title: "",
     url: "",
@@ -32,24 +32,8 @@ async function loadLocalHistoryDB() {
     });
 }
 
-function pushToLocalHistory({ title, url, innerText, ...others }) {
-
-    let temp = { ...frame };
-    temp.visitTime = new Date().getTime();
-    temp.title = title;
-    temp.url = url;
-    temp.innerText = innerText;
-    temp.timer = 0;
-
-    //현재 context에 push
-    localHistoryData.push(temp);
-
-    //context의 값을 데이터에도 갱신
-    chrome.storage.local.set({ localHistoryDB: localHistoryData }, () => { });
-
-    //TODO: 서버에 전송
-
-    //TODO: 타이머 적용
+//localHistory 데이터를 갱신한다.
+function pushToLocalHistory(tabId, { title, url, innerText, ...others }) {
 }
 
 //데이터 로드
@@ -59,10 +43,36 @@ loadLocalHistoryDB();
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     //content.js에서 INNERTEXT값이 전송되었다면, localHistoryDB를 update
     if (message.action === "SEND_HTML_INNERTEXT") {
-        pushToLocalHistory(message.data);
-        sendResponse({ k: "good" });
+        let createdHistory = { ...historyFrame };
+        createdHistory.visitTime = (new Date()).getTime();
+        createdHistory.title = message.data.title;
+        createdHistory.url = message.data.url;
+        createdHistory.pageData = message.data.innerText;
+        createdHistory.timeOnPage = 0;
+
+        //현재 context에 push
+        localHistoryData.push(createdHistory);
+
+        //context의 값을 데이터에도 갱신
+        chrome.storage.local.set({ localHistoryDB: localHistoryData }, () => { });
+
+        //tabId와 set의 id를 연결
+        tabIdHistoryMap[sender.tab.id.toString()] = localHistoryData.length - 1;
+
+        //TODO: 서버에 전송
+
+        sendResponse({ log: "good", data: createdHistory });
 
         return true;
+    }
+    else if (message.action === "UPDATE_TIMER") {
+        //타이머 값 업데이트
+        const i = tabIdHistoryMap[sender.tabId.toString()];
+        localHistoryData[i].timeOnPage = message.data;
+        //context의 값을 데이터에도 갱신
+        chrome.storage.local.set({ localHistoryDB: localHistoryData }, () => { });
+
+        sendResponse({ log: "good", data: localHistoryData[i] });
     }
     else {
         sendResponse({ k: message.action });
