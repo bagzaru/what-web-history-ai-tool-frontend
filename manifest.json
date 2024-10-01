@@ -7,7 +7,7 @@
       "256": "icon.png"
     },
     "background": {
-      "service_worker": "scripts/background.js",
+      "service_worker": "scripts/service_worker.js",
       "type": "module"
     },
     "action": {
