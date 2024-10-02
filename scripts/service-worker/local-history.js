@@ -23,3 +23,5 @@ async function loadLocalHistoryDB() {
 
     return localHistoryData;
 }
+
+export { historyFrame };

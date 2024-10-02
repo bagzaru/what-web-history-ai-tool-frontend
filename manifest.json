@@ -7,7 +7,7 @@
       "256": "icon.png"
     },
     "background": {
-      "service_worker": "scripts/service_worker.js",
+      "service_worker": "scripts/service-worker.js",
       "type": "module"
     },
     "action": {
@@ -20,7 +20,8 @@
       "tabs",
       "scripting",
       "notifications",
-      "storage"
+      "storage",
+      "webNavigation"
     ],
 
     "content_scripts":[
