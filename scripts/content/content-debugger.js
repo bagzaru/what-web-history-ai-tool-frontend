@@ -7,3 +7,5 @@ function debugMessageHandler(message, sender, sendResponse) {
     }
     sendResponse({ result: "undefined Message" });
 }
+
+export { debugMessageHandler };

@@ -1,4 +1,4 @@
-export const MessageActions = {
+const MessageActions = {
     LOG: "LOG"
 };
 
