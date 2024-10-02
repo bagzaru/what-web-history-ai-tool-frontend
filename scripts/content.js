@@ -10,7 +10,9 @@ function debugMessageHandler(message, sender, sendResponse) {
         console.log("msg from background: " + message.data);
         sendResponse({ result: "good" });
     }
-    sendResponse({ result: "undefined Message" });
+    else {
+        sendResponse({ result: "undefined Message" });
+    }
 }
 
 //페이지 체류 시간

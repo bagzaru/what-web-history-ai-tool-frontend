@@ -1,6 +1,4 @@
-const MessageActions = {
-    LOG: "LOG"
-};
+import { MessageActions } from "../content/content-debugger.js";
 
 
 function consoleLogOnCurrentTab(text) {

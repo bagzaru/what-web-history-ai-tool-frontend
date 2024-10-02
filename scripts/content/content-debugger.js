@@ -1,4 +1,7 @@
-import { MessageActions } from "../service-worker/console-logger";
+const MessageActions = {
+    LOG: "LOG"
+};
+
 
 function debugMessageHandler(message, sender, sendResponse) {
     if (message.action === MessageActions.LOG) {
@@ -8,4 +11,4 @@ function debugMessageHandler(message, sender, sendResponse) {
     sendResponse({ result: "undefined Message" });
 }
 
-export { debugMessageHandler };
+export { debugMessageHandler, MessageActions };
