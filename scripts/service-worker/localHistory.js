@@ -3,8 +3,18 @@ const historyFrame = {
     visitTime: "",
     title: "",
     url: "",
-    timeOnPage: "",
+    spentTime: "",
     pageData: ""
+}
+
+function createHistoryBody(visitTime, title, url, spentTime, pageData) {
+    return {
+        visitTime: visitTime,
+        title: title,
+        url: url,
+        spentTime: spentTime,
+        pageData: pageData
+    };
 }
 
 async function loadLocalHistoryDB() {
@@ -24,4 +34,4 @@ async function loadLocalHistoryDB() {
     return localHistoryData;
 }
 
-export { historyFrame };
+export { historyFrame, createHistoryBody };

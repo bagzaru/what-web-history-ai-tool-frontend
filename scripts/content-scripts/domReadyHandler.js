@@ -4,14 +4,14 @@ console.log("domReadyHandler: document ready? " + document.readyState);
 function onDOMLoaded() {
     //innerText 추출이 완료되면, extension의 service-worker에 text 전송
     const innerText = document.querySelector("body").innerText;
-    const pageData = {
+    const data = {
         title: document.title,
         url: window.location.href,
-        innerText: innerText
+        pageData: innerText
     }
 
     //TODO: service-worker에 text 전송
-    chrome.runtime.sendMessage({ action: "DOM_LOADED" }, (response) => {
+    chrome.runtime.sendMessage({ action: "DOM_LOADED", data: data }, (response) => {
         console.log("DOM load 완료, 메시지 service-worker로 전송");
     });
 }
