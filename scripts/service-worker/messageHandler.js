@@ -1,5 +1,5 @@
-import { post } from "./service-worker/dataSender.js";
-import { createHistoryBody } from "./service-worker/localhistory.js";
+import { post } from "./dataSender.js";
+import { createHistoryBody } from "./localhistory.js";
 
 //content, popup 등에서 전송된 Message 값 처리
 function messageHandler(message, sender, sendResponse) {

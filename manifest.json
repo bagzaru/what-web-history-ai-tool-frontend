@@ -27,7 +27,7 @@
     "content_scripts":[
       {
         "matches": ["https://*/*", "http://*/*"],
-        "js": ["scripts/content/domReadyHandler.js"],
+        "js": ["scripts/content-scripts/domReadyHandler.js"],
         "type": "module"
       }
     ],
