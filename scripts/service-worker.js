@@ -1,8 +1,14 @@
 import { messageHandler } from "./service-worker/messageHandler.js";
+import { tabActivateHandler, windowFocusChangeHandler } from "./service-worker/tabFocusManager.js";
 
 console.log("service-worker on");
 
 chrome.runtime.onMessage.addListener(messageHandler);
+chrome.tabs.onActivated.addListener(tabActivateHandler);
+chrome.windows.onFocusChanged.addListener(windowFocusChangeHandler);
+
+
+/* 이하는 테스트용 코드 */
 
 //onCommitted, onCompleted 확인
 chrome.webNavigation.onCommitted.addListener(function (details) {
