@@ -1,4 +1,5 @@
 import { post, put } from "./networking/dataSender.js";
+import { createHistoryBody } from "./localhistory.js";
 
 function getURLfromPath(path) {
     const url = /^https?:\/\//.test(path)
@@ -49,8 +50,13 @@ const server = {
     getServerState: getServerState,
     setServerState: setServerState,
     post: {
-        saveHistory: function () {
+        saveHistory: function ({ title, url, pageData }) {
+            const path = "/createHistory";
+            const body = createHistoryBody((new Date()).getTime, title, url, 0, pageData);
 
+            post(path, body)
+                .then((data) => console.log("POST: history created"))
+                .catch((err) => console.log("POST: err" + err));
         }
     },
     put: {
