@@ -1,6 +1,6 @@
 import { post } from "./networking/dataSender.js";
 import { createHistoryBody } from "./localhistory.js";
-import { setServerState } from "./serverState.js";
+import server from "./server.js";
 
 //content, popup 등에서 전송된 Message 값 처리
 function messageHandler(message, sender, sendResponse) {
@@ -15,7 +15,7 @@ function messageHandler(message, sender, sendResponse) {
             .catch((err) => console.log("POST: err" + err));
     }
     else if (message.action === "SERVER_STATE_CHANGED") {
-        setServerState(message.data);
+        server.setServerState(message.data);
 
         console.log("server State chagned: " + message.data);
         sendResponse({ data: message.data });
