@@ -51,6 +51,8 @@ const server = {
     setServerState: setServerState,
     post: {
         saveHistory: function ({ title, url, pageData }) {
+            if (getServerState() === false) return;
+
             const path = "/createHistory";
             const body = createHistoryBody((new Date()).getTime, title, url, 0, pageData);
 
@@ -61,6 +63,8 @@ const server = {
     },
     put: {
         updateHistory: async function ({ tabId, url, startTime, endTime }) {
+            if (getServerState() === false) return;
+
             //서버로 전송하여 해당 url의 체류 시간을 업데이트한다.
             const spentTime = endTime - startTime;
 
