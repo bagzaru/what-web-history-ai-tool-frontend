@@ -88,7 +88,7 @@ async function tabActivateHandler(activeInfo) {
     //이전 값이 비어있지 않다면 (비어있다==이미 전송했거나, 들른 사이트가 없다)
     //이전 값을 서버로 보낸다.
     if (toSend.url !== "") {
-        putToServer();
+        putToServer(toSend);
     }
 
 }
