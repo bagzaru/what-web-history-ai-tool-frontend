@@ -1,4 +1,4 @@
-import { post, put } from "./networking/dataSender.js";
+import { post, put } from "./networking/RestAPI.js";
 import { createHistoryBody } from "./localhistory.js";
 
 function getURLfromPath(path) {
