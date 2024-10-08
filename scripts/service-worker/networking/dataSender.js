@@ -1,19 +1,17 @@
 const defaultHost = "seokjin.url";
 
-function getURLfromPath(path) {
-    const url = /^https?:\/\//.test(path)
-        ? path
-        : `https://${defaultHost}/${path}`;
-    return url;
-}
+const defaultHeader = {
+    "Content-Type": "application/json",
+    "Accept": "*/*",
+};
+
 
 async function post(path, body, headers = {}) {
-    const url = getURLfromPath(path);
+    const url = path;
     const options = {
         method: "POST",
         headers: {
-            "Content-Type": "application/json",
-            "Accept": "*/*",
+            ...defaultHeader,
             ...headers
         },
         body: JSON.stringify(body)
@@ -30,12 +28,11 @@ async function post(path, body, headers = {}) {
     }
 }
 async function put(path, body, headers = {}) {
-    const url = getURLfromPath(path);
+    const url = path;
     const options = {
         method: "PUT",
         headers: {
-            "Content-Type": "application/json",
-            "Accept": "*/*",
+            ...defaultHeader,
             ...headers
         },
         body: JSON.stringify(body)

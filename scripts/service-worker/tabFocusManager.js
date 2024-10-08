@@ -1,5 +1,5 @@
 //탭의 포커스를 체크한다.
-import { put } from "./dataSender.js";
+import server from "./server.js";
 
 //마지막으로 focus되어있던 탭. 탭이 닫히면 startTime을 이용하여 체류 시간을 계산하고 서버에 전송한다.
 // url이 ""일 경우 마지막으로 focus되어있던 탭이 없거나, 이미 서버로 전송했음을 의미한다.
@@ -19,21 +19,6 @@ function popLastFocused() {
         startTime: (new Date()).getTime()
     }
     return toSend;
-}
-
-//서버로 전송하여 해당 url의 체류 시간을 업데이트한다.
-async function putToServer({ tabId, url, startTime, endTime }) {
-    const spentTime = endTime - startTime;
-
-    console.log(`PUT: url: ${url}, 머문 시간: ${spentTime} `)
-
-    const path = '/updateSpentTime';
-    const body = {
-        url: url,
-        spentTime: spentTime,
-    };
-
-    put(path, body);
 }
 
 //윈도우 포커스 이벤트 리스너
@@ -65,7 +50,7 @@ async function windowFocusChangeHandler(windowId) {
 
     //lastFocused 값이 존재했었다면, 서버로 해당 데이터 전송
     if (toSend.url !== "") {
-        putToServer(toSend);
+        server.put.updateHistory(toSend);
     }
 }
 
@@ -88,7 +73,7 @@ async function tabActivateHandler(activeInfo) {
     //이전 값이 비어있지 않다면 (비어있다==이미 전송했거나, 들른 사이트가 없다)
     //이전 값을 서버로 보낸다.
     if (toSend.url !== "") {
-        putToServer(toSend);
+        server.put.updateHistory(toSend);
     }
 
 }

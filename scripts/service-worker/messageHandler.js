@@ -1,4 +1,4 @@
-import { post } from "./dataSender.js";
+import { post } from "./networking/dataSender.js";
 import { createHistoryBody } from "./localhistory.js";
 import { setServerState } from "./serverState.js";
 
