@@ -5,7 +5,7 @@ import server from "./server.js";
 // url이 ""일 경우 마지막으로 focus되어있던 탭이 없거나, 이미 서버로 전송했음을 의미한다.
 let lastFocused = {
     tabId: -1,
-    url: "",
+    url: "*init url*",
     startTime: (new Date()).getTime()
 };
 
@@ -32,14 +32,11 @@ async function windowFocusChangeHandler(windowId) {
 
     //포커스 값 초기화
     const toSend = popLastFocused();
-    console.log(`Win Focus 이벤트 발생, last url: ${toSend.url}, 체류시간: ${toSend.endTime - toSend.startTime} `);
 
-
-    //창이 활성화된 경우, 현재 탭의 정보를 쿼리하여 저장한다.
-    //tabs.query가 반환되는 시점에 해당 정보가 가장 최신임이 보장되므로, 이 이벤트는 tab activation 이벤트에서 중복으로 갱신해도 상관없다.
+    //Win focus 이벤트가 발생했는데, 현재 activation인 탭이 있다면 focus가 새로 시작된 것이므로 현재 탭의 정보를 쿼리하여 저장한다.
     if (windowId !== chrome.windows.WINDOW_ID_NONE) {
         const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-        console.log(`WIN: 새 포커스 탭 갱신: url:${tabs[0].url}`)
+        console.log(`Win Focus 이벤트 결과 - 새 탭이 존재하므로, 새 포커스 탭 갱신: url:${tabs[0].url}:`)
         lastFocused = {
             ...lastFocused,
             tabId: tabs[0].id,
@@ -48,21 +45,25 @@ async function windowFocusChangeHandler(windowId) {
         }
     }
 
+    //lastFocused를 pop한 결과가 비어있다면, 동시에 발생한 다른 이벤트에서 먼저 확인 후 처리중이라는 이야기므로 처리하지 않는다.
+    if (toSend.url === "")
+        return;
+    console.log(`Win Focus 이벤트 발생, 체류시간: ${toSend.endTime - toSend.startTime}, last url: ${toSend.url}`);
+
+
+
     //lastFocused 값이 존재했었다면, 서버로 해당 데이터 전송
-    if (toSend.url !== "") {
+    if (toSend.url !== "*init url*")
         server.put.updateHistory(toSend);
-    }
 }
 
 //tabActivation 이벤트리스너
 async function tabActivateHandler(activeInfo) {
     //last Focused 값 가져오고 초기화
     const toSend = popLastFocused();
-    console.log(`Tab Activate 이벤트 발생, last url: ${toSend.url}`);
 
     //last focused 데이터를 갱신한다.
     const tabInfo = await chrome.tabs.get(activeInfo.tabId);
-    console.log(`TAB: 새 포커스 탭 갱신: url:${tabInfo.url}, tabInfo: `)
     lastFocused = {
         ...lastFocused,
         tabId: activeInfo.tabId,
@@ -70,11 +71,15 @@ async function tabActivateHandler(activeInfo) {
         startTime: (new Date()).getTime()
     }
 
-    //이전 값이 비어있지 않다면 (비어있다==이미 전송했거나, 들른 사이트가 없다)
+    //lastFocused를 pop한 결과가 비어있다면, 동시에 발생한 다른 이벤트에서 먼저 확인 후 처리중이라는 이야기므로 처리하지 않는다.
+    if (toSend.url === "")
+        return;
+
+    console.log(`Tab Activate 이벤트 발생, 체류 시간: ${toSend.endTime - toSend.startTime}, 직전 tab: ${toSend.url}:`);
+
     //이전 값을 서버로 보낸다.
-    if (toSend.url !== "") {
+    if (toSend.url !== "*init url*")
         server.put.updateHistory(toSend);
-    }
 
 }
 
