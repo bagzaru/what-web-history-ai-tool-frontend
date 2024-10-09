@@ -1,6 +1,6 @@
 import { post, put } from "./networking/RestAPI.js";
 import { createHistoryBody } from "./localhistory.js";
-
+import getJavaDateString from "./date/javaDateConverter.js";
 
 const defaultHost = "https://capstonepractice.site";
 
@@ -57,14 +57,14 @@ const server = {
 
             const path = "/api/history";
             const fullPath = getFullPath(defaultHost, path);
-            const body = createHistoryBody(title, content, url, 0, (new Date()).getTime().toString);
+            const body = createHistoryBody(title, content, url, 0, getJavaDateString(new Date()));
 
-            //const body = createHistoryBody((new Date()).getTime, title, url, 0, content);
+            //console.log(`post 준비 완료, body: ${JSON.stringify(body)}`);
 
             const data = await post(fullPath, body);
 
             //TODO: 반환된 id값 저장하기
-            console.log(`saveHistory 완료, 반환된 값: ${JSON.stringify(data)}`);
+            console.log(`POST: saveHistory 완료, 반환된 값: ${JSON.stringify(data)}`);
 
             //visitTime, content
         }
