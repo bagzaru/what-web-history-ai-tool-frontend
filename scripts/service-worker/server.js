@@ -84,10 +84,10 @@ const server = {
 
             const path = '/api/history/2';
             const body = {
-                id: url,
+                url: url,
                 spentTime: spentTime,
             };
-            const fullPath = getFullPath(this.defaultHost, path);
+            const fullPath = getFullPath(defaultHost, path);
 
             put(fullPath, body);
         },
