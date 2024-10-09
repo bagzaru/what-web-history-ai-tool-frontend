@@ -7,10 +7,11 @@ function messageHandler(message, sender, sendResponse) {
         const data = {
             title: message.data.title,
             url: message.data.url,
-            postData: message.data.postData
+            content: message.data.pageData
         }
         //텍스트 데이터 서버에 전송
-        server.post.saveHistory(data);
+        server.post.saveHistory(data)
+            .catch((e) => { console.log(`saveHistory Error: ${e.message}`); });
     }
     else if (message.action === "SERVER_STATE_CHANGED") {
         server.setServerState(message.data);

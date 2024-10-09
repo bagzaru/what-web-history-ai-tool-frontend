@@ -4,16 +4,16 @@ const historyFrame = {
     title: "",
     url: "",
     spentTime: "",
-    pageData: ""
+    content: ""
 }
 
-function createHistoryBody(visitTime, title, url, spentTime, pageData) {
+function createHistoryBody(title, content, url, spentTime, visitTime) {
     return {
-        visitTime: visitTime,
         title: title,
+        content: content,
         url: url,
         spentTime: spentTime,
-        pageData: pageData
+        visitTime: visitTime
     };
 }
 

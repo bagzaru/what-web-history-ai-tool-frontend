@@ -1,6 +1,9 @@
 import { post, put } from "./networking/RestAPI.js";
 import { createHistoryBody } from "./localhistory.js";
 
+
+const defaultHost = "https://capstonepractice.site";
+
 function getURLfromPath(path) {
     const url = /^https?:\/\//.test(path)
         ? path
@@ -46,24 +49,31 @@ function addServerStateChangeListener(func) {
 
 //서버와의 통신 모듈
 const server = {
-    defaultHost: 'https://capstonepractice.site',
     getServerState: getServerState,
     setServerState: setServerState,
     post: {
-        saveHistory: function ({ title, url, pageData }) {
+        saveHistory: async function ({ title, url, content }) {
             if (getServerState() === false) return;
 
-            const path = "/createHistory";
-            const body = createHistoryBody((new Date()).getTime, title, url, 0, pageData);
+            const path = "/api/history";
+            const fullPath = getFullPath(defaultHost, path);
+            const body = createHistoryBody(title, content, url, 0, (new Date()).getTime().toString);
 
-            post(path, body)
-                .then((data) => console.log("POST: history created"))
-                .catch((err) => console.log("POST: err" + err));
+            //const body = createHistoryBody((new Date()).getTime, title, url, 0, content);
+
+            const data = await post(fullPath, body);
+
+            //TODO: 반환된 id값 저장하기
+            console.log(`saveHistory 완료, 반환된 값: ${JSON.stringify(data)}`);
+
+            //visitTime, content
         }
     },
     put: {
         updateHistory: async function ({ tabId, url, startTime, endTime }) {
             if (getServerState() === false) return;
+            console.log("현재 updateHistory는 수리중");
+            return;
 
             //서버로 전송하여 해당 url의 체류 시간을 업데이트한다.
             const spentTime = endTime - startTime;
@@ -77,7 +87,7 @@ const server = {
                 id: url,
                 spentTime: spentTime,
             };
-            const fullPath = getFullPath(defaultHost, path);
+            const fullPath = getFullPath(this.defaultHost, path);
 
             put(fullPath, body);
         },
