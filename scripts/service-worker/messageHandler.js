@@ -49,6 +49,9 @@ function messageHandler(message, sender, sendResponse) {
             });
         return true;
     }
+    else if (message.action === "GET_SERVER_STATE") {
+        sendResponse({ data: server.getServerState() });
+    }
     else {
         sendResponse({ k: message.action });
         return false;

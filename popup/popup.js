@@ -7,6 +7,15 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     }
 });
 
+//server 확인
+chrome.runtime.sendMessage({ action: "GET_SERVER_STATE" }, (response) => {
+    if (response.data === true) {
+        document.querySelector("#radio-on").checked = "checked";
+    }
+    else {
+        document.querySelector("#radio-off").checked = "checked";
+    }
+});
 
 
 //서버 선택
@@ -62,6 +71,7 @@ function loadHistoryData(orderBy) {
             const title = rowData.title;
             const keyword = rowData.keywords.join(', ');
             const visitCount = rowData.visitCount;
+            const spentTime = rowData.spentTime;
 
             newRow.insertCell().textContent = title;
             newRow.insertCell().textContent = keyword;
