@@ -11,9 +11,13 @@ function messageHandler(message, sender, sendResponse) {
         }
         //텍스트 데이터 서버에 전송
         server.post.saveHistory(data)
-            .then(() => {
-                server.put.extractKeywords()
-                    .catch((e) => { console.log(`extractKeywords error: ${e.message}`) })
+            .then(async () => {
+                try {
+                    await server.put.extractKeywords()
+                }
+                catch (e) {
+                    console.log(`extractKeywords error: ${e.message}`);
+                }
             })
             .catch((e) => {
                 console.log(`saveHistory Error: ${e.message}`);

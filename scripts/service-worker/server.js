@@ -92,7 +92,7 @@ const server = {
             put(fullPath, body);
         },
 
-        extractKeywords: function () {
+        extractKeywords: async function () {
             if (getServerState() === false) return;
 
             console.log("extract 요청");
