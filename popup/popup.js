@@ -24,7 +24,10 @@ window.onload = function () {
         .addEventListener('change', (event) => {
             if (event.target.checked) {
                 //서버 연결 시작
-                chrome.runtime.sendMessage({ action: "SERVER_STATE_CHANGED", data: true }, (response) => { });
+                chrome.runtime.sendMessage({ action: "SERVER_STATE_CHANGED", data: true }, (response) => {
+                    const selected = document.getElementById('dropdown').value;
+                    loadHistoryData(selected);
+                });
             }
         });
     document.querySelector("#radio-off")
