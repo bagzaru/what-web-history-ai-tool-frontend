@@ -82,7 +82,7 @@ const server = {
 
             console.log(`PUT: url: ${url}, 머문 시간: ${spentTime} `)
 
-            const path = '/api/history/2';
+            const path = '/api/history';
             const body = {
                 url: url,
                 spentTime: spentTime,
@@ -92,16 +92,21 @@ const server = {
             put(fullPath, body);
         },
 
-        extractKeywords: async function () {
+        extractKeywords: async function (url) {
             if (getServerState() === false) return;
 
-            console.log("extract 요청");
-
-            const path = '/api/history/2/keyword';
-            const body = {};
+            const path = '/api/history/keyword';
+            const body = {
+                url: url
+            };
+            console.log("extractKeywords: url:" + url);
             const fullPath = getFullPath(defaultHost, path);
 
-            put(fullPath, body);
+            const data = await put(fullPath, body);
+
+
+            //TODO: 반환된 id값 저장하기
+            console.log(`POST: saveHistory 완료, 반환된 값: ${JSON.stringify(data)}`);
         }
     },
     get: {

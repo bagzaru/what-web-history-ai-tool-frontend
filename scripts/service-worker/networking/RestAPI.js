@@ -28,6 +28,7 @@ async function post(path, body, headers = {}) {
     }
 }
 async function put(path, body, headers = {}) {
+    console.log("put: body: " + JSON.stringify(body));
     const url = path;
     const options = {
         method: "PUT",
@@ -45,7 +46,7 @@ async function put(path, body, headers = {}) {
         return data;
     }
     else {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP error! status: ${response.status}, ${data.message}`);
     }
 }
 

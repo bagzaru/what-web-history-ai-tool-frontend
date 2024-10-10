@@ -13,12 +13,12 @@ function messageHandler(message, sender, sendResponse) {
         server.post.saveHistory(data)
             .then(async () => {
                 try {
-                    await server.put.extractKeywords()
+                    await server.put.extractKeywords(data.url);
+                    console.log("extractKeywords 성공적");
                 }
                 catch (e) {
                     console.log(`extractKeywords error: ${e.message}`);
                 }
-                console.log("extractKeywords 성공적");
             })
             .catch((e) => {
                 console.log(`saveHistory Error: ${e.message}`);

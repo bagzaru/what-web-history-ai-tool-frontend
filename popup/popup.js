@@ -14,4 +14,8 @@ window.onload = function () {
                 chrome.runtime.sendMessage({ action: "SERVER_STATE_CHANGED", data: false }, (response) => { });
             }
         })
+
+    //서버 데이터 받아오기
+
 }
+
