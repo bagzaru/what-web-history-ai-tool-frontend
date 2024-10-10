@@ -80,7 +80,7 @@ function loadHistoryData(orderBy) {
     });
 }
 
-loadHistoryData("visitCount");
+loadHistoryData(dropdown.checked);
 
 dropdown.addEventListener('change', function () {
     const selected = dropdown.value;
