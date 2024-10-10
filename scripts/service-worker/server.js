@@ -74,8 +74,6 @@ const server = {
     put: {
         updateHistory: async function ({ tabId, url, startTime, endTime }) {
             if (getServerState() === false) return;
-            console.log("현재 updateHistory는 수리중");
-            return;
 
             //서버로 전송하여 해당 url의 체류 시간을 업데이트한다.
             const spentTime = endTime - startTime;
@@ -85,10 +83,14 @@ const server = {
             console.log(`PUT: url: ${url}, 머문 시간: ${spentTime} `)
 
             const path = '/api/history';
-            const body = {
-                url: url,
-                spentTime: spentTime,
-            };
+            // const body = {
+            //     url: url,
+            //     spentTime: spentTime,
+            // };
+            const body = new FormData();
+            body.append("url", url);
+            body.append("spentTime", spentTime);
+
             const fullPath = getFullPath(defaultHost, path);
 
             put(fullPath, body);
