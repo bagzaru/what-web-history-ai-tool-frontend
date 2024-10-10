@@ -18,6 +18,7 @@ function messageHandler(message, sender, sendResponse) {
                 catch (e) {
                     console.log(`extractKeywords error: ${e.message}`);
                 }
+                console.log("extractKeywords 성공적");
             })
             .catch((e) => {
                 console.log(`saveHistory Error: ${e.message}`);
