@@ -1,10 +1,10 @@
 //localHistoryDB에 저장할 것들
 const historyFrame = {
-    visitTime: "",
-    title: "",
-    url: "",
-    spentTime: "",
-    content: ""
+    title: title,
+    content: content,
+    url: url,
+    spentTime: spentTime,
+    visitTime: visitTime
 }
 
 function createHistoryBody(title, content, url, spentTime, visitTime) {

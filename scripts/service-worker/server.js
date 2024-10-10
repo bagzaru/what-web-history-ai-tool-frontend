@@ -93,7 +93,15 @@ const server = {
         },
 
         extractKeywords: function () {
+            if (getServerState() === false) return;
 
+            console.log("extract 요청");
+
+            const path = '/api/history/2/keyword';
+            const body = {};
+            const fullPath = getFullPath(defaultHost, path);
+
+            put(fullPath, body);
         }
     },
     get: {
