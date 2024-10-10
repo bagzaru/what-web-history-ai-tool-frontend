@@ -97,10 +97,12 @@ const server = {
         extractKeywords: async function (url) {
             if (getServerState() === false) return;
 
-            const path = '/api/history/keyword';
+
             // const body = {
             //     url: url
             // };
+
+            const path = '/api/history/keyword';
 
             const body = new FormData();
             body.append('url', url);
@@ -112,7 +114,7 @@ const server = {
 
 
             //TODO: 반환된 id값 저장하기
-            console.log(`POST: extractKeywords 완료, 반환된 값: ${JSON.stringify(data)}`);
+            console.log(`PUT: extractKeywords 완료, 반환된 값: ${JSON.stringify(data)}`);
 
             return data;
         }
