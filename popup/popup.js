@@ -1,13 +1,13 @@
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     if (message.action === "SW_POPUP_HISTORIES") {
-
-
         sendResponse({ data: true });
     }
     else {
         sendResponse({ data: false });
     }
 });
+
+
 
 //서버 선택
 window.onload = function () {
@@ -30,18 +30,25 @@ window.onload = function () {
 
 }
 
+
+
+//값을 초기화
+const dropdown = document.getElementById('dropdown');
+const table = document.getElementById('keyword-table').getElementsByTagName('tbody')[0];
+const log = document.getElementById('debugLog');
+
 function loadHistoryData(orderBy) {
+    table.innerHTML = '';
+    table.insertRow().insertCell().textContent = "로딩 중...";
+
     //s-w에 로드됨 보냄
     chrome.runtime.sendMessage({ action: "POPUP_GET_HISTORY", data: { orderBy: orderBy } }, (response) => {
         //서버에서 받아온 데이터 처리
-        const table = document.getElementById('keyword-table').getElementsByTagName('tbody')[0];
-        const log = document.getElementById('debugLog');
         const data = response.data;
+        table.innerHTML = '';
         if (data === null) {
             //TODO: 서버 송신 오류 처리
-            const newRow = table.insertRow();
-
-            newRow.insertCell().textContent = "네트워크 오류 발생";
+            table.insertRow().insertCell().textContent = "네트워크 오류 발생";
             return;
         }
 
@@ -64,3 +71,8 @@ function loadHistoryData(orderBy) {
 }
 
 loadHistoryData("visitCount");
+
+dropdown.addEventListener('change', function () {
+    const selected = dropdown.value;
+    loadHistoryData(selected);
+})
