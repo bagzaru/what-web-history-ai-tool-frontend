@@ -28,7 +28,6 @@ async function post(path, body, headers = {}) {
     }
 }
 async function put(path, body, headers = {}) {
-    console.log("put: body: " + JSON.stringify(body));
     const url = path;
     const options = {
         method: "PUT",
@@ -36,7 +35,8 @@ async function put(path, body, headers = {}) {
             ...defaultHeader,
             ...headers
         },
-        body: JSON.stringify(body)
+        body: body
+        //body: JSON.stringify(body)
     };
 
     const response = await fetch(url, options);
@@ -50,5 +50,26 @@ async function put(path, body, headers = {}) {
     }
 }
 
+async function get(path, body, headers = {}) {
+    const url = path;
+    const options = {
+        method: "GET",
+        headers: {
+            ...defaultHeader,
+            ...headers
+        }
+        // body: JSON.stringify(body)
+    };
 
-export { post, put };
+    const response = await fetch(url, options);
+    const data = await response.json();
+
+    if (response.ok) {
+        return data;
+    }
+    else {
+        throw new Error(`HTTP error! status: ${response.status}, ${data.message}`);
+    }
+}
+
+export { post, put, get };

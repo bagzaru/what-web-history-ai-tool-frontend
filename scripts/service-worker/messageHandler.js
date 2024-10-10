@@ -30,6 +30,25 @@ function messageHandler(message, sender, sendResponse) {
         console.log("server State chagned: " + message.data);
         sendResponse({ data: message.data });
     }
+    else if (message.action === "POPUP_GET_HISTORY") {
+        //서버에 getkeyword 처리
+
+        server.get.getHistoryByDate(message.data.orderBy)
+            .then((data) => {
+                chrome.runtime.sendMessage({ action: "SW_POPUP_HISTORIES", data: data }, (response) => {
+                    console.log("get 성공!");
+                });
+                sendResponse({ data: data });
+            })
+            .catch((e) => {
+                //s-w에 로드됨 보냄
+                console.log("getHistoryDate: 실패: " + e.message)
+                chrome.runtime.sendMessage({ action: "SW_POPUP_HISTORIES", data: null }, (response) => {
+                });
+                sendResponse({ data: null });
+            });
+        return true;
+    }
     else {
         sendResponse({ k: message.action });
         return false;

@@ -1,4 +1,4 @@
-import { post, put } from "./networking/RestAPI.js";
+import { post, put, get } from "./networking/RestAPI.js";
 import { createHistoryBody } from "./localhistory.js";
 import getJavaDateString from "./date/javaDateConverter.js";
 
@@ -67,6 +67,8 @@ const server = {
             console.log(`POST: saveHistory 완료, 반환된 값: ${JSON.stringify(data)}`);
 
             //visitTime, content
+
+            return data;
         }
     },
     put: {
@@ -96,9 +98,13 @@ const server = {
             if (getServerState() === false) return;
 
             const path = '/api/history/keyword';
-            const body = {
-                url: url
-            };
+            // const body = {
+            //     url: url
+            // };
+
+            const body = new FormData();
+            body.append('url', url);
+
             console.log("extractKeywords: url:" + url);
             const fullPath = getFullPath(defaultHost, path);
 
@@ -106,17 +112,47 @@ const server = {
 
 
             //TODO: 반환된 id값 저장하기
-            console.log(`POST: saveHistory 완료, 반환된 값: ${JSON.stringify(data)}`);
+            console.log(`POST: extractKeywords 완료, 반환된 값: ${JSON.stringify(data)}`);
+
+            return data;
         }
     },
     get: {
-        getHistoryByDate: function () {
+        getHistoryByDate: async function (orderBy) {
+            if (getServerState() === false) throw new Error(`getServerState 닫혀있음!`);
 
+            //TODO: 기간 외부에서 입력받기
+            const curTime = new Date();
+            const startTime = new Date();
+            startTime.setDate(curTime.getDate() - 7);
+
+            //const path = '/api/history';
+            // const body = {
+            //     startTime: getJavaDateString(startTime),
+            //     endTime: getJavaDateString(curTime)
+            // };
+
+            const path = '/api/history' + '?' + 'startTime=' + getJavaDateString(startTime) + '&' + 'endTime=' + getJavaDateString(curTime) + '&orderBy=' + orderBy;
+            const body = {};
+
+            // const body = new FormData();
+            // body.append('startTime', getJavaDateString(startTime));
+            // body.append('endTime', getJavaDateString(curTime));
+
+            const fullPath = getFullPath(defaultHost, path);
+            console.log("getHistoryByDate: 쿼리스트링: " + fullPath);
+            const data = await get(fullPath, body);
+
+
+            //TODO: 반환된 id값 저장하기
+            console.log(`GET: getHistoryByDate 완료, 반환된 값: ${JSON.stringify(data)}`);
+
+            return data;
         },
         getHistoryByDateAndKeyword: function () {
 
         },
-        getKeywordFrequency: function () {
+        getKeywordFrequency: async function () {
 
         },
         getTotalSpentTime: function () {
