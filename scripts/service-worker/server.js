@@ -53,7 +53,7 @@ const server = {
     setServerState: setServerState,
     post: {
         saveHistory: async function ({ title, url, content }) {
-            if (getServerState() === false) return;
+            if (getServerState() === false) throw new Error(`현재 오프라인 모드입니다. serverState: false`);
 
             const path = "/api/history";
             const fullPath = getFullPath(defaultHost, path);
@@ -73,7 +73,7 @@ const server = {
     },
     put: {
         updateHistory: async function ({ tabId, url, startTime, endTime }) {
-            if (getServerState() === false) return;
+            if (getServerState() === false) throw new Error(`현재 오프라인 모드입니다. serverState: false`);
 
             //서버로 전송하여 해당 url의 체류 시간을 업데이트한다.
             const spentTime = endTime - startTime;
@@ -97,7 +97,7 @@ const server = {
         },
 
         extractKeywords: async function (url) {
-            if (getServerState() === false) return;
+            if (getServerState() === false) throw new Error(`현재 오프라인 모드입니다. serverState: false`);
 
 
             // const body = {
@@ -123,7 +123,7 @@ const server = {
     },
     get: {
         getHistoryByDate: async function (orderBy) {
-            if (getServerState() === false) throw new Error(`getServerState 닫혀있음!`);
+            if (getServerState() === false) throw new Error(`현재 오프라인 모드입니다. serverState: false`);
 
             //TODO: 기간 외부에서 입력받기
             const curTime = new Date();
@@ -154,17 +154,21 @@ const server = {
             return data;
         },
         getHistoryByDateAndKeyword: function () {
+            if (getServerState() === false) throw new Error(`현재 오프라인 모드입니다. serverState: false`);
 
         },
         getKeywordFrequency: async function () {
+            if (getServerState() === false) throw new Error(`현재 오프라인 모드입니다. serverState: false`);
 
         },
         getTotalSpentTime: function () {
+            if (getServerState() === false) throw new Error(`현재 오프라인 모드입니다. serverState: false`);
 
         }
     },
     del: {
         deleteHistory: function () {
+            if (getServerState() === false) throw new Error(`현재 오프라인 모드입니다.`);
 
         }
     }
