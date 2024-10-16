@@ -1,5 +1,3 @@
-const defaultHost = "seokjin.url";
-
 async function post(path, body, headers = {}) {
     const defaultHeader = {
         "Content-Type": "application/json",
@@ -12,7 +10,7 @@ async function post(path, body, headers = {}) {
             ...defaultHeader,
             ...headers
         },
-        body: JSON.stringify(body)
+        body: body
     };
 
     const response = await fetch(url, options);
@@ -37,7 +35,6 @@ async function put(path, body, headers = {}) {
             ...headers
         },
         body: body
-        //body: JSON.stringify(body)
     };
 
     const response = await fetch(url, options);
@@ -51,7 +48,7 @@ async function put(path, body, headers = {}) {
     }
 }
 
-async function get(path, body, headers = {}) {
+async function get(path, headers = {}) {
     const defaultHeader = {
         "Content-Type": "application/json",
         "Accept": "*/*",
@@ -63,7 +60,6 @@ async function get(path, body, headers = {}) {
             ...defaultHeader,
             ...headers
         }
-        // body: JSON.stringify(body)
     };
 
     const response = await fetch(url, options);

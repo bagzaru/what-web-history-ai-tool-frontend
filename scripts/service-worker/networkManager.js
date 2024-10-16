@@ -20,6 +20,7 @@ const networkManager = {
             const path = "/api/history";
             const fullPath = getFullPath(defaultHost, path);
             const body = createHistoryDTO(title, content, url, 0, getJavaDateString(new Date()));
+            body = JSON.stringify(body);    //saveHistory는 json dto 형태로 주고받는다.
 
             const data = await post(fullPath, body);
             console.log(`POST: saveHistory 완료: ${url}`);
@@ -42,7 +43,7 @@ const networkManager = {
             //     url: url,
             //     spentTime: spentTime,
             // };
-            const body = new FormData();
+            const body = new FormData();    //PUT: updatehistory의 body는 formdata 형식으로 주고받는다.
             body.append("url", url);
             body.append("spentTime", spentTime);
 
@@ -60,7 +61,7 @@ const networkManager = {
             // const body = {
             //     url: url
             // };
-            const body = new FormData();
+            const body = new FormData();    //PUT: updatehistory의 body는 formdata 형식으로 주고받는다.
             body.append('url', url);
             const fullPath = getFullPath(defaultHost, path);
 
@@ -76,27 +77,18 @@ const networkManager = {
             if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다. networkState: false`);
 
             //getHistoryByDate: 서버에서 방문기록 데이터를 최근 방문 순으로 가져옵니다.
-            //TODO: history 탐색기간 외부에서 입력받기
+            //TODO: 외부에서 기간을 지정받아, 해당 기간 내의 방문기록 데이터 가져오기
 
             const curTime = new Date();
             const startTime = new Date();
             startTime.setDate(curTime.getDate() - 7);
 
-            //현재 queryString으로 전송, 추후 변경 가능성 있어 기존 코드 남겨둠
-            //const path = '/api/history';
-            // const body = {
-            //     startTime: getJavaDateString(startTime),
-            //     endTime: getJavaDateString(curTime)
-            // };
-            // const body = new FormData();
-            // body.append('startTime', getJavaDateString(startTime));
-            // body.append('endTime', getJavaDateString(curTime));
-            const path = '/api/history' + '?' + 'startTime=' + getJavaDateString(startTime) + '&' + 'endTime=' + getJavaDateString(curTime) + '&orderBy=' + orderBy;
-            const body = {};
-            const fullPath = getFullPath(defaultHost, path);
+            const path = '/api/history' + '?';
+            const queryString = 'startTime=' + getJavaDateString(startTime) + '&' + 'endTime=' + getJavaDateString(curTime) + '&orderBy=' + orderBy;
+            const fullPath = getFullPath(defaultHost, path + queryString);
 
             console.log("getHistoryByDate 요청, 쿼리스트링: " + fullPath);
-            const data = await get(fullPath, body);
+            const data = await get(fullPath);
             console.log(`GET: getHistoryByDate 완료, 반환된 값: ${JSON.stringify(data)}`);
 
             return data;
