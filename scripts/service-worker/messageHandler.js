@@ -30,7 +30,7 @@ function messageHandler(message, sender, sendResponse) {
                 console.log(`saveHistory Error: ${e.message}`);
             });
     }
-    else if (message.action === "SERVER_STATE_CHANGED") {
+    else if (message.action === "NETWORK_STATE_CHANGED") {
         //popup에서 serverState값이 바뀌었을 때에 대한 대응
         networkManager.setNetworkState(message.data);
 
@@ -53,7 +53,7 @@ function messageHandler(message, sender, sendResponse) {
             });
         return true;
     }
-    else if (message.action === "GET_SERVER_STATE") {
+    else if (message.action === "GET_NETWORK_STATE") {
         //popup이나 content에서 서버 state가 알고싶다고 요청할 때
         sendResponse({ data: networkManager.getNetworkState() });
     }

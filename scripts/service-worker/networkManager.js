@@ -2,35 +2,11 @@ import { post, put, get } from "./networking/RestAPI.js";
 import { createHistoryDTO } from "./networking/historyDTO.js";
 import getJavaDateString from "./date/javaDateConverter.js";
 
+//defaultHost: 기본 연결 서버 주소
 const defaultHost = "https://capstonepractice.site";
 
+//networkState: true일 때만 서버와의 통신 진행
 let networkState = false;
-
-//url의 host와 path를 입력하면 둘을 이어주는 함수
-function getFullPath(host, path) {
-    if (typeof host === "string" && typeof path === "string") {
-        if (path[0] == '/') {
-            return host + path;
-        }
-        else {
-            return host + '/' + path;
-        }
-    }
-    else return "";
-}
-
-function getNetworkState() {
-    return networkState;
-}
-
-function setNetworkState(state) {
-    if (state === true || state === false) {
-        networkState = state;
-    }
-    else {
-        console.log("serverstate.js: setServerstate의 밸류로 이상한 값 들어옴");
-    }
-}
 
 //서버와의 통신 모듈
 const networkManager = {
@@ -145,5 +121,32 @@ const networkManager = {
         }
     }
 }
+
+//url의 host와 path를 입력하면 둘을 이어주는 함수
+function getFullPath(host, path) {
+    if (typeof host === "string" && typeof path === "string") {
+        if (path[0] == '/') {
+            return host + path;
+        }
+        else {
+            return host + '/' + path;
+        }
+    }
+    else return "";
+}
+
+function getNetworkState() {
+    return networkState;
+}
+
+function setNetworkState(state) {
+    if (state === true || state === false) {
+        networkState = state;
+    }
+    else {
+        console.log("serverstate.js: setServerstate의 밸류로 이상한 값 들어옴");
+    }
+}
+
 
 export default networkManager;

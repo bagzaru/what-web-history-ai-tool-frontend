@@ -1,3 +1,6 @@
+//javaDateConverter.js: javascript의 date 형식을 java spring의 date 형식으로 변환
+
+//java 형태로 date를 변환하는 함수
 function getJavaDateString(date = new Date()) {
     const yyyy = date.getFullYear();
     const mm = String(date.getMonth() + 1).padStart(2, "0");
