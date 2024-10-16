@@ -34,7 +34,10 @@ window.onload = function () {
         .addEventListener('change', (event) => {
             if (event.target.checked) {
                 //서버 연결 끊기                
-                chrome.runtime.sendMessage({ action: "SERVER_STATE_CHANGED", data: false }, (response) => { });
+                chrome.runtime.sendMessage({ action: "SERVER_STATE_CHANGED", data: false }, (response) => {
+                    const selected = document.getElementById('dropdown').value;
+                    loadHistoryData(selected);
+                });
             }
         })
 
