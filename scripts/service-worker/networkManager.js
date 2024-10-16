@@ -1,16 +1,12 @@
 import { post, put, get } from "./networking/RestAPI.js";
-import { createHistoryBody } from "./localhistory.js";
+import { createHistoryDTO } from "./networking/historyDTO.js";
 import getJavaDateString from "./date/javaDateConverter.js";
 
 const defaultHost = "https://capstonepractice.site";
 
-function getURLfromPath(path) {
-    const url = /^https?:\/\//.test(path)
-        ? path
-        : `https://host/${path}`;
-    return url;
-}
+let networkState = false;
 
+//url의 host와 path를 입력하면 둘을 이어주는 함수
 function getFullPath(host, path) {
     if (typeof host === "string" && typeof path === "string") {
         if (path[0] == '/') {
@@ -23,63 +19,46 @@ function getFullPath(host, path) {
     else return "";
 }
 
-let serverState = false;
-let events = [];
-
-function getServerState() {
-    return serverState;
+function getNetworkState() {
+    return networkState;
 }
 
-function setServerState(state) {
-    if (serverState === true || serverState === false) {
-        serverState = state;
-        for (let f of events) {
-            f(serverState);
-        }
+function setNetworkState(state) {
+    if (state === true || state === false) {
+        networkState = state;
     }
     else {
         console.log("serverstate.js: setServerstate의 밸류로 이상한 값 들어옴");
     }
 }
 
-function addServerStateChangeListener(func) {
-    events.push(func);
-}
-
-
 //서버와의 통신 모듈
-const server = {
-    getServerState: getServerState,
-    setServerState: setServerState,
+const networkManager = {
+    getNetworkState: getNetworkState,
+    setNetworkState: setNetworkState,
     post: {
         saveHistory: async function ({ title, url, content }) {
-            if (getServerState() === false) throw new Error(`현재 오프라인 모드입니다. serverState: false`);
+            if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다. networkState: false`);
 
+            //새 페이지가 로드되었을 때, 해당 url과 방문시각을 서버에 전송하여 저장합니다.
             const path = "/api/history";
             const fullPath = getFullPath(defaultHost, path);
-            const body = createHistoryBody(title, content, url, 0, getJavaDateString(new Date()));
-
-            //console.log(`post 준비 완료, body: ${JSON.stringify(body)}`);
+            const body = createHistoryDTO(title, content, url, 0, getJavaDateString(new Date()));
 
             const data = await post(fullPath, body);
-
-            //TODO: 반환된 id값 저장하기
-            console.log(`POST: saveHistory 완료, 반환된 값: ${JSON.stringify(data)}`);
-
-            //visitTime, content
+            console.log(`POST: saveHistory 완료: ${url}`);
 
             return data;
         }
     },
     put: {
         updateHistory: async function ({ tabId, url, startTime, endTime }) {
-            if (getServerState() === false) throw new Error(`현재 오프라인 모드입니다. serverState: false`);
+            if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다. networkState: false`);
 
-            //서버로 전송하여 해당 url의 체류 시간을 업데이트한다.
+            //updateHistory: 해당 사이트의 체류 시간(visitTime)값을 업데이트합니다.
+
+            //체류 시간 계산
             const spentTime = endTime - startTime;
-
-            //해당 url의 id를 확인한다. 체크한다.
-
             console.log(`PUT: url: ${url}, 머문 시간: ${spentTime} `)
 
             const path = '/api/history';
@@ -97,25 +76,20 @@ const server = {
         },
 
         extractKeywords: async function (url) {
-            if (getServerState() === false) throw new Error(`현재 오프라인 모드입니다. serverState: false`);
+            if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다. networkState: false`);
 
+            //extractKeywords: GPT에게 키워드 추출 요청을 보냅니다.
 
+            const path = '/api/history/keyword';
             // const body = {
             //     url: url
             // };
-
-            const path = '/api/history/keyword';
-
             const body = new FormData();
             body.append('url', url);
-
-            console.log("extractKeywords: url:" + url);
             const fullPath = getFullPath(defaultHost, path);
 
+            console.log("extractKeywords 시도: url:" + url);
             const data = await put(fullPath, body);
-
-
-            //TODO: 반환된 id값 저장하기
             console.log(`PUT: extractKeywords 완료, 반환된 값: ${JSON.stringify(data)}`);
 
             return data;
@@ -123,55 +97,53 @@ const server = {
     },
     get: {
         getHistoryByDate: async function (orderBy) {
-            if (getServerState() === false) throw new Error(`현재 오프라인 모드입니다. serverState: false`);
+            if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다. networkState: false`);
 
-            //TODO: 기간 외부에서 입력받기
+            //getHistoryByDate: 서버에서 방문기록 데이터를 최근 방문 순으로 가져옵니다.
+            //TODO: history 탐색기간 외부에서 입력받기
+
             const curTime = new Date();
             const startTime = new Date();
             startTime.setDate(curTime.getDate() - 7);
 
+            //현재 queryString으로 전송, 추후 변경 가능성 있어 기존 코드 남겨둠
             //const path = '/api/history';
             // const body = {
             //     startTime: getJavaDateString(startTime),
             //     endTime: getJavaDateString(curTime)
             // };
-
-            const path = '/api/history' + '?' + 'startTime=' + getJavaDateString(startTime) + '&' + 'endTime=' + getJavaDateString(curTime) + '&orderBy=' + orderBy;
-            const body = {};
-
             // const body = new FormData();
             // body.append('startTime', getJavaDateString(startTime));
             // body.append('endTime', getJavaDateString(curTime));
-
+            const path = '/api/history' + '?' + 'startTime=' + getJavaDateString(startTime) + '&' + 'endTime=' + getJavaDateString(curTime) + '&orderBy=' + orderBy;
+            const body = {};
             const fullPath = getFullPath(defaultHost, path);
-            console.log("getHistoryByDate: 쿼리스트링: " + fullPath);
+
+            console.log("getHistoryByDate 요청, 쿼리스트링: " + fullPath);
             const data = await get(fullPath, body);
-
-
-            //TODO: 반환된 id값 저장하기
             console.log(`GET: getHistoryByDate 완료, 반환된 값: ${JSON.stringify(data)}`);
 
             return data;
         },
         getHistoryByDateAndKeyword: function () {
-            if (getServerState() === false) throw new Error(`현재 오프라인 모드입니다. serverState: false`);
+            if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다. networkState: false`);
 
         },
         getKeywordFrequency: async function () {
-            if (getServerState() === false) throw new Error(`현재 오프라인 모드입니다. serverState: false`);
+            if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다. networkState: false`);
 
         },
         getTotalSpentTime: function () {
-            if (getServerState() === false) throw new Error(`현재 오프라인 모드입니다. serverState: false`);
+            if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다. networkState: false`);
 
         }
     },
     del: {
         deleteHistory: function () {
-            if (getServerState() === false) throw new Error(`현재 오프라인 모드입니다.`);
+            if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다.`);
 
         }
     }
 }
 
-export default server;
+export default networkManager;

@@ -1,5 +1,5 @@
 //탭의 포커스를 체크한다.
-import server from "./server.js";
+import networkManager from "./networkManager.js";
 
 //마지막으로 focus되어있던 탭. 탭이 닫히면 startTime을 이용하여 체류 시간을 계산하고 서버에 전송한다.
 // url이 ""일 경우 마지막으로 focus되어있던 탭이 없거나, 이미 서버로 전송했음을 의미한다.
@@ -54,7 +54,7 @@ async function windowFocusChangeHandler(windowId) {
 
     //lastFocused 값이 존재했었다면, 서버로 해당 데이터 전송
     if (toSend.url !== "*init url*")
-        server.put.updateHistory(toSend);
+        networkManager.put.updateHistory(toSend);
 }
 
 //tabActivation 이벤트리스너
@@ -79,7 +79,7 @@ async function tabActivateHandler(activeInfo) {
 
     //이전 값을 서버로 보낸다.
     if (toSend.url !== "*init url*")
-        server.put.updateHistory(toSend);
+        networkManager.put.updateHistory(toSend);
 
 }
 

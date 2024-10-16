@@ -1,13 +1,4 @@
-chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-    if (message.action === "SW_POPUP_HISTORIES") {
-        sendResponse({ data: true });
-    }
-    else {
-        sendResponse({ data: false });
-    }
-});
-
-//server 확인
+//server state 확인 후, 
 chrome.runtime.sendMessage({ action: "GET_SERVER_STATE" }, (response) => {
     if (response.data === true) {
         document.querySelector("#radio-on").checked = "checked";
