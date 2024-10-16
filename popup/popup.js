@@ -44,7 +44,7 @@ window.onload = function () {
 
 
 
-//값을 초기화
+//서버의 방문기록 리스트 로드 관련
 const dropdown = document.getElementById('dropdown');
 const table = document.getElementById('keyword-table').getElementsByTagName('tbody')[0];
 const log = document.getElementById('debugLog');
@@ -53,7 +53,7 @@ function loadHistoryData(orderBy) {
     table.innerHTML = '';
     table.insertRow().insertCell().textContent = "로딩 중...";
 
-    //s-w에 로드됨 보냄
+    //서비스 워커에 로드됨 보냄
     chrome.runtime.sendMessage({ action: "POPUP_GET_HISTORY", data: { orderBy: orderBy } }, (response) => {
         //서버에서 받아온 데이터 처리
         const data = response.data;
@@ -86,6 +86,41 @@ function loadHistoryData(orderBy) {
 loadHistoryData(dropdown.checked);
 
 dropdown.addEventListener('change', function () {
+    const selected = dropdown.value;
+    loadHistoryData(selected);
+})
+
+//gpt 서버에 전송하여 키워드 추출 요청 버튼
+const gptRequestButton = document.getElementById("gpt-request-button");
+gptRequestButton.addEventListener('click', () => {
+    //현재 페이지 어딘지 조회하여 보내기
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        var activeTab = tabs[0];
+        var activeTabUrl = activeTab.url;
+
+        //gpt 이벤트 요청하기
+        chrome.runtime.sendMessage({ action: "GPT_REQUEST_EVENT", data: { url: activeTabUrl } }, (response) => {
+            //요청 전송 후 할 일
+            const date = new Date();
+            if (response.data === null) {
+                //에러 발생
+                log.innerText = `GPT 요청 실패: ${response.message}`;
+            }
+            else {
+                log.innerText = date.toString() + ": gpt 키워드추출 요청 완료";
+
+                //방문기록 새로고침
+                const selected = dropdown.value;
+                loadHistoryData(selected);
+            }
+        })
+
+    });
+})
+
+//새로고침 버튼
+const historyRefreshButton = document.getElementById("history-refresh-button");
+historyRefreshButton.addEventListener('click', () => {
     const selected = dropdown.value;
     loadHistoryData(selected);
 })

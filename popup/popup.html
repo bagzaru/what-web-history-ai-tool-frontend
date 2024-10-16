@@ -6,12 +6,14 @@
     <title>Document</title>
 </head>
 <body>
-    <div style="width: 400px;">
+    <div style="width: 350px;">
         <input id="radio-on" type="radio" name="chk_info" value="on">서버전송on
         <input id="radio-off" type="radio" name="chk_info" value="off">서버전송off
+        <button id="gpt-request-button" type="button" style="width: 80px; height: 45px">GPT <br>키워드 추출</button>
+        <button id="history-refresh-button" style="width: 80px; height: 45px">목록<br>새로고침</button>
     </div>
     <hr>
-    <div id="keywords" style="width: 400px;">
+    <div id="keywords" style="width: 350px;">
         <select id="dropdown">
             <option value="visitTime" checked="checked">최근 방문 순</option>
             <option value="visitCount">방문 횟수 순</option>
@@ -30,7 +32,7 @@
             </tbody>
         </table>
     </div>
-    <div id="histories" style="width: 400px;">
+    <div id="histories" style="width: 350px;">
 
     </div>
     <hr>

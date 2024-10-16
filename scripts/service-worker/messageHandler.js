@@ -13,8 +13,10 @@ function messageHandler(message, sender, sendResponse) {
         server.post.saveHistory(data)
             .then(async () => {
                 try {
-                    await server.put.extractKeywords(data.url);
-                    console.log("extractKeywords 성공적");
+                    //24.10.16: 현재 자동 키워드 추출 사용하지 않음(비용 문제)
+                    // - 실제 릴리즈 시에는 사용할 예정
+                    //await server.put.extractKeywords(data.url);
+                    //console.log("extractKeywords 성공적");
                 }
                 catch (e) {
                     console.log(`extractKeywords error: ${e.message}`);
@@ -32,7 +34,6 @@ function messageHandler(message, sender, sendResponse) {
     }
     else if (message.action === "POPUP_GET_HISTORY") {
         //서버에 getkeyword 처리
-
         server.get.getHistoryByDate(message.data.orderBy)
             .then((data) => {
                 chrome.runtime.sendMessage({ action: "SW_POPUP_HISTORIES", data: data }, (response) => {
@@ -51,6 +52,16 @@ function messageHandler(message, sender, sendResponse) {
     }
     else if (message.action === "GET_SERVER_STATE") {
         sendResponse({ data: server.getServerState() });
+    }
+    else if (message.action === "GPT_REQUEST_EVENT") {
+        //비용 문제로 인해 제작한 GPT 요청 버튼 눌렸을 때의 이벤트
+        server.put.extractKeywords(message.data.url)
+            .then((data) => {
+                sendResponse({ data: data });
+            }).catch((e) => {
+                sendResponse({ data: null, message: e.message });
+            })
+        return true;
     }
     else {
         sendResponse({ k: message.action });
