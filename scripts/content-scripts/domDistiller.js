@@ -26,7 +26,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-function extract() {
+function extract(isResultHTML = false) {
     try {
         (function () {
             var $gwt_version = "2.7.0";
@@ -547,10 +547,28 @@ function extract() {
         console.log('Extracted text: ');
         console.log(res);
 
-        return {
-            title: res[1],
-            content: res[2][1]
-        };
+        if (isResultHTML === false) {
+            const htmlString = res[2][1];
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(htmlString, 'text/html');
+            const textOnlyString = doc.body.textContent || "";
+            if (textOnlyString === "") {
+                throw new Error('Dom Distiller: html parse failed');
+            }
+            else {
+                return {
+                    title: res[1],
+                    content: textOnlyString
+                }
+            }
+        }
+        else {
+            return {
+                title: res[1],
+                content: res[2][1]
+            };
+        }
+
     }
     catch (e) {
         console.error("TestExt_: Error while DOM Distill: " + e);
