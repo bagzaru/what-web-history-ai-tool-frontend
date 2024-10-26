@@ -19,10 +19,10 @@ const networkManager = {
             //새 페이지가 로드되었을 때, 해당 url과 방문시각을 서버에 전송하여 저장합니다.
             const path = "/api/history";
             const fullPath = getFullPath(defaultHost, path);
-            const body = createHistoryDTO(title, content, url, 0, getJavaDateString(new Date()));
-            body = JSON.stringify(body);    //saveHistory는 json dto 형태로 주고받는다.
+            const jsonBody = createHistoryDTO(title, content, url, 0, getJavaDateString(new Date()));
+            const stringBody = JSON.stringify(jsonBody);    //saveHistory는 json dto 형태로 주고받는다.
 
-            const data = await post(fullPath, body);
+            const data = await post(fullPath, stringBody);
             console.log(`POST: saveHistory 완료: ${url}`);
 
             return data;
