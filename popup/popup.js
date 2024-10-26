@@ -113,4 +113,18 @@ function loadHistoryData(orderBy) {
             newRow.insertCell().textContent = visitCount;
         }
     });
+
+    function redirectToGoogleLogin() {
+        window.location.href = "https://capstonepractice.site/oauth2/authorization/google";
+    };
+
+    const googleLoginButton = document.getElementById("google-login-button");
+    googleLoginButton.addEventListener('click', () => {
+        redirectToGoogleLogin();
+    });
+
+    const showRecapButton = document.getElementById("show-recap-button");
+    showRecapButton.addEventListener('click', () => {
+        location.href = "../pages/recap.html";
+    });
 }
