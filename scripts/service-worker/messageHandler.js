@@ -18,9 +18,13 @@ function messageHandler(message, sender, sendResponse) {
             sender.tab.id,
             { action: "DOM_DISTILLER_EXTRACT", data: {} },
             (response) => {
-                data.title = response.data.title;
-                data.content = response.data.content;
-                console.log("Distilled Data:" + data.title + ", content: " + data.content);
+                if (response.data !== undefined) {
+                    //DOM Distiller에 오류가 없었을 경우
+                    data.title = response.data.title;
+                    data.content = response.data.content;
+                }
+                console.log("원본: " + message.data.pageData);
+                console.log("Sending Data title:" + data.title + ", content: " + data.content);
 
                 //텍스트 데이터를 서버에 전송
                 networkManager.post.saveHistory(data)
