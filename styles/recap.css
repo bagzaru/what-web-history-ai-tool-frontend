@@ -1,7 +1,62 @@
-
-
+html {
+    width: 400px;
+    height: 400px;
+    overflow: hidden;
+}
 body {
-    height: 350px;
-    width: 350px;
     font-family: 'NanumBarunGothic';
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    height: 100%;
+    width: 100%;  
+    font-size: 3rem;
+    overflow: hidden;
+}
+.wrap {
+    position: relative;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+  }
+  
+.container {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    bottom: -100%;
+    transition: bottom .7s;
+  
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    /* flex 로 정렬시키고 싶은 요소가 있으면 해당 요소의 부모 요소에 flex 걸기 */
+}
+  
+.container:nth-child(1){background-color: lightblue;}
+.container:nth-child(2){background-color: lightcoral;}
+.container:nth-child(3){background-color: lightgreen;}
+.container:nth-child(4){background-color: lightpink;}
+
+.pagination {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.pagination>li {
+    list-style: none;
+    height: 20px;
+    width: 20px;
+    background: #000000;
+    border-radius: 50%;
+    margin-top: 10px;
+    transition: background .7s;
+}
+
+.pagination>li.active {
+    background: #ffffff;
 }
