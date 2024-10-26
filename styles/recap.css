@@ -27,12 +27,10 @@ body {
     position: absolute;
     bottom: -100%;
     transition: bottom .7s;
-  
     background-attachment: fixed;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    /* flex 로 정렬시키고 싶은 요소가 있으면 해당 요소의 부모 요소에 flex 걸기 */
 }
   
 .container:nth-child(1){background-color: lightblue;}
@@ -42,21 +40,27 @@ body {
 
 .pagination {
     position: absolute;
-    right: 20px;
-    top: 50%;
+    right: 10px;
+    top: 40%;
     transform: translateY(-50%);
 }
 
 .pagination>li {
     list-style: none;
-    height: 20px;
-    width: 20px;
-    background: #000000;
-    border-radius: 50%;
-    margin-top: 10px;
+    height: 50px;
+    width: 5px;
+    background: #3C3A39;
+    border-radius: 5%;
+    margin-top: 5px;
     transition: background .7s;
 }
 
 .pagination>li.active {
     background: #ffffff;
+}
+
+.scroll_down {
+    position: absolute;
+    left: 120px;
+    bottom: 10px;
 }
