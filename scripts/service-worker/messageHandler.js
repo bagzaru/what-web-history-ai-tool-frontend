@@ -22,12 +22,15 @@ function messageHandler(message, sender, sendResponse) {
             sender.tab.id,
             { action: "DOM_DISTILLER_EXTRACT", data: {} },
             (response) => {
-                if (response.data !== undefined) {
+                if (response === undefined) {
+                    console.log("issue#3 문제 발생, URL: " + message.data.url + ", 탭 id: " + sender.tab.id);
+                }
+                else if (response.data !== undefined) {
                     //DOM Distiller에 오류가 없었을 경우
                     data.title = response.data.title;
                     data.content = response.data.content;
                 }
-                console.log("DOM  extracted");
+                console.log("DOM extracted");
                 //console.log("원본: " + message.data.pageData);
                 //console.log("Sending Data title:" + data.title + ", content: " + data.content);
 
