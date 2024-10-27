@@ -1,10 +1,11 @@
 import networkManager from "./networkManager.js";
+import { domLoadHandler } from "./tabFocusManager.js";
 
 //content, popup 등에서 전송된 Message 값 처리
 function messageHandler(message, sender, sendResponse) {
     if (message.action === "DOM_LOADED") {
         //content의 domReadyHandler에서 DOM이 Load됨을 감지되었을 때 실행
-        console.log("service-worker msg Handler: DOM LOADED!!");
+        console.log("service-worker msg Handler: DOM LOADED!!" + message.data.url);
 
         //데이터 서버에 전송할 데이터 제작
         let data = {
@@ -12,6 +13,9 @@ function messageHandler(message, sender, sendResponse) {
             url: message.data.url,
             content: message.data.pageData
         }
+
+        //tabFocusManager의 url 업데이트함
+        domLoadHandler(sender.tab.id, message.data.url);
 
         //DOM Distiller를 통해 요약된 데이터 추출
         chrome.tabs.sendMessage(
@@ -23,8 +27,9 @@ function messageHandler(message, sender, sendResponse) {
                     data.title = response.data.title;
                     data.content = response.data.content;
                 }
-                console.log("원본: " + message.data.pageData);
-                console.log("Sending Data title:" + data.title + ", content: " + data.content);
+                console.log("DOM  extracted");
+                //console.log("원본: " + message.data.pageData);
+                //console.log("Sending Data title:" + data.title + ", content: " + data.content);
 
                 //텍스트 데이터를 서버에 전송
                 networkManager.post.saveHistory(data)
@@ -44,7 +49,6 @@ function messageHandler(message, sender, sendResponse) {
                     });
             });
 
-        //TODO: Response가 오지 않거나, Distill 실패 경우가 있는지, 있는 경우에 대한 대처
         //TODO: Distiller를 사용하는 경우와 사용하지 않는 경우 나누기
     }
     else if (message.action === "NETWORK_STATE_CHANGED") {

@@ -77,15 +77,23 @@ async function tabActivationHandler(activeInfo) {
     tabFocusManager.updateFocus(focus);
 }
 
-export { tabFocusManager, windowFocusChangeHandler, tabActivationHandler };
+async function domLoadHandler(tabId = -1, url = "", startTime = (new Date()).getTime()) {
+    //DOM이 로드되었을 경우, 현재 포커스된 탭과 일치하는지 확인 후 값을 갱신한다.
+    console.log("DOM LOAD HANDLER" + (tabId) + ", " + tabFocusManager.currentFocus.tabId);
+    if (tabId === tabFocusManager.currentFocus.tabId) {
+        tabFocusManager.updateFocus({ tabId, url, startTime });
+    }
+}
+
+export { windowFocusChangeHandler, tabActivationHandler, domLoadHandler };
 
 
 //테스트 케이스
 // 1. 탭 사용 중 다른 탭 누르기
-// 2. 탭 사용 중 다른 페이지로 넘어가기 -----
+// 2. 탭 사용 중 다른 페이지로 넘어가기
 // 3. 탭 사용 중 다른 크롬창 누르기
 // 4. 탭 사용 중 다른 크롬창의 다른 탭 누르기
 // 5. 탭 사용 중 아예 다른 프로그램 누르기
 // 6. 다른 프로그램 사용 중 크롬 창 누르기
 // 7. 다른 프로그램 사용 중 다른 탭 누르기
-// 8. 다른 프로그램 사용 중 다른 페이지 url 누르기 -----
+// 8. 다른 프로그램 사용 중 다른 페이지 url 누르기
