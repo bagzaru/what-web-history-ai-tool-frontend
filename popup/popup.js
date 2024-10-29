@@ -114,17 +114,27 @@ function loadHistoryData(orderBy) {
         }
     });
 
-    function redirectToGoogleLogin() {
-        window.location.href = "https://capstonepractice.site/oauth2/authorization/google";
-    };
-
     const googleLoginButton = document.getElementById("google-login-button");
     googleLoginButton.addEventListener('click', () => {
-        redirectToGoogleLogin();
+        const backendLoginUrl = "https://capstonepractice.site/oauth2/authorization/google";
+        // 팝업 창을 열어 백엔드 로그인 url로 이동
+        chrome.windows.create(
+            {
+                url: backendLoginUrl,
+                type: "popup",
+                width: 500,
+                height: 700,
+            }
+          );
     });
 
     const showRecapButton = document.getElementById("show-recap-button");
     showRecapButton.addEventListener('click', () => {
         location.href = "../pages/recap.html";
+    });
+
+    const showTokenButton = document.getElementById("show-token");
+    showTokenButton.addEventListener('click', () => {
+        chrome.storage.local.get((result) => console.log(result));
     });
 }

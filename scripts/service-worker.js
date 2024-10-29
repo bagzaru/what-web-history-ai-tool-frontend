@@ -1,5 +1,6 @@
 import { messageHandler } from "./service-worker/messageHandler.js";
 import { tabActivationHandler, windowFocusChangeHandler } from "./service-worker/tabFocusManager.js";
+import { loginHandler } from "./service-worker/loginHandler.js";
 
 console.log("service-worker on");
 
@@ -7,6 +8,11 @@ chrome.runtime.onMessage.addListener(messageHandler);
 chrome.tabs.onActivated.addListener(tabActivationHandler);
 chrome.windows.onFocusChanged.addListener(windowFocusChangeHandler);
 
+chrome.webRequest.onCompleted.addListener(loginHandler,
+    {
+        urls: ["https://capstonepractice.site/api/auth/oauth2/google"],
+    }
+);
 
 /* 이하는 테스트용 코드 */
 
