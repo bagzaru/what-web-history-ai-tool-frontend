@@ -3,7 +3,8 @@ async function loginHandler(details) {
     try {
         if (
             details.url.includes("/api/auth/oauth2/google") &&
-            details.statusCode === 200
+            details.statusCode === 200 &&
+            details.initiator === "https://accounts.google.com"
         ) {
             const response = await fetch(details.url);
             if (!response.ok) {
@@ -14,6 +15,8 @@ async function loginHandler(details) {
             const data = await response.json();
             const token = data.token;
 
+            // console.log("OAuth2 요청완료", details);
+
             if (token) {
                 // Chrome 스토리지에 토큰 저장
                 chrome.storage.local.set({ jwtToken: token }, () => {
@@ -21,10 +24,6 @@ async function loginHandler(details) {
                         console.error("토큰 저장 오류:", chrome.runtime.lastError);
                     } else {
                         console.log("JWT 토큰 저장 성공:", token);
-                        // 리스너 해제
-                        // 해제 하지 않으면 리스너가 계속 작동하여 토큰 요청이 무한히 됨
-                        chrome.webRequest.onCompleted.removeListener(loginHandler);
-                        console.log("리스너가 해제되었습니다.");
 
                         // 팝업창 닫기
                         chrome.windows.getAll({ windowTypes: ["popup"] }, (windows) => {
