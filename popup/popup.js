@@ -1,3 +1,5 @@
+import { logoutHandler } from "../scripts/service-worker/logoutHandler.js";
+
 //주요 element들
 const dropdown = document.getElementById('dropdown');
 const table = document.getElementById('keyword-table').getElementsByTagName('tbody')[0];
@@ -137,4 +139,9 @@ function loadHistoryData(orderBy) {
     showTokenButton.addEventListener('click', () => {
         chrome.storage.local.get((result) => console.log(result));
     });
+
+    const logoutButton = document.getElementById("logout-button");
+    logoutButton.addEventListener('click', async () => {
+        await logoutHandler();
+    })
 }
