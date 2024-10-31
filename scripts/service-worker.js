@@ -11,7 +11,8 @@ chrome.windows.onFocusChanged.addListener(windowFocusChangeHandler);
 chrome.webRequest.onCompleted.addListener(loginHandler,
     {
         urls: ["https://capstonepractice.site/api/auth/oauth2/google"],
-    }
+    },
+    ["responseHeaders"]
 );
 
 /* 이하는 테스트용 코드 */
