@@ -1,7 +1,10 @@
 async function post(path, body, headers = {}) {
+    const token = await getToken();
+
     const defaultHeader = {
         "Content-Type": "application/json",
         "Accept": "*/*",
+        "Authorization": `Bearer ${token}`,
     };
     const url = path;
     const options = {
@@ -24,8 +27,11 @@ async function post(path, body, headers = {}) {
     }
 }
 async function put(path, body, headers = {}) {
+    const token = await getToken();
+
     const defaultHeader = {
         "Accept": "*/*",
+        "Authorization": `Bearer ${token}`,
     };
     const url = path;
     const options = {
@@ -49,9 +55,12 @@ async function put(path, body, headers = {}) {
 }
 
 async function get(path, headers = {}) {
+    const token = await getToken();
+
     const defaultHeader = {
         "Content-Type": "application/json",
         "Accept": "*/*",
+        "Authorization": `Bearer ${token}`,
     };
     const url = path;
     const options = {
@@ -71,6 +80,18 @@ async function get(path, headers = {}) {
     else {
         throw new Error(`HTTP error! status: ${response.status}, ${data.message}`);
     }
+}
+
+function getToken() {
+    return new Promise((resolve, reject) => {
+        chrome.storage.local.get("jwtToken", (result) => {
+            if (chrome.runtime.lastError) {
+                reject(chrome.runtime.lastError);
+            } else {
+                resolve(result.jwtToken); //return token
+            }
+        });
+    });
 }
 
 export { post, put, get };
