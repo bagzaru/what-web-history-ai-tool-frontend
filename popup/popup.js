@@ -130,11 +130,6 @@ function loadHistoryData(orderBy) {
           );
     });
 
-    const showRecapButton = document.getElementById("show-recap-button");
-    showRecapButton.addEventListener('click', () => {
-        location.href = "../pages/recap.html";
-    });
-
     const showTokenButton = document.getElementById("show-token");
     showTokenButton.addEventListener('click', () => {
         chrome.storage.local.get((result) => console.log(result));
