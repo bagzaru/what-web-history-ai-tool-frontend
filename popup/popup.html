@@ -3,9 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/popup.css">
+    <link rel="stylesheet" href="../styles/fonts.css">
     <title>Document</title>
 </head>
 <body>
+    <div class="google-login-container">
+        <button class="google-login-btn" id="google-login-button">
+            <img src="../assets/web_light_sq_SI.svg" alt="Google Logo" class="google-logo">
+        </button>
+        <button id="logout-button" type="button" style="width: 80px; height: 45px">
+            Logout
+        </button>
+    </div>
+
+    </div>
     <div style="width: 350px;">
         <input id="radio-on" type="radio" name="chk_info" value="on">서버전송on
         <input id="radio-off" type="radio" name="chk_info" value="off">서버전송off
@@ -41,8 +53,13 @@
         test
         </p>
     </div>
+    <div>
+        <button id="show-token" type="button" style="width: 80px; height: 45px">
+            show
+            <br/>token
+        </button>
+    </div>
     
 </body>
-
-<script src="popup.js"></script>
+<script src="popup.js" type="module"></script>
 </html>
