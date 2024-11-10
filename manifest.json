@@ -13,7 +13,7 @@
     "action": {
       "default_icon": "icon.png",
       "default_title": "KJS",
-      "default_popup": "popup/popup.html",
+      "default_popup": "popup/main.html",
       "default_width": 200,
       "default_height": 100
     },
