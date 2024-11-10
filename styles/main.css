@@ -1,0 +1,73 @@
+*{
+    font-family: 'NanumBarunGothic';
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    border: 0px;
+    -webkit-box-sizing: border-box;
+}
+.container {
+    margin: 0 auto;
+    width: 500px;
+    overflow: hidden;
+    background: #BDBDBD;
+}
+li {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    height: 35px;
+    line-height: 35px;
+    list-style: none;
+    text-align: center;
+    width: 110px;
+    border-radius: 5px;
+    font-weight: 400;
+    font-size: small;
+    transition: all 0.2s ease-out;
+}
+li:hover {
+    background-color: #9E9E9E;
+}
+li.active {
+    background: #F5F5F5;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+a.tab {
+    display: block;
+    text-decoration: none;
+    color: #121212;
+}
+
+#tab_content {
+    float: right;
+    width: 380px;
+    background: #BDBDBD;
+    height: 400px;
+    overflow: hidden;
+}
+#tab_content .content {
+    padding: 15px;
+    height: 400px;
+    background: #F5F5F5;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 50px;
+    background: #BDBDBD;
+    color: #121212;
+    font-family: "Roboto", sans-serif;
+    font-weight: 900;
+    font-size: large;
+    user-select: none;
+}
+
+iframe {
+    height: 100%;
+    width: 100%;
+}
