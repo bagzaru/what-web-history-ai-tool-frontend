@@ -124,6 +124,7 @@ a.tab {
     justify-content: center;
     align-items: center;
     opacity: 0; /* 기본적으로 숨김 */
+    visibility: hidden;
     width: 140px;
     height: 45px;
     background-color: #F5F5F5;
@@ -135,6 +136,7 @@ a.tab {
 
 /* 체크박스가 선택된 경우 드롭다운 메뉴 보이기 */
 #toggle:checked ~ #menu {
+    visibility: visible;
     opacity: 1;
 }
 
