@@ -1,13 +1,22 @@
 const googleLoginButton = document.getElementById("google-login-button");
-googleLoginButton.addEventListener('click', () => {
-    const backendLoginUrl = "https://capstonepractice.site/oauth2/authorization/google";
-        // 팝업 창을 열어 백엔드 로그인 url로 이동
-    chrome.windows.create(
-        {
-            url: backendLoginUrl,
-            type: "popup",
-            width: 500,
-            height: 700,
+googleLoginButton.addEventListener('click', async() => {
+    try {
+        const response = await new Promise((resolve, reject) => {
+            chrome.runtime.sendMessage({ action: "LOGIN_REQUEST" }, (response) => {
+                if (chrome.runtime.lastError) {
+                    reject(chrome.runtime.lastError);
+                } else {
+                    resolve(response);
+                }
+            });
+        });
+        console.log("response data:", response);
+        if (response.data === true) {
+            console.log("From login.js : Login Success");
+        } else {
+            console.log("From login.js : Login Failed");
         }
-    );
+    } catch (error) {
+        console.error("Login request failed:", error);
+    }
 });
