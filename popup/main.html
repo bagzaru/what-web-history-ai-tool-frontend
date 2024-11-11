@@ -5,13 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../styles/main.css">
     <link rel="stylesheet" href="../styles/fonts.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <title>Test</title>
 </head>
 <body>
     <div class="container">
         <div id="tab_content">
             <div id="a" class="content">
-                로그인
+                <iframe src="login.html"></iframe>
             </div>
             <div id="b" class="content">
                 <iframe src="popup.html"></iframe>
@@ -19,17 +22,24 @@
             <div id="c" class="content">
                 전체 데이터 보기
             </div>
-            <div id="d" class="content">
-                로그아웃
-            </div>
         </div>
         <div class="logo">WHAT</div>
+        <div class="login-info">
+            <input type="checkbox" id="toggle" hidden>
+            <label for="toggle" id="label">
+                <img src="../assets/Google__G__logo.svg" alt="Google Logo" id="user-icon">
+                <div id="user-name">Team_WH123123O</div>
+                <img src="../assets/chevron-up-outline.svg" alt="Toggle" id="arrow">
+            </label>
+            <div id="menu">
+                <button class="logout-btn">로그아웃</button>
+            </div>
+        </div>
         <div>
             <ul id="tabnav">
                 <li class="active"><a href="#a" class="tab">로그인</a></li>
                 <li><a href="#b" class="tab">검색</a></li>
                 <li><a href="#c" class="tab">전체 데이터 보기</a></li>
-                <li><a href="#d" class="tab">로그아웃</a></li>
             </ul>
         </div>
     </div>
