@@ -92,10 +92,10 @@ function messageHandler(message, sender, sendResponse) {
             })
         return true;
     }
-    else {
-        sendResponse({ k: message.action });
-        return false;
-    }
+    // else {
+    //     sendResponse({ k: message.action });
+    //     return false;
+    // }
 }
 
 export { messageHandler };
