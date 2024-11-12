@@ -100,14 +100,25 @@ async function loginHandler() {
     try {
         const idToken = await googleLogin();
         console.log("loginHandler Active: ", idToken);
-        chrome.storage.local.set({ jwtToken: idToken }, () => {
-            if (chrome.runtime.lastError) {
-                console.error("토큰 저장 오류:", chrome.runtime.lastError);
-            } else {
-                console.log("JWTtoken이 성공적으로 저장되었습니다.");
+        fetch("https://capstonepractice.site/api/auth/oauth2/google", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ token: idToken }),
+        })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error (`Server responded with status: ${response.status}`);
             }
-        });
-        return true;
+            console.log("response:", response.json());
+            return response.json();
+        })
+        .then((data) => {
+            const { jwtToken } = data;
+            console.log("JWT Token:", jwtToken);
+        })
+        .catch((error) => console.error("Error during login:",error));
     } catch (error) {
         console.error("Error in loginHandler", error);
         return false;
