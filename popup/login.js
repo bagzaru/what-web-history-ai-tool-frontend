@@ -13,6 +13,7 @@ googleLoginButton.addEventListener('click', async() => {
         console.log("response data:", response);
         if (response.data === true) {
             console.log("From login.js : Login Success");
+            window.parent.location.reload();
         } else {
             console.log("From login.js : Login Failed");
         }

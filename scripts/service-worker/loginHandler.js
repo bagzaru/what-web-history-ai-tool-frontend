@@ -100,6 +100,13 @@ async function loginHandler() {
     try {
         const idToken = await googleLogin();
         console.log("loginHandler Active: ", idToken);
+        chrome.storage.local.set({ jwtToken: idToken }, () => {
+            if (chrome.runtime.lastError) {
+                console.error("토큰 저장 오류:", chrome.runtime.lastError);
+            } else {
+                console.log("JWTtoken이 성공적으로 저장되었습니다.");
+            }
+        });
         return true;
     } catch (error) {
         console.error("Error in loginHandler", error);

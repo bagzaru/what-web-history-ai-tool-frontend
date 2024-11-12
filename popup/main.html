@@ -13,33 +13,37 @@
 <body>
     <div class="container">
         <div id="tab_content">
-            <div id="a" class="content">
+            <div id="login-frame" class="content">
                 <iframe src="login.html"></iframe>
             </div>
-            <div id="b" class="content">
-                <iframe src="popup.html"></iframe>
+            <div id="search-frame" class="content">
+                검색
             </div>
-            <div id="c" class="content">
+            <div id="showall-frame" class="content">
                 전체 데이터 보기
+            </div>
+            <div id="temp-frame" class="content">
+                <iframe src="popup.html"></iframe>
             </div>
         </div>
         <div class="logo">WHAT</div>
-        <div class="login-info">
+        <div class="login-info" id="login-info">
             <input type="checkbox" id="toggle" hidden>
             <label for="toggle" id="label">
                 <img src="../assets/person-circle-outline.svg" alt="User Image" id="user-icon">
-                <div id="user-name">user-name</div>
+                <div id="user-name">user-email</div>
                 <img src="../assets/chevron-up-outline.svg" alt="Toggle" id="arrow">
             </label>
             <div id="menu">
-                <button class="logout-btn">로그아웃</button>
+                <button class="logout-btn" id="logout-btn">로그아웃</button>
             </div>
         </div>
         <div>
             <ul id="tabnav">
-                <li class="active"><a href="#a" class="tab">로그인</a></li>
-                <li><a href="#b" class="tab">검색</a></li>
-                <li><a href="#c" class="tab">전체 데이터 보기</a></li>
+                <li class="active" id="login-tab"><a href="#login-frame" class="tab">로그인</a></li>
+                <li id="search-tab"><a href="#search-frame" class="tab">검색</a></li>
+                <li id="showall-tab"><a href="#showall-frame" class="tab">전체 데이터 보기</a></li>
+                <li id="temp-tab"><a href="#temp-frame" class="tab">임시</a></li>
             </ul>
         </div>
     </div>
