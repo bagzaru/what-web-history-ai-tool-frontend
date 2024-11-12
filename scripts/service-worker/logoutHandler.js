@@ -1,30 +1,27 @@
 async function logoutHandler(){
-    const token = await getToken();
-    const defaultHeader = {
-        "Accept": "*/*",
-        "Authorization": `Bearer ${token}`,
-    };
-    const url = "https://capstonepractice.site/api/auth/logout";
-    const options = {
-        method: "POST",
-        headers: {
-            ...defaultHeader,
-        },
-    };
-    fetch(url, options)
-    .then((response) => {
-        console.log("response", response);
-        if (response.status === 200){
-            chrome.storage.local.remove("jwtToken", () => {
-                if (chrome.runtime.lastError) {
-                    console.error("토큰 삭제 오류:", chrome.runtime.lastError);
-                } else {
-                    console.log("JWT 토큰이 삭제되었습니다.");
-                }
-            });
+    try {
+        const token = await getToken();
+        const defaultHeader = {
+            "Accept": "*/*",
+            "Authorization": `Bearer ${token}`,
+        };
+        const url = "https://capstonepractice.site/api/auth/logout";
+        const options = {
+            method: "POST",
+            headers: {
+                ...defaultHeader,
+            },
+        };
+        const response = await fetch(url, options);
+        if (!response.ok) {
+            throw new Error(`Server responded with status: ${response.status}`);
         }
-    })
-    .catch((e) => console.log("error:", e));
+        await deleteToken();
+        return true;
+    } catch (error) {
+        console.error("Error in logoutHandler", error);
+        return false;
+    }
 }
 
 function getToken() {
@@ -34,6 +31,20 @@ function getToken() {
                 reject(chrome.runtime.lastError);
             } else {
                 resolve(result.jwtToken); //return token
+            }
+        });
+    });
+}
+
+// 저장된 토큰 삭제를 동기식으로 처리하기 위한 함수
+function deleteToken() {
+    return new Promise((resolve, reject) => {
+        chrome.storage.local.remove('jwtToken', () => {
+            if (chrome.runtime.lastError) {
+                reject(new Error(chrome.runtime.lastError));
+            } else {
+                console.log("jwt 토큰 삭제 성공");
+                resolve();
             }
         });
     });
