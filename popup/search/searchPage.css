@@ -1,0 +1,71 @@
+    /* 페이지 전체를 가운데 정렬하고 배경 색상 설정 */
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+    }
+
+    /* 컨테이너 스타일 */
+    .container {
+      text-align: center;
+      width: 100%;
+      max-width: 500px;
+      min-width: 300px;
+      max-height: 500px;
+      min-height: 250px;
+      margin-top: 300px;
+      margin-bottom: 300px;
+      margin-left: 100px;
+      margin-right: 100px;
+    }
+
+    /* 로고 스타일 */
+    .logo {
+      font-size: 2em;
+      color: #3e3e3e;
+      font-weight: bold;
+      margin-top: 50px;
+    }
+
+    /* 검색창 스타일 */
+    .search-box {
+      display: flex;
+      align-items: center;
+      border: 1px solid #ddd;
+      border-radius: 2px;
+      padding: 10px 15px;
+      margin-top: 20px;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+      background-color: #fff;
+    }
+
+    /* 검색 입력 필드 스타일 */
+    .search-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      padding: 8px;
+    color: #3e3e3e;
+      background-color: #fff;
+    }
+
+    /* 버튼 스타일 */
+    .search-button {
+      background-color: #fff;
+      color: #5e5e5e;
+      border-radius: 1px;
+      padding: 8px 16px;
+      font-size: 16px;
+      cursor: pointer;
+      border: 1px solid #ccc;
+    }
+
+    /* 버튼 호버 효과 */
+    .search-button:hover {
+      background-color: #ddd;
+    }
