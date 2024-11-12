@@ -21,7 +21,7 @@
 // Main.html의 DOM 트리가 완성되는 즉시 로그인 상태에 따라 렌더링 변경
 // window.onload 보다 이전 시점
 document.addEventListener("DOMContentLoaded", function () {
-    chrome.storage.local.get("jwtToken", (result) => {
+    chrome.storage.local.get(["jwtToken", "user_email", "user_picture"], (result) => {
         if (result.jwtToken) {
             console.log("jwtToken이 존재합니다:", result.jwtToken);
             // 로그인 상태일 시, 로그인 탭이 보이지 않게 됨
@@ -30,6 +30,11 @@ document.addEventListener("DOMContentLoaded", function () {
             // 탭의 기본 값이 검색 창이 됨.
             document.getElementById("login-tab").classList.remove("active");
             document.getElementById("search-tab").classList.add("active");
+            // 사용자 정보 보여주기
+            const img = document.getElementById("user-icon");
+            img.src = result.user_picture;
+            const email_text = document.getElementById("user-name");
+            email_text.innerText = result.user_email;
         } else {
             console.log("jwtToken이 존재하지 않습니다:");
             // 로그아웃 상태일 시 사용자 정보 박스 및 로그아웃 버튼이 보이지 않음
