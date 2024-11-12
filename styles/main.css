@@ -1,5 +1,5 @@
 *{
-    font-family: 'NanumBarunGothic';
+    font-family: 'Pretendard';
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -23,8 +23,8 @@ li {
     text-align: center;
     width: 140px;
     border-radius: 5px;
-    font-weight: 400;
-    font-size: small;
+    font-weight: 500;
+    font-size: 14px;
     transition: all 0.2s ease-out;
 }
 li:hover {
@@ -62,7 +62,7 @@ a.tab {
     height: 50px;
     background: #BDBDBD;
     color: #121212;
-    font-family: "Roboto", sans-serif;
+    font-family: 'Roboto', sans-serif;
     font-weight: 700;
     font-size: 20px;
     user-select: none;
@@ -76,7 +76,7 @@ a.tab {
     width: 150px;
     height: 100px;
     color: #121212;
-    font-family: 'NanumBarunGothic';
+    font-family: 'Pretendard';
     font-weight: 400;
     font-size: 14px;
     user-select: none;
@@ -92,7 +92,7 @@ a.tab {
     color: #faf7ff;
     transition: all 0.2s ease-out;
     cursor: pointer;
-    font-family: 'NanumBarunGothic';
+    font-family: 'Pretendard';
     font-weight: 700;
     font-size: 12px;
 }
@@ -159,7 +159,7 @@ a.tab {
     overflow: hidden;
     text-overflow: ellipsis;
     color: #121212;
-    font-family: 'NanumBarunGothic';
+    font-family: 'Pretendard';
     font-weight: 500;
     font-size: 13px;
 }
