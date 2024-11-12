@@ -35,6 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
             img.src = result.user_picture;
             const email_text = document.getElementById("user-name");
             email_text.innerText = result.user_email;
+            email_text.title = result.user_email;
         } else {
             console.log("jwtToken이 존재하지 않습니다:");
             // 로그아웃 상태일 시 사용자 정보 박스 및 로그아웃 버튼이 보이지 않음
