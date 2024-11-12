@@ -38,7 +38,7 @@ async function loginHandler() {
             body: JSON.stringify({ token: idToken }),
         });
         if (!login_response.ok) {
-            throw new Error(`Server responded with status: ${response.status}`);
+            throw new Error(`Server responded with status: ${login_response.status}`);
         }
         const token = await login_response.text();
         const jwtToken = token;
@@ -53,7 +53,7 @@ async function loginHandler() {
             },
         });
         if (!info_response.ok){
-            throw new Error(`Server responded with status: ${response.status}`);
+            throw new Error(`Server responded with status: ${info_response.status}`);
         }
         const info = await info_response.json();
         console.log('User Info:', info);
