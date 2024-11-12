@@ -64,13 +64,25 @@ for (let tab of tabs) {
 }
 
 const logoutButton = document.getElementById("logout-btn");
-logoutButton.addEventListener('click', () => {
-    chrome.storage.local.remove("jwtToken", () => {
-        if (chrome.runtime.lastError) {
-            console.error("토큰 삭제 오류:", chrome.runtime.lastError);
+logoutButton.addEventListener('click', async () => {
+    try {
+        const response = await new Promise((resolve, reject) => {
+            chrome.runtime.sendMessage({ action: "LOGOUT_REQUEST" }, (response) => {
+                if (chrome.runtime.lastError) {
+                    reject(chrome.runtime.lastError);
+                } else {
+                    resolve(response);
+                }
+            });
+        });
+        console.log("response data:", response);
+        if (response.data === true) {
+            console.log("From main.js : Logout Success");
+            window.parent.location.reload();
         } else {
-            console.log("jwtToken이 성공적으로 삭제되었습니다.");
-            window.location.reload();
+            console.log("From main.js : Logout Failed");
         }
-    });
+    } catch (error) {
+        console.error("Logout request failed:", error);
+    }
 })
