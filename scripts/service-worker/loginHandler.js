@@ -29,21 +29,37 @@ async function loginHandler() {
     try {
         const idToken = await googleLogin();
         console.log("loginHandler Active: ", idToken);
-        const response = await fetch("https://capstonepractice.site/api/auth/oauth2/google", {
-            method: "POST",
+        // 로그인 요청
+        const login_response = await fetch('https://capstonepractice.site/api/auth/oauth2/google', {
+            method: 'POST',
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({ token: idToken }),
         });
-        if (!response.ok) {
+        if (!login_response.ok) {
             throw new Error(`Server responded with status: ${response.status}`);
         }
-        
-        const data = await response.text();
-        const jwtToken = data;
+        const token = await login_response.text();
+        const jwtToken = token;
         console.log("jwtToken:", jwtToken);
         await storeToken("jwtToken", jwtToken);
+
+        // 유저 정보 가져오기
+        const info_response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${idToken}`,
+            },
+        });
+        if (!info_response.ok){
+            throw new Error(`Server responded with status: ${response.status}`);
+        }
+        const info = await info_response.json();
+        console.log('User Info:', info);
+        const email = info.email;
+        const profilePicture = info.picture;
+        await storeUserInfo(email, profilePicture);
         return true;
     } catch (error) {
         console.error("Error in loginHandler", error);
@@ -62,6 +78,26 @@ function storeToken(key, value) {
                 resolve();
             }
         });
+    });
+}
+
+//로그인한 User의 UserInfo를 가져와 localstorage에 저장하는 함수
+// Promise를 사용해 동기식으로 구현
+function storeUserInfo(email, picture) {
+    return new Promise((resolve, reject) => {
+        chrome.storage.local.set(
+            { 
+                user_email: email,
+                user_picture: picture
+            }, 
+            () => {
+                if (chrome.runtime.lastError) {
+                    reject (new Error(chrome.runtime.lastError));
+                } else {
+                    resolve();
+                }
+            }
+        );
     });
 }
 
