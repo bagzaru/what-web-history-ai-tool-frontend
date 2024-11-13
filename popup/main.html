@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"/>
+    <title>Test</title>
+</head>
+<body>
+    <div class="container">
+        <div id="tab_content">
+            <div id="login-frame" class="content">
+                <iframe src="login.html"></iframe>
+            </div>
+            <div id="search-frame" class="content">
+                검색
+            </div>
+            <div id="showall-frame" class="content">
+                전체 데이터 보기
+            </div>
+            <div id="temp-frame" class="content">
+                <iframe src="popup.html"></iframe>
+            </div>
+        </div>
+        <div class="logo">WHAT</div>
+        <div class="login-info" id="login-info">
+            <input type="checkbox" id="toggle" hidden>
+            <label for="toggle" id="label">
+                <img src="../assets/person-circle-outline.svg" alt="User Image" id="user-icon">
+                <div id="user-name">user-email</div>
+                <img src="../assets/chevron-up-outline.svg" alt="Toggle" id="arrow">
+            </label>
+            <div id="menu">
+                <button class="logout-btn" id="logout-btn">로그아웃</button>
+            </div>
+        </div>
+        <div>
+            <ul id="tabnav">
+                <li class="active" id="login-tab"><a href="#login-frame" class="tab">로그인</a></li>
+                <li id="search-tab"><a href="#search-frame" class="tab">검색</a></li>
+                <li id="showall-tab"><a href="#showall-frame" class="tab">전체 데이터 보기</a></li>
+                <li id="temp-tab"><a href="#temp-frame" class="tab">임시</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+<script src="main.js"></script>
+</html>

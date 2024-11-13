@@ -13,7 +13,7 @@
     "action": {
       "default_icon": "icon.png",
       "default_title": "KJS",
-      "default_popup": "popup/popup.html",
+      "default_popup": "popup/main.html",
       "default_width": 200,
       "default_height": 100
     },
@@ -25,14 +25,31 @@
       "storage",
       "webNavigation",
       "webRequest",
-      "windows"
+      "windows",
+      "identity"
     ],
+    "oauth2": {
+      "client_id": "304314144761-9gfb9l023pe0cpi5p9efn21uonp9nsfo.apps.googleusercontent.com",
+      "scopes" : ["profile", "email"]
+    },
 
     "content_scripts":[
       {
         "matches": ["https://*/*", "http://*/*"],
         "js": ["scripts/content-scripts/domReadyHandler.js", "scripts/content-scripts/domDistiller.js"],
         "type": "module"
+      }
+    ],
+    "web_accessible_resources":[
+      {
+        "resources": [
+          "assets/*.svg",
+          "styles/*.css"
+        ],
+        "matches": [
+          "https://*/*", 
+          "http://*/*"
+        ]
       }
     ],
     
