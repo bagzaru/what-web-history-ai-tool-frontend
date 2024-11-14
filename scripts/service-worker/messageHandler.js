@@ -92,6 +92,11 @@ function messageHandler(message, sender, sendResponse) {
             })
         return true;
     }
+    else if (message.action === "SAVE_PAGE") {
+        console.log("SAVE DATA 요청 왔음!");
+
+        sendResponse({ data: "굿" });
+    }
     else {
         sendResponse({ k: message.action });
         return false;

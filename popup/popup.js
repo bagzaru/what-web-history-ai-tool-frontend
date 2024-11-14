@@ -37,6 +37,7 @@ window.onload = function () {
                 });
             }
         })
+
 }
 
 //popup이 켜졌을 때, history data 최신 정보로 로드 시도
@@ -127,7 +128,7 @@ function loadHistoryData(orderBy) {
                 width: 500,
                 height: 700,
             }
-          );
+        );
     });
 
     const showTokenButton = document.getElementById("show-token");
@@ -140,3 +141,11 @@ function loadHistoryData(orderBy) {
         await logoutHandler();
     })
 }
+
+//데이터 저장 테스트 버튼
+const testSaveButton = document.getElementById("save-button");
+testSaveButton.addEventListener('click', () => {
+    chrome.runtime.sendMessage({ action: "SAVE_PAGE" }, (response) => {
+        log.innerText = "밥김국";
+    })
+})
