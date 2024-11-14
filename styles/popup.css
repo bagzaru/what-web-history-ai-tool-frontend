@@ -1,0 +1,12 @@
+.google-login-container {
+    text-align: center;
+    padding: 10px;
+    margin: 10px;
+    border-bottom: 1px solid darkgray;
+}
+
+.google-login-btn {
+    padding: 0px;
+    border: 0px;
+    cursor: pointer;
+}

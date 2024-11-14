@@ -1,3 +1,5 @@
+import { logoutHandler } from "../scripts/service-worker/logoutHandler.js";
+
 //주요 element들
 const dropdown = document.getElementById('dropdown');
 const table = document.getElementById('keyword-table').getElementsByTagName('tbody')[0];
@@ -113,4 +115,28 @@ function loadHistoryData(orderBy) {
             newRow.insertCell().textContent = visitCount;
         }
     });
+
+    const googleLoginButton = document.getElementById("google-login-button");
+    googleLoginButton.addEventListener('click', () => {
+        const backendLoginUrl = "https://capstonepractice.site/oauth2/authorization/google";
+        // 팝업 창을 열어 백엔드 로그인 url로 이동
+        chrome.windows.create(
+            {
+                url: backendLoginUrl,
+                type: "popup",
+                width: 500,
+                height: 700,
+            }
+          );
+    });
+
+    const showTokenButton = document.getElementById("show-token");
+    showTokenButton.addEventListener('click', () => {
+        chrome.storage.local.get((result) => console.log(result));
+    });
+
+    const logoutButton = document.getElementById("logout-button");
+    logoutButton.addEventListener('click', async () => {
+        await logoutHandler();
+    })
 }
