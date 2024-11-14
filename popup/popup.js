@@ -146,6 +146,6 @@ function loadHistoryData(orderBy) {
 const testSaveButton = document.getElementById("save-button");
 testSaveButton.addEventListener('click', () => {
     chrome.runtime.sendMessage({ action: "SAVE_PAGE" }, (response) => {
-        log.innerText = "밥김국";
+        //log.innerText += "밥김국";
     })
 })

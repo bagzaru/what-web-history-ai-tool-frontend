@@ -95,7 +95,31 @@ function messageHandler(message, sender, sendResponse) {
     else if (message.action === "SAVE_PAGE") {
         console.log("SAVE DATA 요청 왔음!");
 
+        //content script에 데이터 추출 요청
+        //현재 focus된 content tab의 위치 확인한다.
+        chrome.tabs.query(
+            { active: true, currentWindow: true },
+            (tabs) => {
+                if (tabs.length > 0) {
+                    const tab = tabs[0];
+                    const tabId = tab.id;
+
+                    //해당 탭의 content에 메시지 전송
+                    chrome.tabs.sendMessage(
+                        tabId,
+                        { action: "EXTRACT_PAGE" },
+                        (response) => {
+                            //TODO: 서버에 데이터 전송
+                            console.log("추출완: " + response.data);
+                        });
+                }
+                else {
+                    console.log("messageHandler: SAVE_PAGE실패: active tab이 없습니다.");
+                }
+            });
         sendResponse({ data: "굿" });
+
+        return true;
     }
     else {
         sendResponse({ k: message.action });
