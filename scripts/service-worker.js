@@ -2,6 +2,7 @@ import { messageHandler } from "./service-worker/messageHandler.js";
 import { tabActivationHandler, windowFocusChangeHandler } from "./service-worker/tabFocusManager.js";
 import { loginHandler } from "./service-worker/loginHandler.js";
 import { logoutHandler } from "./service-worker/logoutHandler.js";
+import { savePageData } from "./service-worker/savePageData.js";
 
 console.log("service-worker on");
 
@@ -24,12 +25,29 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     else if (request.action === "LOGOUT_REQUEST") {
         logoutHandler().then((result) => {
             console.log("logoutHandler result:", result);
-            sendResponse({ data: result});
+            sendResponse({ data: result });
         }).catch((error) => {
             console.error("Error in logoutHandler:", error);
-            sendResponse({ data: false});
+            sendResponse({ data: false });
         });
         return true; // keep the messaging channel open for sendResponse
+    }
+});
+
+//웹페이지 우클릭 시 등장하는 컨텍스트 메뉴 생성
+chrome.runtime.onInstalled.addListener(() => {
+    chrome.contextMenus.create({
+        id: "savePageData", // 고유 ID
+        title: "페이지를 WHAT에 저장", // 메뉴에 표시될 텍스트
+        contexts: ["all"], // 메뉴를 표시할 컨텍스트 (예: 페이지, 텍스트 선택 등)
+    });
+});
+
+// 컨텍스트 메뉴 클릭 시 동작 정의
+chrome.contextMenus.onClicked.addListener((info, tab) => {
+    if (info.menuItemId === "savePageData") {
+        // 메뉴 클릭 시 실행할 함수
+        savePageData(tab.id);
     }
 });
 
@@ -40,18 +58,4 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 //     ["responseHeaders"]
 // );
 
-/* 이하는 테스트용 코드 */
 
-// //onCommitted, onCompleted 확인
-// chrome.webNavigation.onCommitted.addListener(function (details) {
-//     console.log(`onCommitted 완료, url: ${details.url}`);
-// }/*, { url: [{ urlMatches: 'https://example.com/*' }] }*/);
-
-// chrome.webNavigation.onCompleted.addListener((details) => {
-//     console.log(`onCompleted 완료, url: ${details.url}`);
-// });
-
-// //방문기록 업데이트 확인
-// chrome.webNavigation.onHistoryStateUpdated.addListener((details) => {
-//     console.log(`service-worker: onHistoryStateUpdated 완료, uuid: ${details.documentId}, url: ${details.url}`);
-// });

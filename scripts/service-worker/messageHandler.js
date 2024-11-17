@@ -1,6 +1,7 @@
 import dummyModule from "../debugging/dummyModule.js";
 import networkManager from "./networkManager.js";
 import { domLoadHandler } from "./tabFocusManager.js";
+import { savePageData } from "./savePageData.js";
 
 //content, popup 등에서 전송된 Message 값 처리
 function messageHandler(message, sender, sendResponse) {
@@ -99,25 +100,19 @@ function messageHandler(message, sender, sendResponse) {
 
         //현재 focus된 content tab의 위치 확인하여 데이터 추출 요청
         const query = { active: true, lastFocusedWindow: true };
-        const extractCallback = (tabs) => {
+        const onSaveFinished = (response) => {
+            //TODO: 추출된 데이터를 서버에 전송한다.
+            console.log("SAVE_PAGE_DATA: 데이터 추출 완료: " + JSON.stringify(response));
+            sendResponse({ data: response });
+        }
+        const onTabQueryFinished = (tabs) => {
             if (tabs.length > 0) {
-                const tab = tabs[0];
-                const tabId = tab.id;
-                const message = { action: "EXTRACT_PAGE_DATA" };
-                const callback = (response) => {
-                    //TODO: 추출된 데이터를 서버에 전송한다.
-                    console.log("SAVE_PAGE_DATA: 데이터 추출 완료: " + JSON.stringify(response));
-                    sendResponse({ data: response });
-                }
-
-                //해당 탭의 content에 메시지 전송
-                chrome.tabs.sendMessage(tabId, message, callback);
-            }
-            else {
-                console.log("messageHandler: SAVE_PAGE_DATA실패: active tab이 없습니다.");
+                savePageData(tabs[0].id, onSaveFinished);
             }
         }
-        chrome.tabs.query(query, extractCallback);
+
+
+        chrome.tabs.query(query, onTabQueryFinished);
 
         return true;
     }
