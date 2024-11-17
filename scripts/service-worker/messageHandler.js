@@ -131,6 +131,16 @@ function messageHandler(message, sender, sendResponse) {
         }, 1000);
 
         return true;
+    } else if (message.action === "GET_SEARCH_DATA_LIST") {
+        //popup에서 전체 데이터 리스트를 요청했을 때
+        //TODO: 실제 서버에서 데이터를 받아오도록 수정
+        const data = dummyModule.getDummyData(message.data);
+        console.log("data: " + JSON.stringify(data));
+        setTimeout(() => {
+            sendResponse({ data: data });
+        }, 1000);
+
+        return true;
     }
     return false;
 }

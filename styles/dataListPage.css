@@ -1,0 +1,21 @@
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        .article {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .title {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        .keywords {
+            color: #555;
+            font-style: italic;
+        }
+        .content {
+            margin-top: 10px;
+        }
