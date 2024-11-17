@@ -19,7 +19,7 @@ function messageHandler(message, sender, sendResponse) {
         domLoadHandler(sender.tab.id, message.data.url);
 
         //DOM Distiller를 통해 요약된 데이터 추출
-        chrome.tabs.sendMessage(
+        /*chrome.tabs.sendMessage(
             sender.tab.id,
             { action: "DOM_DISTILLER_EXTRACT", data: {} },
             (response) => {
@@ -51,7 +51,7 @@ function messageHandler(message, sender, sendResponse) {
                     .catch((e) => {
                         console.log(`saveHistory Error: ${e.message}`);
                     });
-            });
+            });*/
 
         //TODO: Distiller를 사용하는 경우와 사용하지 않는 경우 나누기
     }

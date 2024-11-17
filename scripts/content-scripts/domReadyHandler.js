@@ -22,6 +22,6 @@ function onDOMLoaded() {
 
     //service-worker에 전송
     chrome.runtime.sendMessage({ action: "DOM_LOADED", data: data }, (response) => {
-        console.log("DOM load 완료, 메시지 service-worker로 전송");
+        console.log("content:domReadyHandler: DOM load 완료");
     });
 }
