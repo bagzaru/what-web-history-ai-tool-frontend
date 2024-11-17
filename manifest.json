@@ -26,7 +26,8 @@
       "webNavigation",
       "webRequest",
       "windows",
-      "identity"
+      "identity",
+      "contextMenus"
     ],
     "oauth2": {
       "client_id": "304314144761-9gfb9l023pe0cpi5p9efn21uonp9nsfo.apps.googleusercontent.com",
