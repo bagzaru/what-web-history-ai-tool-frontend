@@ -1,16 +1,17 @@
-import renderArticles from "./renderArticles/renderArticles.js";
+import renderArticles from "../renderArticles/renderArticles.js";
 
 const searchButton = document.getElementById('search-button');
 const searchInput = document.getElementById('search-input');
 
-const searchResultContainer = document.getElementById('result-container');
+const resultContainer = document.getElementById('result-container');
 
+//버튼 클릭 시 데이터 가져옴
 searchButton.addEventListener('click', () => {
     const searchValue = searchInput.value;
     chrome.runtime.sendMessage({ action: "GET_SEARCH_DATA_LIST", data: searchValue }, (response) => {
         const data = response.data;
-        const renderResult = renderArticles(data, searchResultContainer);
+        const renderResult = renderArticles(data, resultContainer);
 
-        searchResultContainer.appendChild(renderResult);
+        resultContainer.appendChild(renderResult);
     });
 });
