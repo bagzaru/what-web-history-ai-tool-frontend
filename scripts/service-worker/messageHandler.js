@@ -120,10 +120,7 @@ function messageHandler(message, sender, sendResponse) {
 
         return true;
     }
-    else {
-        sendResponse({ k: message.action });
-        return false;
-    }
+    return false;
 }
 
 export { messageHandler };
