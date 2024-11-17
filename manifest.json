@@ -36,7 +36,11 @@
     "content_scripts":[
       {
         "matches": ["https://*/*", "http://*/*"],
-        "js": ["scripts/content-scripts/domReadyHandler.js", "scripts/content-scripts/domDistiller.js"],
+        "js": [
+          "scripts/content-scripts/domReadyHandler.js",
+           "scripts/content-scripts/domDistiller.js",
+           "scripts/content-scripts/htmlExtractor.js"
+          ],
         "type": "module"
       }
     ],

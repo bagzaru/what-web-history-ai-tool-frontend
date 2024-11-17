@@ -1,3 +1,4 @@
+import dummyModule from "../debugging/dummyModule.js";
 import networkManager from "./networkManager.js";
 import { domLoadHandler } from "./tabFocusManager.js";
 
@@ -92,10 +93,56 @@ function messageHandler(message, sender, sendResponse) {
             })
         return true;
     }
-    // else {
-    //     sendResponse({ k: message.action });
-    //     return false;
-    // }
+    else if (message.action === "SAVE_PAGE_DATA") {
+        //'페이지 저장' 이벤트 발생 시
+        // - content script에서 페이지 데이터를 추출하여 서버에 전송한다.
+
+        //현재 focus된 content tab의 위치 확인하여 데이터 추출 요청
+        const query = { active: true, lastFocusedWindow: true };
+        const extractCallback = (tabs) => {
+            if (tabs.length > 0) {
+                const tab = tabs[0];
+                const tabId = tab.id;
+                const message = { action: "EXTRACT_PAGE_DATA" };
+                const callback = (response) => {
+                    //TODO: 추출된 데이터를 서버에 전송한다.
+                    console.log("SAVE_PAGE_DATA: 데이터 추출 완료: " + JSON.stringify(response));
+                    sendResponse({ data: response });
+                }
+
+                //해당 탭의 content에 메시지 전송
+                chrome.tabs.sendMessage(tabId, message, callback);
+            }
+            else {
+                console.log("messageHandler: SAVE_PAGE_DATA실패: active tab이 없습니다.");
+            }
+        }
+        chrome.tabs.query(query, extractCallback);
+
+        return true;
+    }
+    else if (message.action === "GET_ALL_DATA_LIST") {
+        //popup에서 전체 데이터 리스트를 요청했을 때
+        //TODO: 실제 서버에서 데이터를 받아오도록 수정
+        const data = dummyModule.getDummyData();
+        console.log("data: " + JSON.stringify(data));
+        setTimeout(() => {
+            sendResponse({ data: data });
+        }, 1000);
+
+        return true;
+    } else if (message.action === "GET_SEARCH_DATA_LIST") {
+        //popup에서 전체 데이터 리스트를 요청했을 때
+        //TODO: 실제 서버에서 데이터를 받아오도록 수정
+        const data = dummyModule.getDummyData(message.data);
+        console.log("data: " + JSON.stringify(data));
+        setTimeout(() => {
+            sendResponse({ data: data });
+        }, 1000);
+
+        return true;
+    }
+    return false;
 }
 
 export { messageHandler };
