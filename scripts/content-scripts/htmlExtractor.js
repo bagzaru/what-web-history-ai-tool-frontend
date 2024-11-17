@@ -4,7 +4,6 @@ function extractHTMLText() {
     //TODO: 전체 html을 뽑는것, innerText만 뽑는 것, DOM Distiller를 이용한 것 중에 어떤 것이 정확한 결과에 가까운가?
     const bodyHTML = document.body.outerHTML;
 
-    console.log("추출됨: " + bodyHTML);
     return bodyHTML;
 }
 
@@ -14,7 +13,6 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === "EXTRACT_PAGE_DATA") {
 
         const extractedPage = extractHTMLText();
-        console.log("is this fucking work????");
         sendResponse({ data: extractedPage });
 
         return false;

@@ -97,7 +97,7 @@ function messageHandler(message, sender, sendResponse) {
         // - content script에서 페이지 데이터를 추출하여 서버에 전송한다.
 
         //현재 focus된 content tab의 위치 확인하여 데이터 추출 요청
-        const query = { active: true, currentWindow: true };
+        const query = { active: true, lastFocusedWindow: true };
         const extractCallback = (tabs) => {
             if (tabs.length > 0) {
                 const tab = tabs[0];
