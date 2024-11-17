@@ -583,7 +583,5 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         sendResponse({ data: data });
         return true;
     }
-    else {
-        sendResponse({});
-    }
+    return false;
 });

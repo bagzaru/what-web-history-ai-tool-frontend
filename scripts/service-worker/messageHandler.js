@@ -92,32 +92,31 @@ function messageHandler(message, sender, sendResponse) {
             })
         return true;
     }
-    else if (message.action === "SAVE_PAGE") {
-        console.log("SAVE DATA 요청 왔음!");
+    else if (message.action === "SAVE_PAGE_DATA") {
+        //'페이지 저장' 이벤트 발생 시
+        // - content script에서 페이지 데이터를 추출하여 서버에 전송한다.
 
-        //content script에 데이터 추출 요청
-        //현재 focus된 content tab의 위치 확인한다.
-        chrome.tabs.query(
-            { active: true, currentWindow: true },
-            (tabs) => {
-                if (tabs.length > 0) {
-                    const tab = tabs[0];
-                    const tabId = tab.id;
+        //현재 focus된 content tab의 위치 확인하여 데이터 추출 요청
+        const query = { active: true, currentWindow: true };
+        const extractCallback = (tabs) => {
+            if (tabs.length > 0) {
+                const tab = tabs[0];
+                const tabId = tab.id;
+                const message = { action: "EXTRACT_PAGE_DATA" };
+                const callback = (response) => {
+                    //TODO: 추출된 데이터를 서버에 전송한다.
+                    console.log("SAVE_PAGE_DATA: 데이터 추출 완료: " + JSON.stringify(response));
+                    sendResponse({ data: response });
+                }
 
-                    //해당 탭의 content에 메시지 전송
-                    chrome.tabs.sendMessage(
-                        tabId,
-                        { action: "EXTRACT_PAGE" },
-                        (response) => {
-                            //TODO: 서버에 데이터 전송
-                            console.log("추출완: " + response.data);
-                        });
-                }
-                else {
-                    console.log("messageHandler: SAVE_PAGE실패: active tab이 없습니다.");
-                }
-            });
-        sendResponse({ data: "굿" });
+                //해당 탭의 content에 메시지 전송
+                chrome.tabs.sendMessage(tabId, message, callback);
+            }
+            else {
+                console.log("messageHandler: SAVE_PAGE_DATA실패: active tab이 없습니다.");
+            }
+        }
+        chrome.tabs.query(query, extractCallback);
 
         return true;
     }

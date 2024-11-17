@@ -145,7 +145,7 @@ function loadHistoryData(orderBy) {
 //데이터 저장 테스트 버튼
 const testSaveButton = document.getElementById("save-button");
 testSaveButton.addEventListener('click', () => {
-    chrome.runtime.sendMessage({ action: "SAVE_PAGE" }, (response) => {
+    chrome.runtime.sendMessage({ action: "SAVE_PAGE_DATA" }, (response) => {
         //log.innerText += "밥김국";
     })
 })
