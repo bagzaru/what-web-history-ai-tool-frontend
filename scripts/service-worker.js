@@ -24,10 +24,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     else if (request.action === "LOGOUT_REQUEST") {
         logoutHandler().then((result) => {
             console.log("logoutHandler result:", result);
-            sendResponse({ data: result});
+            sendResponse({ data: result });
         }).catch((error) => {
             console.error("Error in logoutHandler:", error);
-            sendResponse({ data: false});
+            sendResponse({ data: false });
         });
         return true; // keep the messaging channel open for sendResponse
     }
@@ -40,18 +40,4 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 //     ["responseHeaders"]
 // );
 
-/* 이하는 테스트용 코드 */
 
-// //onCommitted, onCompleted 확인
-// chrome.webNavigation.onCommitted.addListener(function (details) {
-//     console.log(`onCommitted 완료, url: ${details.url}`);
-// }/*, { url: [{ urlMatches: 'https://example.com/*' }] }*/);
-
-// chrome.webNavigation.onCompleted.addListener((details) => {
-//     console.log(`onCompleted 완료, url: ${details.url}`);
-// });
-
-// //방문기록 업데이트 확인
-// chrome.webNavigation.onHistoryStateUpdated.addListener((details) => {
-//     console.log(`service-worker: onHistoryStateUpdated 완료, uuid: ${details.documentId}, url: ${details.url}`);
-// });
