@@ -28,9 +28,9 @@ const tabFocusManager = {
                 ...this.currentFocus,
                 endTime: (new Date()).getTime()
             }
-            console.log("Old Focus Sended: " + toSend.url + ", time: " + (toSend.endTime - toSend.startTime));
-            networkManager.put.updateHistory(toSend)
-                .catch((e) => { console.log("tabFocusManager: visitTime 전송 중 에러 발생: " + e.message) });
+            console.log("포커스 변경됨, 기존: " + toSend.url + ", 체류시간: " + (toSend.endTime - toSend.startTime));
+            // networkManager.put.updateHistory(toSend)
+            //     .catch((e) => { console.log("tabFocusManager: visitTime 전송 중 에러 발생: " + e.message) });
         }
         this.currentFocus = {
             ...this.currentFocus,
