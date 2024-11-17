@@ -1,3 +1,4 @@
+import dummyModule from "../debugging/dummyModule.js";
 import networkManager from "./networkManager.js";
 import { domLoadHandler } from "./tabFocusManager.js";
 
@@ -117,6 +118,17 @@ function messageHandler(message, sender, sendResponse) {
             }
         }
         chrome.tabs.query(query, extractCallback);
+
+        return true;
+    }
+    else if (message.action === "GET_ALL_DATA_LIST") {
+        //popup에서 전체 데이터 리스트를 요청했을 때
+        //TODO: 실제 서버에서 데이터를 받아오도록 수정
+        const data = dummyModule.getDummyData();
+        console.log("data: " + JSON.stringify(data));
+        setTimeout(() => {
+            sendResponse({ data: data });
+        }, 1000);
 
         return true;
     }

@@ -40,3 +40,5 @@ const dummyModule = {
         ];
     }
 }
+
+export default dummyModule;
