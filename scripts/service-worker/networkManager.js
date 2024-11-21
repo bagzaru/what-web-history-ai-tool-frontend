@@ -27,7 +27,7 @@ const networkManager = {
         }
     },
     put: {
-        updateHistory: async function ({ tabId, url, startTime, endTime }) {
+        updateHistorySpentTime: async function ({ url, startTime, endTime }) {
             if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다. networkState: false`);
 
             //updateHistory: 해당 사이트의 체류 시간(visitTime)값을 업데이트합니다.
