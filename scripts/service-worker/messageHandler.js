@@ -67,7 +67,7 @@ function messageHandler(message, sender, sendResponse) {
         //popup.js에서 history load 요청이 있었을 때
         console.log("POPUP: getHistoryDate 요청");
 
-        networkManager.get.getHistoryByDate(message.data.orderBy)
+        networkManager.get.getHistories(message.data.orderBy)
             .then((data) => {
                 console.log("getHistoryDate 요청 성공");
                 sendResponse({ data: data });
