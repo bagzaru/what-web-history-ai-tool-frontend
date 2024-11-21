@@ -18,7 +18,7 @@ const networkManager = {
             //페이지 저장 요청이 오면, 해당 url과 방문시각을 서버에 전송하여 저장합니다.
             const path = "/api/history";
             const fullPath = getFullPath(defaultHost, path);
-            const jsonBody = createHistoryRequestDTO(content, url);
+            const jsonBody = createHistoryRequestDTO(url, content);
             const stringBody = JSON.stringify(jsonBody);    //saveHistory는 json dto 형태로 주고받는다.
 
             const data = await post(fullPath, stringBody);

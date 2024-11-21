@@ -1,3 +1,5 @@
+import networkManager from "./networkManager.js";
+
 function savePageData(tabId, onSaveFinished = (response) => { }, onSaveFailed = (response) => { }) {
     //해당 탭의 content에 메시지 전송
     const callback = (response) => {
@@ -8,9 +10,9 @@ function savePageData(tabId, onSaveFinished = (response) => { }, onSaveFailed = 
 
         //TODO: 서버 호출 후 콜백으로 변경
         const data = {
-            title: response.title,
-            url: response.url,
-            content: response.content
+            title: response.data.title,
+            url: response.data.url,
+            content: response.data.content
         };
 
         networkManager.post.saveHistory(data)

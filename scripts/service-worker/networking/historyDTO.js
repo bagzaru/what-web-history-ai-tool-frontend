@@ -14,7 +14,7 @@ function createDetailedHistoryResponseDTO(id, url, title, visitTime, shortSummar
     }
 }
 
-function createHistoryRequestDTO(url, content) {
+function createHistoryRequestDTO(url = "", content = "") {
     return {
         url: url,
         content: content
