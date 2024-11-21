@@ -18,7 +18,7 @@ const networkManager = {
             //페이지 저장 요청이 오면, 해당 url과 방문시각을 서버에 전송하여 저장합니다.
             const path = "/api/history";
             const fullPath = getFullPath(defaultHost, path);
-            const jsonBody = createHistoryRequestDTO(title, content, url);
+            const jsonBody = createHistoryRequestDTO(content, url);
             const stringBody = JSON.stringify(jsonBody);    //saveHistory는 json dto 형태로 주고받는다.
 
             const data = await post(fullPath, stringBody);
@@ -51,14 +51,14 @@ const networkManager = {
         }
     },
     get: {
-        getHistories: async function (orderBy, startTime, endTime) {
+        getHistories: async function (orderBy, startDate, endDate) {
             if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다. networkState: false`);
 
             //getHistoryByDate: 서버에서 지정된 기간에 저장한 페이지 데이터를 가져옵니다.
             //TODO: 외부에서 기간을 지정받아, 해당 기간 내의 방문기록 데이터 가져오기
 
             const path = '/api/history' + '?';
-            const queryString = 'startTime=' + getJavaDateString(startTime) + '&' + 'endTime=' + getJavaDateString(curTime) + '&orderBy=' + orderBy;
+            const queryString = 'startTime=' + getJavaDateString(startDate) + '&' + 'endTime=' + getJavaDateString(endDate) + '&orderBy=' + orderBy;
             const fullPath = getFullPath(defaultHost, path + queryString);
 
             console.log("getHistories 요청, 쿼리스트링: " + fullPath);
@@ -112,7 +112,7 @@ const networkManager = {
 
             return data;
         },
-        search: async function (startTime, endTime, query) {
+        search: async function (startTime, endTime, query = "") {
             if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다. networkState: false`);
 
             //get.search: 해당 시간대에 검색한 키워드를 가져옵니다.
