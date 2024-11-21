@@ -22,7 +22,7 @@ const networkManager = {
             const stringBody = JSON.stringify(jsonBody);    //saveHistory는 json dto 형태로 주고받는다.
 
             const data = await post(fullPath, stringBody);
-            console.log(`POST: saveHistory 완료: ${url}`);
+            console.log(`POST: saveHistory 완료: ${url}, 반환된 값: ${JSON.stringify(data)}`);
             return data;
         }
     },
