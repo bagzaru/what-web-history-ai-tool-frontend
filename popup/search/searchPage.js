@@ -16,6 +16,7 @@ searchButton.addEventListener('click', () => {
         }
         const renderResult = renderArticles(data, resultContainer);
 
+        resultContainer.innerHTML = "";
         resultContainer.appendChild(renderResult);
     });
 });

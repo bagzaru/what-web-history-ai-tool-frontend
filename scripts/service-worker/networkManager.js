@@ -116,7 +116,7 @@ const networkManager = {
             if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다. networkState: false`);
 
             //get.search: 해당 시간대에 검색한 키워드를 가져옵니다.
-            const path = `/api/history/search/`;
+            const path = `/api/history/search?`;
             const queryString = 'startTime=' + getJavaDateString(startTime) + '&' + 'endTime=' + getJavaDateString(endTime) + '&' + 'query=' + query;
             const fullPath = getFullPath(defaultHost, path + queryString);
 

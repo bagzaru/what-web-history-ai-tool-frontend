@@ -139,12 +139,12 @@ function messageHandler(message, sender, sendResponse) {
         //TODO: 실제 서버에서 데이터를 받아오도록 수정\
         const startDate = new Date(2000, 0, 1);
         const endDate = new Date();
-        networkManager.get.search(startDate, endDate, message.data.keyword).then((data) => {
+        networkManager.get.search(startDate, endDate, message.data).then((data) => {
             console.log("GET_SEARCH_DATA_LIST: 데이터 요청 성공");
             sendResponse({ data: data });
         })
             .catch((e) => {
-                console.log("GET_SEARCH_DATA_LIST: 데이터 요청 실패");
+                console.log("GET_SEARCH_DATA_LIST: 데이터 요청 실패:" + e.message);
                 sendResponse({ data: null, message: e.message });
             });
 
