@@ -48,26 +48,6 @@ const networkManager = {
             const fullPath = getFullPath(defaultHost, path);
 
             put(fullPath, body);
-        },
-
-        extractKeywords: async function (url) {
-            if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다. networkState: false`);
-
-            //extractKeywords: GPT에게 키워드 추출 요청을 보냅니다.
-
-            const path = '/api/history/keyword';
-            // const body = {
-            //     url: url
-            // };
-            const body = new FormData();    //PUT: updatehistory의 body는 formdata 형식으로 주고받는다.
-            body.append('url', url);
-            const fullPath = getFullPath(defaultHost, path);
-
-            console.log("extractKeywords 시도: url:" + url);
-            const data = await put(fullPath, body);
-            console.log(`PUT: extractKeywords 완료, 반환된 값: ${JSON.stringify(data)}`);
-
-            return data;
         }
     },
     get: {
