@@ -6,7 +6,7 @@ import getJavaDateString from "./date/javaDateConverter.js";
 const defaultHost = "https://capstonepractice.site";
 
 //networkState: true일 때만 서버와의 통신 진행
-let networkState = false;
+let networkState = true;
 
 //서버와의 통신 모듈
 const networkManager = {

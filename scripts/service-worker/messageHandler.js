@@ -86,12 +86,12 @@ function messageHandler(message, sender, sendResponse) {
     else if (message.action === "GPT_REQUEST_EVENT") {
         //popup의 GPT 요청 버튼 눌렸을 때의 이벤트
         //비용 문제로 인해 제작한 스크립트, 릴리즈 시에는 삭제 예정
-        networkManager.put.extractKeywords(message.data.url)
-            .then((data) => {
-                sendResponse({ data: data });
-            }).catch((e) => {
-                sendResponse({ data: null, message: e.message });
-            })
+        // networkManager.put.extractKeywords(message.data.url)
+        //     .then((data) => {
+        //         sendResponse({ data: data });
+        //     }).catch((e) => {
+        //         sendResponse({ data: null, message: e.message });
+        //     })
         return true;
     }
     else if (message.action === "SAVE_PAGE_DATA") {
@@ -103,28 +103,15 @@ function messageHandler(message, sender, sendResponse) {
         const onTabQueryFinished = (tabs) => {
             if (tabs.length > 0) {
                 const tabId = tabs[0].id;
-                //해당 탭의 content에 메시지 전송
-                const callback = (response) => {
-                    console.log("savePageData: 데이터 추출 완료: " + JSON.stringify(response));
-                    //TODO: 추출된 데이터를 서버에 전송한다.
-                    const data = {
-                        title: response.title,
-                        url: response.url,
-                        content: response.content
-                    };
-
-                    networkManager.post.saveHistory(data)
-                        .then((response) => {
-                            console.log("SAVE_PAGE_DATA: 데이터 추출 완료: " + JSON.stringify(response));
-                            sendResponse({ data: response });
-                        })
-                        .catch((e) => {
-                            console.error("SAVE_PAGE_DATA: 데이터 추출 실패: " + e.message);
-                            sendResponse({ data: null, message: e.message });
-                        });
+                const onSaveFinished = (response) => {
+                    console.log("SAVE_PAGE_DATA: 데이터 추출 완료: " + JSON.stringify(response));
+                    sendResponse({ data: response });
                 }
-                const message = { action: "EXTRACT_PAGE_DATA" };
-                chrome.tabs.sendMessage(tabId, message, callback);
+                const onSaveFailed = (e) => {
+                    console.error("SAVE_PAGE_DATA: 데이터 추출 실패: " + e.message);
+                    sendResponse({ data: null, message: e.message });
+                }
+                savePageData(tabId, onSaveFinished, onSaveFailed);
             }
         }
 
@@ -142,11 +129,12 @@ function messageHandler(message, sender, sendResponse) {
                 console.log("GET_ALL_DATA_LIST: 데이터 요청 성공");
                 sendResponse({ data: data });
             }).catch((e) => {
-                console.log("GET_ALL_DATA_LIST: 데이터 요청 실패");
+                console.log("GET_ALL_DATA_LIST: 데이터 요청 실패: " + e.message);
                 sendResponse({ data: null, message: e.message });
-            });;
+            });
         return true;
-    } else if (message.action === "GET_SEARCH_DATA_LIST") {
+    }
+    else if (message.action === "GET_SEARCH_DATA_LIST") {
         //popup에서 전체 데이터 리스트를 요청했을 때
         //TODO: 실제 서버에서 데이터를 받아오도록 수정\
         const startDate = new Date(2000, 0, 1);

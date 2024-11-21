@@ -5,6 +5,13 @@ const articleContainer = document.getElementById('article-container');
 function loadDataList() {
     chrome.runtime.sendMessage({ action: "GET_ALL_DATA_LIST" }, (response) => {
         const data = response.data;
+        if (data === null) {
+            console.log("데이터 요청 실패: " + response.message);
+        }
+        else {
+            console.log("데이터 요청 성공");
+        }
+        console.log("데이터: " + JSON.stringify(data));
         const articles = renderArticles(data);
         articleContainer.innerHTML = "";
         articleContainer.appendChild(articles);
