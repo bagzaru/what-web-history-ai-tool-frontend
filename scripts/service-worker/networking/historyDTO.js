@@ -1,14 +1,34 @@
 //historyDTO.js: history와 관련된 DTO 형태를 저장하는 파일
 
-function createHistoryDTO(title, content, url, spentTime, visitTime) {
+function createDetailedHistoryResponseDTO(id, url, title, visitTime, shortSummary, longSummary, keywords, spentTime, visitCount) {
     return {
-        title: title,
-        content: content,
+        id: id,
         url: url,
+        title: title,
+        visitTime: visitTime,
+        shortSummary: shortSummary,
+        longSummary: longSummary,
+        keywords: keywords,
         spentTime: spentTime,
-        visitTime: visitTime
+        visitCount: visitCount
+    }
+}
+
+function createHistoryRequestDTO(url = "", content = "") {
+    return {
+        url: url,
+        content: content
     };
 }
 
+function createHistoryResponseDTO(id, url, title, visitTime, shortSummary) {
+    return {
+        id: id,
+        url: url,
+        title: title,
+        visitTime: visitTime,
+        shortSummary: shortSummary
+    };
+}
 
-export { createHistoryDTO };
+export { createDetailedHistoryResponseDTO, createHistoryRequestDTO, createHistoryResponseDTO };

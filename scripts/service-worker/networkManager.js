@@ -1,12 +1,12 @@
 import { post, put, get } from "./networking/RestAPI.js";
-import { createHistoryDTO } from "./networking/historyDTO.js";
+import { createHistoryRequestDTO } from "./networking/historyDTO.js";
 import getJavaDateString from "./date/javaDateConverter.js";
 
 //defaultHost: 기본 연결 서버 주소
 const defaultHost = "https://capstonepractice.site";
 
 //networkState: true일 때만 서버와의 통신 진행
-let networkState = false;
+let networkState = true;
 
 //서버와의 통신 모듈
 const networkManager = {
@@ -15,21 +15,19 @@ const networkManager = {
     post: {
         saveHistory: async function ({ title, url, content }) {
             if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다. networkState: false`);
-
-            //새 페이지가 로드되었을 때, 해당 url과 방문시각을 서버에 전송하여 저장합니다.
+            //페이지 저장 요청이 오면, 해당 url과 방문시각을 서버에 전송하여 저장합니다.
             const path = "/api/history";
             const fullPath = getFullPath(defaultHost, path);
-            const jsonBody = createHistoryDTO(title, content, url, 0, getJavaDateString(new Date()));
+            const jsonBody = createHistoryRequestDTO(url, content);
             const stringBody = JSON.stringify(jsonBody);    //saveHistory는 json dto 형태로 주고받는다.
 
             const data = await post(fullPath, stringBody);
-            console.log(`POST: saveHistory 완료: ${url}`);
-
+            console.log(`POST: saveHistory 완료: ${url}, 반환된 값: ${JSON.stringify(data)}`);
             return data;
         }
     },
     put: {
-        updateHistory: async function ({ tabId, url, startTime, endTime }) {
+        updateHistorySpentTime: async function ({ url, startTime, endTime }) {
             if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다. networkState: false`);
 
             //updateHistory: 해당 사이트의 체류 시간(visitTime)값을 업데이트합니다.
@@ -50,66 +48,99 @@ const networkManager = {
             const fullPath = getFullPath(defaultHost, path);
 
             put(fullPath, body);
-        },
-
-        extractKeywords: async function (url) {
-            if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다. networkState: false`);
-
-            //extractKeywords: GPT에게 키워드 추출 요청을 보냅니다.
-
-            const path = '/api/history/keyword';
-            // const body = {
-            //     url: url
-            // };
-            const body = new FormData();    //PUT: updatehistory의 body는 formdata 형식으로 주고받는다.
-            body.append('url', url);
-            const fullPath = getFullPath(defaultHost, path);
-
-            console.log("extractKeywords 시도: url:" + url);
-            const data = await put(fullPath, body);
-            console.log(`PUT: extractKeywords 완료, 반환된 값: ${JSON.stringify(data)}`);
-
-            return data;
         }
     },
     get: {
-        getHistoryByDate: async function (orderBy) {
+        getHistories: async function (orderBy, startDate, endDate) {
             if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다. networkState: false`);
 
-            //getHistoryByDate: 서버에서 방문기록 데이터를 최근 방문 순으로 가져옵니다.
+            //getHistoryByDate: 서버에서 지정된 기간에 저장한 페이지 데이터를 가져옵니다.
             //TODO: 외부에서 기간을 지정받아, 해당 기간 내의 방문기록 데이터 가져오기
 
-            const curTime = new Date();
-            const startTime = new Date();
-            startTime.setDate(curTime.getDate() - 7);
-
             const path = '/api/history' + '?';
-            const queryString = 'startTime=' + getJavaDateString(startTime) + '&' + 'endTime=' + getJavaDateString(curTime) + '&orderBy=' + orderBy;
+            const queryString = 'startTime=' + getJavaDateString(startDate) + '&' + 'endTime=' + getJavaDateString(endDate) + '&orderBy=' + orderBy;
             const fullPath = getFullPath(defaultHost, path + queryString);
 
-            console.log("getHistoryByDate 요청, 쿼리스트링: " + fullPath);
+            console.log("getHistories 요청, 쿼리스트링: " + fullPath);
             const data = await get(fullPath);
-            console.log(`GET: getHistoryByDate 완료, 반환된 값: ${JSON.stringify(data)}`);
+            console.log(`GET: getHistories 완료, 반환된 값: ${JSON.stringify(data)}`);
 
             return data;
         },
-        getHistoryByDateAndKeyword: function () {
+        getHistoryById: async function (id) {
             if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다. networkState: false`);
 
+            //getHistoryById: history의 ID를 입력하여 해당 history를 가져옵니다.
+            if (typeof id !== "number") {
+                throw new Error("getHistoryById: id가 number 형식이 아님");
+            }
+
+            const path = '/api/history' + '/' + id;
+            const fullPath = getFullPath(defaultHost, path);
+
+            console.log("getHistoryById 요청, 쿼리스트링: " + fullPath);
+            const data = await get(fullPath);
+            console.log(`GET: getHistoryById 완료, 반환된 값: ${JSON.stringify(data)}`);
+
+            return data;
         },
-        getKeywordFrequency: async function () {
+        getKeywordSpentTime: async function (keyword, startTime, endTime) {
             if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다. networkState: false`);
 
+            //getKeywordSpentTime: 해당 키워드와 관련된 방문기록의 총 체류시간을 가져옵니다.
+            const path = `/api/history/statistics/${keyword}/spent_time/`;
+            const queryString = 'startTime=' + getJavaDateString(startTime) + '&' + 'endTime=' + getJavaDateString(endTime);
+            const fullPath = getFullPath(defaultHost, path + queryString);
+
+            console.log("getKeywordSpentTime 요청, 쿼리스트링: " + fullPath);
+            const data = await get(fullPath);
+            console.log(`GET: getKeywordSpentTime 완료, 반환된 값: ${JSON.stringify(data)}`);
+
+            return data;
         },
-        getTotalSpentTime: function () {
+        getKeywordFrequency: async function (keyword, startTime, endTime) {
             if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다. networkState: false`);
 
+            //getKeywordFrequency: 전체 데이터 중 해당 데이터의 빈도수를 가져옵니다.
+            const path = `/api/history/statistics/${keyword}/frequency/`;
+            const queryString = 'startTime=' + getJavaDateString(startTime) + '&' + 'endTime=' + getJavaDateString(endTime);
+            const fullPath = getFullPath(defaultHost, path + queryString);
+
+            console.log("getKeywordFrequency 요청, 쿼리스트링: " + fullPath);
+            const data = await get(fullPath);
+            console.log(`GET: getKeywordFrequency 완료, 반환된 값: ${JSON.stringify(data)}`);
+
+            return data;
+        },
+        search: async function (startTime, endTime, query = "") {
+            if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다. networkState: false`);
+
+            //get.search: 해당 시간대에 검색한 키워드를 가져옵니다.
+            const path = `/api/history/search?`;
+            const queryString = 'startTime=' + getJavaDateString(startTime) + '&' + 'endTime=' + getJavaDateString(endTime) + '&' + 'query=' + query;
+            const fullPath = getFullPath(defaultHost, path + queryString);
+
+            console.log("get.search 요청, 쿼리스트링: " + fullPath);
+            const data = await get(fullPath);
+            console.log(`GET: search 완료, 반환된 값: ${JSON.stringify(data)}`);
+
+            return data;
         }
     },
     del: {
-        deleteHistory: function () {
+        deleteHistory: async function (url) {
             if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다.`);
 
+            //get.search: 해당 시간대에 검색한 키워드를 가져옵니다.
+            const path = `/api/history/search/`;
+            const queryString = 'url=' + url;
+            const fullPath = getFullPath(defaultHost, path + queryString);
+
+            console.log("deleteHistory 요청, 쿼리스트링: " + fullPath);
+            const data = await get(fullPath);
+            console.log(`DELETE: deleteHistory 완료, 반환된 값: ${JSON.stringify(data)}`);
+
+            return data;
         }
     }
 }

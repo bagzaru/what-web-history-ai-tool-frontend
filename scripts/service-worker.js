@@ -47,7 +47,15 @@ chrome.runtime.onInstalled.addListener(() => {
 chrome.contextMenus.onClicked.addListener((info, tab) => {
     if (info.menuItemId === "savePageData") {
         // 메뉴 클릭 시 실행할 함수
-        savePageData(tab.id);
+        const onSaveFinished = (response) => {
+
+            console.log("savePageData: 데이터 저장 완료");
+        }
+        const onSaveFailed = (e) => {
+            console.error("savePageData: 데이터 저장 실패: " + e.message);
+        }
+
+        savePageData(tab.id, onSaveFinished, onSaveFailed);
     }
 });
 

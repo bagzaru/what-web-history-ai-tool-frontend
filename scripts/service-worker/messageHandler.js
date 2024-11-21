@@ -67,7 +67,7 @@ function messageHandler(message, sender, sendResponse) {
         //popup.js에서 history load 요청이 있었을 때
         console.log("POPUP: getHistoryDate 요청");
 
-        networkManager.get.getHistoryByDate(message.data.orderBy)
+        networkManager.get.getHistories(message.data.orderBy)
             .then((data) => {
                 console.log("getHistoryDate 요청 성공");
                 sendResponse({ data: data });
@@ -86,12 +86,12 @@ function messageHandler(message, sender, sendResponse) {
     else if (message.action === "GPT_REQUEST_EVENT") {
         //popup의 GPT 요청 버튼 눌렸을 때의 이벤트
         //비용 문제로 인해 제작한 스크립트, 릴리즈 시에는 삭제 예정
-        networkManager.put.extractKeywords(message.data.url)
-            .then((data) => {
-                sendResponse({ data: data });
-            }).catch((e) => {
-                sendResponse({ data: null, message: e.message });
-            })
+        // networkManager.put.extractKeywords(message.data.url)
+        //     .then((data) => {
+        //         sendResponse({ data: data });
+        //     }).catch((e) => {
+        //         sendResponse({ data: null, message: e.message });
+        //     })
         return true;
     }
     else if (message.action === "SAVE_PAGE_DATA") {
@@ -100,17 +100,20 @@ function messageHandler(message, sender, sendResponse) {
 
         //현재 focus된 content tab의 위치 확인하여 데이터 추출 요청
         const query = { active: true, lastFocusedWindow: true };
-        const onSaveFinished = (response) => {
-            //TODO: 추출된 데이터를 서버에 전송한다.
-            console.log("SAVE_PAGE_DATA: 데이터 추출 완료: " + JSON.stringify(response));
-            sendResponse({ data: response });
-        }
         const onTabQueryFinished = (tabs) => {
             if (tabs.length > 0) {
-                savePageData(tabs[0].id, onSaveFinished);
+                const tabId = tabs[0].id;
+                const onSaveFinished = (response) => {
+                    console.log("SAVE_PAGE_DATA: 데이터 추출 완료: " + JSON.stringify(response));
+                    sendResponse({ data: response });
+                }
+                const onSaveFailed = (e) => {
+                    console.error("SAVE_PAGE_DATA: 데이터 추출 실패: " + e.message);
+                    sendResponse({ data: null, message: e.message });
+                }
+                savePageData(tabId, onSaveFinished, onSaveFailed);
             }
         }
-
 
         chrome.tabs.query(query, onTabQueryFinished);
 
@@ -119,21 +122,31 @@ function messageHandler(message, sender, sendResponse) {
     else if (message.action === "GET_ALL_DATA_LIST") {
         //popup에서 전체 데이터 리스트를 요청했을 때
         //TODO: 실제 서버에서 데이터를 받아오도록 수정
-        const data = dummyModule.getDummyData();
-        console.log("data: " + JSON.stringify(data));
-        setTimeout(() => {
-            sendResponse({ data: data });
-        }, 1000);
-
+        const startDate = new Date(2000, 0, 1);
+        const endDate = new Date();
+        networkManager.get.getHistories("visitTime", startDate, endDate)
+            .then((data) => {
+                console.log("GET_ALL_DATA_LIST: 데이터 요청 성공");
+                sendResponse({ data: data });
+            }).catch((e) => {
+                console.log("GET_ALL_DATA_LIST: 데이터 요청 실패: " + e.message);
+                sendResponse({ data: null, message: e.message });
+            });
         return true;
-    } else if (message.action === "GET_SEARCH_DATA_LIST") {
+    }
+    else if (message.action === "GET_SEARCH_DATA_LIST") {
         //popup에서 전체 데이터 리스트를 요청했을 때
-        //TODO: 실제 서버에서 데이터를 받아오도록 수정
-        const data = dummyModule.getDummyData(message.data);
-        console.log("data: " + JSON.stringify(data));
-        setTimeout(() => {
+        //TODO: 실제 서버에서 데이터를 받아오도록 수정\
+        const startDate = new Date(2000, 0, 1);
+        const endDate = new Date();
+        networkManager.get.search(startDate, endDate, message.data).then((data) => {
+            console.log("GET_SEARCH_DATA_LIST: 데이터 요청 성공");
             sendResponse({ data: data });
-        }, 1000);
+        })
+            .catch((e) => {
+                console.log("GET_SEARCH_DATA_LIST: 데이터 요청 실패:" + e.message);
+                sendResponse({ data: null, message: e.message });
+            });
 
         return true;
     }
