@@ -19,6 +19,25 @@ function messageHandler(message, sender, sendResponse) {
         //tabFocusManager의 url 업데이트함
         domLoadHandler(sender.tab.id, message.data.url);
 
+        //만약 autoSave가 켜져있을 경우, 페이지 데이터를 서버에 전송
+        chrome.storage.sync.get(["settingAutoSave"], (result) => {
+
+            if (result.settingAutoSave) {
+                //자동 저장이 켜져있을 경우
+                console.log("DOM_LOADED: autoSave 켜져있음");
+                const tabId = sender.tab.id;
+                const onSaveFinished = (response) => {
+                    console.log("DOM_Loaded: savePageData: 데이터 추출 완료: " + JSON.stringify(response));
+                    sendResponse({ data: response });
+                }
+                const onSaveFailed = (e) => {
+                    console.error("DOM_Loaded savePageData: 데이터 추출 실패: " + e.message);
+                    sendResponse({ data: null, message: e.message });
+                }
+                savePageData(tabId, onSaveFinished, onSaveFailed);
+            }
+        });
+
         //DOM Distiller를 통해 요약된 데이터 추출
         /*chrome.tabs.sendMessage(
             sender.tab.id,

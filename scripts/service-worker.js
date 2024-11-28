@@ -59,6 +59,13 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
     }
 });
 
+//sync storage 초기화
+chrome.storage.sync.get(['settingAutoSave'], (result) => {
+    if (result.settingAutoSave === undefined) {
+        chrome.storage.sync.set({ settingAutoSave: false });
+    }
+});
+
 // chrome.webRequest.onCompleted.addListener(loginHandler,
 //     {
 //         urls: ["https://capstonepractice.site/api/auth/oauth2/google"],
