@@ -45,6 +45,8 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("search-tab").style.display = "none";
             document.getElementById("showall-frame").style.display = "none";
             document.getElementById("showall-tab").style.display = "none";
+            document.getElementById("setting-frame").style.display = "none";
+            document.getElementById("setting-tab").style.display = "none";
             document.getElementById("temp-frame").style.display = "none";
             document.getElementById("temp-tab").style.display = "none";
         }
@@ -52,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
 })
 
 function changeStyle() {
-    this.addEventListener("click", function() {
+    this.addEventListener("click", function () {
         const list = this.parentNode.children;
         for (let item of list) {
             if (item.classList.contains("active")) {
