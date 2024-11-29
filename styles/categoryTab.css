@@ -1,0 +1,58 @@
+*{
+    user-select: none;
+    font-family: 'Pretendard';
+}
+.container {
+    background: #F5F5F5;
+    padding-left: 10px;
+}
+.title {
+    margin-bottom: 20px;
+    color: #121212;
+    font-family: 'Pretendard';
+    font-weight: 700;
+    font-size: x-large;
+}
+#category-list {
+    margin: 0;
+    padding: 0;
+}
+.category-item {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+.category-item input {
+    padding: 8px;
+    height: 15px;
+    width: 150px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #F5F5F5;
+    transition: border-color 0.3s;
+}
+.category-item input:focus {
+    background-color: #FFFFFF;
+    border-color: #4CAF50;
+    outline: none;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* 초록색 외곽선 */
+}
+.category-item button {
+    user-select: none;
+    padding: 0;
+    height: 28px;
+    width: 28px;
+    margin-left: 10px;
+    background-color: #F5F5F5;; /* 초록색 */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+}
+
+.category-item button:hover {
+    background-color: #BDBDBD; /* 버튼 호버 효과 */
+}
