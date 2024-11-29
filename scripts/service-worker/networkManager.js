@@ -1,5 +1,5 @@
 import { post, put, get } from "./networking/RestAPI.js";
-import { createHistoryRequestDTO } from "./networking/historyDTO.js";
+import { createHistoryRequestDTO, searchHistoryRequestDTO } from "./networking/historyDTO.js";
 import getJavaDateString from "./date/javaDateConverter.js";
 
 //defaultHost: 기본 연결 서버 주소
@@ -15,7 +15,7 @@ const networkManager = {
     post: {
         saveHistory: async function ({ title, url, content }) {
             if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다. networkState: false`);
-            //페이지 저장 요청이 오면, 해당 url과 방문시각을 서버에 전송하여 저장합니다.
+            //url과 content를 입력받아, 해당 url의 방문기록을 저장합니다.
             const path = "/api/history";
             const fullPath = getFullPath(defaultHost, path);
             const jsonBody = createHistoryRequestDTO(url, content);
@@ -23,6 +23,26 @@ const networkManager = {
 
             const data = await post(fullPath, stringBody);
             console.log(`POST: saveHistory 완료: ${url}, 반환된 값: ${JSON.stringify(data)}`);
+            return data;
+        },
+        search: async function (startTime, endTime, query = "", domain = "", category = "") {
+            if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다. networkState: false`);
+
+            //post.search: 해당 시간대와 domain에 대해 검색한 키워드를 가져옵니다.
+            const path = `/api/history/search`;
+            // const queryString = 'startTime=' + getJavaDateString(startTime) + '&' + 'endTime=' + getJavaDateString(endTime) + '&' + 'query=' + query;
+            const fullPath = getFullPath(defaultHost, path);
+
+            const javaStartTime = getJavaDateString(startTime);
+            const javaEndTime = getJavaDateString(endTime);
+
+            const jsonBody = searchHistoryRequestDTO(javaStartTime, javaEndTime, query, domain, category);
+            const stringBody = JSON.stringify(jsonBody);    //search는 json dto 형태로 주고받는다.
+
+            console.log("post.search 요청, 쿼리스트링: " + fullPath);
+            const data = await post(fullPath, stringBody);
+            console.log(`POST: search 완료, 반환된 값: ${JSON.stringify(data)}`);
+
             return data;
         }
     },
@@ -109,20 +129,6 @@ const networkManager = {
             console.log("getKeywordFrequency 요청, 쿼리스트링: " + fullPath);
             const data = await get(fullPath);
             console.log(`GET: getKeywordFrequency 완료, 반환된 값: ${JSON.stringify(data)}`);
-
-            return data;
-        },
-        search: async function (startTime, endTime, query = "") {
-            if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다. networkState: false`);
-
-            //get.search: 해당 시간대에 검색한 키워드를 가져옵니다.
-            const path = `/api/history/search?`;
-            const queryString = 'startTime=' + getJavaDateString(startTime) + '&' + 'endTime=' + getJavaDateString(endTime) + '&' + 'query=' + query;
-            const fullPath = getFullPath(defaultHost, path + queryString);
-
-            console.log("get.search 요청, 쿼리스트링: " + fullPath);
-            const data = await get(fullPath);
-            console.log(`GET: search 완료, 반환된 값: ${JSON.stringify(data)}`);
 
             return data;
         }

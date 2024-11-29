@@ -21,6 +21,16 @@ function createHistoryRequestDTO(url = "", content = "") {
     };
 }
 
+function searchHistoryRequestDTO(startTime, endTime, query = "", domain = "", category = "") {
+    return {
+        startTime: startTime,
+        endTime: endTime,
+        query: query,
+        domain: domain,
+        category: category
+    };
+}
+
 function createHistoryResponseDTO(id, url, title, visitTime, shortSummary) {
     return {
         id: id,
@@ -31,4 +41,4 @@ function createHistoryResponseDTO(id, url, title, visitTime, shortSummary) {
     };
 }
 
-export { createDetailedHistoryResponseDTO, createHistoryRequestDTO, createHistoryResponseDTO };
+export { createDetailedHistoryResponseDTO, searchHistoryRequestDTO, createHistoryRequestDTO, createHistoryResponseDTO };
