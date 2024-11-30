@@ -19,7 +19,7 @@ searchButton.addEventListener('click', () => {
     chrome.runtime.sendMessage({ action: "GET_SEARCH_DATA_LIST", data: searchOption }, (response) => {
         const data = response.data;
         if (data === null) {
-            console.error(`GET_SEARCH_DATA_LIST: 데이터 요청 실패: ${reponse.message}`);
+            console.error(`GET_SEARCH_DATA_LIST: 데이터 요청 실패: ${response.message}`);
             return;
         }
         const renderResult = renderArticles(data, resultContainer);
