@@ -15,13 +15,14 @@
         <div class="title">카테고리 설정</div>
         <ul id="category-list"></ul>
         <div id="description">카테고리 이름을 입력하고 'ENTER' 또는 '+ 버튼'을 누르세요</div>
-        <div class="category-item" id="new-category">
+        <div id="new-category">
             <input type="text" id="new-category-name" placeholder="추가할 카테고리명"/>
             <button id="add-category-button">
                 <img src="../../assets/add-outline.svg" alt="add"/>
             </button>
         </div>
-        <p id="errorMessage" style="color: red; display: none;">값을 입력하세요!</p>
+        <p id="invalidate-error-message" style="color: red; display: none;">값을 입력하세요!</p>
+        <p id="duplicate-error-message" style="color: red; display: none;">이미 존재하는 카테고리입니다!</p>
         <button id="save-button">저장</button>
     </div>
 </body>

@@ -9,10 +9,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 const addButton = document.getElementById('add-category-button');
 const newCategoryInput = document.getElementById('new-category-name');
-const errorMessage = document.getElementById('errorMessage');
+const invalidateErrorMessage = document.getElementById('invalidate-error-message');
+const duplicateErrorMessage = document.getElementById('duplicate-error-message');
 
 addButton.addEventListener('click', () => {
-    if (validateInput()){
+    if (checkValidateInput() && checkDuplicatedInput(newCategoryInput.value)){
         addCategoryItem(newCategoryInput.value);
         newCategoryInput.value = "";
         newCategoryInput.focus();
@@ -21,29 +22,49 @@ addButton.addEventListener('click', () => {
 });
 
 newCategoryInput.addEventListener('keydown', (event) => {
-    if(event.key === 'Enter' && validateInput()){
+    if(event.key === 'Enter' && checkValidateInput() && checkDuplicatedInput(newCategoryInput.value)){
         event.preventDefault();
         addCategoryItem(newCategoryInput.value);
         newCategoryInput.value = "";
         newCategoryInput.focus();
         newCategoryInput.scrollIntoView({behavior: 'smooth', block: 'center'});
+        checkDuplicatedInput();
     }
 });
 
-function validateInput() {
+function checkValidateInput() {
     if (newCategoryInput.value.trim() === '') {
         newCategoryInput.classList.add('error');
-        errorMessage.style.display = 'block';
+        invalidateErrorMessage.style.display = 'block';
+        duplicateErrorMessage.style.display = 'none';
         newCategoryInput.focus();
         return false;
     } else {
         newCategoryInput.classList.remove('error');
-        errorMessage.style.display = 'none';
+        invalidateErrorMessage.style.display = 'none';
         return true;
     }
 }
 
+function checkDuplicatedInput(input) {
+    const categories = document.querySelectorAll('.category-item input');
+    for (const category of categories) {
+        const existCategoryName = category.value.trim();
+        if (input === existCategoryName) {
+            newCategoryInput.classList.add('error');
+            duplicateErrorMessage.style.display = 'block';
+            category.focus();
+            console.log('duplicated!');
+            return false; // 중복 발견 시 false 반환
+        }
+    }
+    console.log('success!');
+    newCategoryInput.classList.remove('error');
+    duplicateErrorMessage.style.display = 'none';
+    return true;
+}
 
+//카테고리 추가
 function addCategoryItem(category) {
     const categoryList = document.getElementById('category-list');
     const categoryItem = document.createElement('div'); // <div> 생성

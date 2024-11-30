@@ -112,6 +112,27 @@
     background-color: #0056b3;
 }
 
+#new-category {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    transition: opacity 0.2s ease-in;
+}
+#new-category-name {
+    padding: 8px;
+    height: 15px;
+    width: 150px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #F5F5F5;
+    transition: border-color 0.3s;
+}
+#new-category-name:focus {
+    background-color: #FFFFFF;
+    border-color: #4CAF50;
+    outline: none;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* 초록색 외곽선 */
+}
 #new-category-name.error {
     border-color: red;
     box-shadow: 0 0 5px red;
