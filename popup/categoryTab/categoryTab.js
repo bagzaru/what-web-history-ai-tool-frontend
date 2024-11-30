@@ -7,6 +7,43 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+const addButton = document.getElementById('add-category-button');
+const newCategoryInput = document.getElementById('new-category-name');
+const errorMessage = document.getElementById('errorMessage');
+
+addButton.addEventListener('click', () => {
+    if (validateInput()){
+        addCategoryItem(newCategoryInput.value);
+        newCategoryInput.value = "";
+        newCategoryInput.focus();
+        newCategoryInput.scrollIntoView({behavior: 'smooth', block: 'center'});
+    }
+});
+
+newCategoryInput.addEventListener('keydown', (event) => {
+    if(event.key === 'Enter' && validateInput()){
+        event.preventDefault();
+        addCategoryItem(newCategoryInput.value);
+        newCategoryInput.value = "";
+        newCategoryInput.focus();
+        newCategoryInput.scrollIntoView({behavior: 'smooth', block: 'center'});
+    }
+});
+
+function validateInput() {
+    if (newCategoryInput.value.trim() === '') {
+        newCategoryInput.classList.add('error');
+        errorMessage.style.display = 'block';
+        newCategoryInput.focus();
+        return false;
+    } else {
+        newCategoryInput.classList.remove('error');
+        errorMessage.style.display = 'none';
+        return true;
+    }
+}
+
+
 function addCategoryItem(category) {
     const categoryList = document.getElementById('category-list');
     const categoryItem = document.createElement('div'); // <div> 생성
@@ -24,9 +61,18 @@ function addCategoryItem(category) {
     deleteImg.alt = 'delete';
 
 
-    const button = document.createElement('button');
-    button.appendChild(deleteImg);                        // 버튼 텍스트 설정
-    button.tabIndex = '-1';
+    const delButton = document.createElement('button');
+    delButton.appendChild(deleteImg);                        // 버튼 텍스트 설정
+    delButton.tabIndex = '-1';
+
+    // 삭제 동작
+    delButton.addEventListener('click', (event) => {
+        const parent = event.target.parentElement;
+        parent.style.opacity = '0';
+        setTimeout(() => {
+            parent.remove();
+        }, 200);
+    });
 
     // 각 카테고리 텍스트 박스를 클릭시 포커싱 효과 추가
     input.addEventListener('click', () => {
@@ -37,15 +83,11 @@ function addCategoryItem(category) {
     // 포커스 해제 시
     input.addEventListener('blur', () => {
         input.readOnly = true;   //다시 읽기 전용으로
-    })
+    });
 
-    input.addEventListener('keydown', (event) => {
-        if(event.key === 'Enter'){
-            event.preventDefault();
-        }
-    })
+    
 
     categoryItem.appendChild(input);
-    categoryItem.appendChild(button);
+    categoryItem.appendChild(delButton);
     categoryList.appendChild(categoryItem);
 }

@@ -21,6 +21,7 @@
     margin-bottom: 15px;
     display: flex;
     align-items: center;
+    transition: opacity 0.2s ease-in;
 }
 .category-item input {
     padding: 8px;
@@ -78,6 +79,7 @@
 .button-img {
     width: 22px;
     height: 22px;
+    pointer-events: none;
 }
 
 #description {
@@ -108,4 +110,9 @@
 }
 #save-button:hover {
     background-color: #0056b3;
+}
+
+#new-category-name.error {
+    border-color: red;
+    box-shadow: 0 0 5px red;
 }
