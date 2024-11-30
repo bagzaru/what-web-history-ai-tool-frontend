@@ -49,6 +49,8 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("setting-tab").style.display = "none";
             document.getElementById("temp-frame").style.display = "none";
             document.getElementById("temp-tab").style.display = "none";
+            document.getElementById("category-frame").style.display = "none";
+            document.getElementById("category-tab").style.display = "none";
         }
     });
 })
