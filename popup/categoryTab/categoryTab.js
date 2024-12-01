@@ -49,8 +49,8 @@ function checkValidateInput() {
 function checkDuplicatedInput(input) {
     const categories = document.querySelectorAll('.category-item input');
     for (const category of categories) {
-        const existCategoryName = category.value.trim();
-        if (input === existCategoryName) {
+        const existCategoryName = removeAllSpaces(category.value);
+        if (removeAllSpaces(input) === existCategoryName) {
             newCategoryInput.classList.add('error');
             duplicateErrorMessage.style.display = 'block';
             category.focus();
@@ -62,6 +62,11 @@ function checkDuplicatedInput(input) {
     newCategoryInput.classList.remove('error');
     duplicateErrorMessage.style.display = 'none';
     return true;
+}
+
+// 공백제거
+function removeAllSpaces(input) {
+    return input.replace(/\s+/g, '');
 }
 
 //카테고리 추가
