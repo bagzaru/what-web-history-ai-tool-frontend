@@ -14,7 +14,7 @@ const duplicateErrorMessage = document.getElementById('duplicate-error-message')
 
 addButton.addEventListener('click', () => {
     if (checkValidateInput() && checkDuplicatedInput(newCategoryInput.value)){
-        addCategoryItem(newCategoryInput.value);
+        addCategoryItem(newCategoryInput.value.trim());
         newCategoryInput.value = "";
         newCategoryInput.focus();
         newCategoryInput.scrollIntoView({behavior: 'smooth', block: 'center'});
@@ -24,7 +24,7 @@ addButton.addEventListener('click', () => {
 newCategoryInput.addEventListener('keydown', (event) => {
     if(event.key === 'Enter' && checkValidateInput() && checkDuplicatedInput(newCategoryInput.value)){
         event.preventDefault();
-        addCategoryItem(newCategoryInput.value);
+        addCategoryItem(newCategoryInput.value.trim());
         newCategoryInput.value = "";
         newCategoryInput.focus();
         newCategoryInput.scrollIntoView({behavior: 'smooth', block: 'center'});
