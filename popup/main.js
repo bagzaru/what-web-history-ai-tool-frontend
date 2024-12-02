@@ -21,7 +21,7 @@
 // Main.html의 DOM 트리가 완성되는 즉시 로그인 상태에 따라 렌더링 변경
 // window.onload 보다 이전 시점
 document.addEventListener("DOMContentLoaded", function () {
-    chrome.storage.local.get(["jwtToken", "user_email", "user_picture"], (result) => {
+    chrome.storage.local.get(["jwtToken", "user_email", "user_picture"], async (result) => {
         if (result.jwtToken) {
             console.log("jwtToken이 존재합니다:", result.jwtToken);
             // 로그인 상태일 시, 로그인 탭이 보이지 않게 됨
@@ -36,6 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const email_text = document.getElementById("user-name");
             email_text.innerText = result.user_email;
             email_text.title = result.user_email;
+            await refreshToken();
         } else {
             console.log("jwtToken이 존재하지 않습니다:");
             // 로그아웃 상태일 시 사용자 정보 박스 및 로그아웃 버튼이 보이지 않음
@@ -96,3 +97,25 @@ logoutButton.addEventListener('click', async () => {
         console.error("Logout request failed:", error);
     }
 })
+
+async function refreshToken() {
+    try {
+        const response = await new Promise((resolve, reject) => {
+            chrome.runtime.sendMessage({ action: "REFRESH_REQUEST" }, (response) => {
+                if (chrome.runtime.lastError) {
+                    reject(chrome.runtime.lastError);
+                } else {
+                    resolve(response);
+                }
+            });
+        });
+        console.log("response data:", response);
+        if (response.data === true) {
+            console.log("From main.js : Refreshing Token Success");
+        } else {
+            console.log("From main.js : Refreshing Token Failed");
+        }
+    } catch (error) {
+        console.error("Refreshing request failed:", error);
+    }
+}
