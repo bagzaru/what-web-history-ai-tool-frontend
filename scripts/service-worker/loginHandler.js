@@ -40,10 +40,10 @@ async function loginHandler() {
         if (!login_response.ok) {
             throw new Error(`Server responded with status: ${login_response.status}`);
         }
-        const token = await login_response.text();
-        const jwtToken = token;
-        console.log("jwtToken:", jwtToken);
-        await storeToken("jwtToken", jwtToken);
+        const tokens = await login_response.text();
+        const jsonTokens = JSON.parse(tokens);
+        console.log("jwtToken:", tokens);
+        await storeToken(jsonTokens.accessToken, jsonTokens.refreshToken);
 
         // 유저 정보 가져오기
         const info_response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
@@ -69,9 +69,13 @@ async function loginHandler() {
 
 //chrome.storage.local.set 은 비동기로 처리됨
 // new Promise 로 감싸서 loginhandler에서 token 저장을 await하게 할 수 있게 함.
-function storeToken(key, value) {
+function storeToken(accessToken, refreshToken) {
     return new Promise((resolve, reject) => {
-        chrome.storage.local.set({ [key]: value }, () => {
+        chrome.storage.local.set(
+            { 
+                jwtToken: accessToken,
+                refreshToken: refreshToken
+             }, () => {
             if (chrome.runtime.lastError) {
                 reject (new Error(chrome.runtime.lastError));
             } else {
@@ -101,4 +105,52 @@ function storeUserInfo(email, picture) {
     });
 }
 
-export { loginHandler };
+function getToken() {
+    return new Promise((resolve, reject) => {
+        chrome.storage.local.get(["jwtToken", "refreshToken"], (result) => {
+            if (chrome.runtime.lastError) {
+                reject(chrome.runtime.lastError);
+            } else {
+                resolve(result); //return token
+            }
+        });
+    });
+}
+
+async function tokenRefreshHandler() {
+    try {
+        const tokens = await getToken();
+        const accessToken = tokens.jwtToken;
+        const refreshToken = tokens.refreshToken;
+        const defaultHeader = {
+            "Accept": "*/*",
+            "Authorization": `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+        };
+        const url = "https://capstonepractice.site/api/auth/refresh";
+        const options = {
+            method: "POST",
+            headers: {
+                ...defaultHeader,
+            },
+            body: JSON.stringify(
+                { 
+                    "accessToken": accessToken,
+                    "refreshToken": refreshToken
+                }),
+        };
+        const response = await fetch(url, options);
+        if (!response.ok) {
+            throw new Error(`Server responded with status: ${response.status}`);
+        }
+        const newToken = await response.text();
+        console.log("refresh response data", newToken);
+        await storeToken(newToken, refreshToken);
+        return true;
+    } catch (error) {
+        console.error("Error in tokenRefreshHandler", error);
+        return false;
+    }
+}
+
+export { loginHandler, tokenRefreshHandler };

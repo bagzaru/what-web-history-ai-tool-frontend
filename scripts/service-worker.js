@@ -1,6 +1,6 @@
 import { messageHandler } from "./service-worker/messageHandler.js";
 import { tabActivationHandler, windowFocusChangeHandler } from "./service-worker/tabFocusManager.js";
-import { loginHandler } from "./service-worker/loginHandler.js";
+import { loginHandler, tokenRefreshHandler } from "./service-worker/loginHandler.js";
 import { logoutHandler } from "./service-worker/logoutHandler.js";
 import { savePageData } from "./service-worker/savePageData.js";
 
@@ -10,7 +10,7 @@ chrome.runtime.onMessage.addListener(messageHandler);
 chrome.tabs.onActivated.addListener(tabActivationHandler);
 chrome.windows.onFocusChanged.addListener(windowFocusChangeHandler);
 
-//로그인 및 로그아웃을 위한 리스너
+//로그인 및 로그아웃 토큰 갱신을 위한 리스너
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === "LOGIN_REQUEST") {
         loginHandler().then((result) => {
@@ -31,6 +31,16 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             sendResponse({ data: false });
         });
         return true; // keep the messaging channel open for sendResponse
+    }
+    else if (request.action === "REFRESH_REQUEST") {
+        tokenRefreshHandler().then((result) => {
+            console.log("tokenRefreshHandler result: ", result);
+            sendResponse({ data: result });
+        }).catch((error) => {
+            console.error("Error in tokenRefreshHandler:", error);
+            sendResponse({ data: false });
+        })
+        return true;
     }
 });
 

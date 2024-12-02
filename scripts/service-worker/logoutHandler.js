@@ -39,7 +39,7 @@ function getToken() {
 // 저장된 토큰 삭제를 동기식으로 처리하기 위한 함수
 function deleteToken() {
     return new Promise((resolve, reject) => {
-        chrome.storage.local.remove(['jwtToken', 'user_email', 'user_picture'], () => {
+        chrome.storage.local.remove(['jwtToken','refreshToken','user_email', 'user_picture'], () => {
             if (chrome.runtime.lastError) {
                 reject(new Error(chrome.runtime.lastError));
             } else {
