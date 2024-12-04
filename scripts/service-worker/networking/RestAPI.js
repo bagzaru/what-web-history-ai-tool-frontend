@@ -84,7 +84,7 @@ async function get(path, headers = {}) {
 
 function getToken() {
     return new Promise((resolve, reject) => {
-        chrome.storage.local.get("jwtToken", (result) => {
+        chrome.storage.sync.get("jwtToken", (result) => {
             if (chrome.runtime.lastError) {
                 reject(chrome.runtime.lastError);
             } else {
