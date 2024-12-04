@@ -141,7 +141,19 @@ async function tokenRefreshHandler() {
         };
         const response = await fetch(url, options);
         if (!response.ok) {
-            throw new Error(`Server responded with status: ${response.status}`);
+            if (response.status === 401){
+                console.log("refreshToken 만료됨");
+                await deleteToken();
+                chrome.notifications.create({
+                    type: "basic",
+                    iconUrl: "../icon.png",
+                    title: "로그인 세션 만료",
+                    message: "로그인 세션이 만료되어 자동으로 로그아웃 됩니다.\n다시 로그인해주세요."
+                });
+                return true;
+            } else {
+                throw new Error(`Server responded with status: ${response.status}`);
+            }
         }
         const newToken = await response.text();
         console.log("refresh response data", newToken);
@@ -151,6 +163,20 @@ async function tokenRefreshHandler() {
         console.error("Error in tokenRefreshHandler", error);
         return false;
     }
+}
+
+// 저장된 토큰 삭제를 동기식으로 처리하기 위한 함수
+function deleteToken() {
+    return new Promise((resolve, reject) => {
+        chrome.storage.sync.remove(['jwtToken','refreshToken','user_email', 'user_picture'], () => {
+            if (chrome.runtime.lastError) {
+                reject(new Error(chrome.runtime.lastError));
+            } else {
+                console.log("jwt 토큰 및 사용자 정보 삭제 성공");
+                resolve();
+            }
+        });
+    });
 }
 
 export { loginHandler, tokenRefreshHandler };
