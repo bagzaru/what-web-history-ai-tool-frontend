@@ -71,7 +71,7 @@ async function loginHandler() {
 // new Promise 로 감싸서 loginhandler에서 token 저장을 await하게 할 수 있게 함.
 function storeToken(accessToken, refreshToken) {
     return new Promise((resolve, reject) => {
-        chrome.storage.local.set(
+        chrome.storage.sync.set(
             { 
                 jwtToken: accessToken,
                 refreshToken: refreshToken
@@ -89,7 +89,7 @@ function storeToken(accessToken, refreshToken) {
 // Promise를 사용해 동기식으로 구현
 function storeUserInfo(email, picture) {
     return new Promise((resolve, reject) => {
-        chrome.storage.local.set(
+        chrome.storage.sync.set(
             { 
                 user_email: email,
                 user_picture: picture
@@ -107,7 +107,7 @@ function storeUserInfo(email, picture) {
 
 function getToken() {
     return new Promise((resolve, reject) => {
-        chrome.storage.local.get(["jwtToken", "refreshToken"], (result) => {
+        chrome.storage.sync.get(["jwtToken", "refreshToken"], (result) => {
             if (chrome.runtime.lastError) {
                 reject(chrome.runtime.lastError);
             } else {

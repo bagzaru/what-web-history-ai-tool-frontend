@@ -21,7 +21,7 @@
 // Main.html의 DOM 트리가 완성되는 즉시 로그인 상태에 따라 렌더링 변경
 // window.onload 보다 이전 시점
 document.addEventListener("DOMContentLoaded", function () {
-    chrome.storage.local.get(["jwtToken", "user_email", "user_picture"], async (result) => {
+    chrome.storage.sync.get(["jwtToken", "user_email", "user_picture"], async (result) => {
         if (result.jwtToken) {
             console.log("jwtToken이 존재합니다:", result.jwtToken);
             // 로그인 상태일 시, 로그인 탭이 보이지 않게 됨
