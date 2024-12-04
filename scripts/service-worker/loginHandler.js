@@ -124,7 +124,7 @@ async function tokenRefreshHandler() {
         const refreshToken = tokens.refreshToken;
         const defaultHeader = {
             "Accept": "*/*",
-            "Authorization": `Bearer ${accessToken}`,
+            "Authorization": `Bearer ${refreshToken}`,
             "Content-Type": "application/json",
         };
         const url = "https://capstonepractice.site/api/auth/refresh";
