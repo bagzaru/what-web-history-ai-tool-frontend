@@ -71,7 +71,7 @@ async function loginHandler() {
 // new Promise 로 감싸서 loginhandler에서 token 저장을 await하게 할 수 있게 함.
 function storeToken(accessToken, refreshToken) {
     return new Promise((resolve, reject) => {
-        chrome.storage.local.set(
+        chrome.storage.sync.set(
             { 
                 jwtToken: accessToken,
                 refreshToken: refreshToken
@@ -89,7 +89,7 @@ function storeToken(accessToken, refreshToken) {
 // Promise를 사용해 동기식으로 구현
 function storeUserInfo(email, picture) {
     return new Promise((resolve, reject) => {
-        chrome.storage.local.set(
+        chrome.storage.sync.set(
             { 
                 user_email: email,
                 user_picture: picture
@@ -107,7 +107,7 @@ function storeUserInfo(email, picture) {
 
 function getToken() {
     return new Promise((resolve, reject) => {
-        chrome.storage.local.get(["jwtToken", "refreshToken"], (result) => {
+        chrome.storage.sync.get(["jwtToken", "refreshToken"], (result) => {
             if (chrome.runtime.lastError) {
                 reject(chrome.runtime.lastError);
             } else {
@@ -141,7 +141,19 @@ async function tokenRefreshHandler() {
         };
         const response = await fetch(url, options);
         if (!response.ok) {
-            throw new Error(`Server responded with status: ${response.status}`);
+            if (response.status === 401){
+                console.log("refreshToken 만료됨");
+                await deleteToken();
+                chrome.notifications.create({
+                    type: "basic",
+                    iconUrl: "../icon.png",
+                    title: "로그인 세션 만료",
+                    message: "로그인 세션이 만료되어 자동으로 로그아웃 됩니다.\n다시 로그인해주세요."
+                });
+                return true;
+            } else {
+                throw new Error(`Server responded with status: ${response.status}`);
+            }
         }
         const newToken = await response.text();
         console.log("refresh response data", newToken);
@@ -151,6 +163,20 @@ async function tokenRefreshHandler() {
         console.error("Error in tokenRefreshHandler", error);
         return false;
     }
+}
+
+// 저장된 토큰 삭제를 동기식으로 처리하기 위한 함수
+function deleteToken() {
+    return new Promise((resolve, reject) => {
+        chrome.storage.sync.remove(['jwtToken','refreshToken','user_email', 'user_picture'], () => {
+            if (chrome.runtime.lastError) {
+                reject(new Error(chrome.runtime.lastError));
+            } else {
+                console.log("jwt 토큰 및 사용자 정보 삭제 성공");
+                resolve();
+            }
+        });
+    });
 }
 
 export { loginHandler, tokenRefreshHandler };
