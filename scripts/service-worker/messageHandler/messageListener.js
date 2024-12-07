@@ -48,32 +48,7 @@ function addMessageHandler({ senderName, eventName, listener }) {
 
 //content, popup 등에서 전송된 Message 값 처리
 function messageHandler(message, sender, sendResponse) {
-    if (message.action === "SAVE_PAGE_DATA") {
-        //'페이지 저장' 이벤트 발생 시
-        // - content script에서 페이지 데이터를 추출하여 서버에 전송한다.
-
-        //현재 focus된 content tab의 위치 확인하여 데이터 추출 요청
-        const query = { active: true, lastFocusedWindow: true };
-        const onTabQueryFinished = (tabs) => {
-            if (tabs.length > 0) {
-                const tabId = tabs[0].id;
-                const onSaveFinished = (response) => {
-                    console.log("SAVE_PAGE_DATA: 데이터 추출 완료: " + JSON.stringify(response));
-                    sendResponse({ data: response });
-                }
-                const onSaveFailed = (e) => {
-                    console.error("SAVE_PAGE_DATA: 데이터 추출 실패: " + e.message);
-                    sendResponse({ data: null, message: e.message });
-                }
-                savePageData(tabId, onSaveFinished, onSaveFailed);
-            }
-        }
-
-        chrome.tabs.query(query, onTabQueryFinished);
-
-        return true;
-    }
-    else if (message.action === "GET_ALL_DATA_LIST") {
+    if (message.action === "GET_ALL_DATA_LIST") {
         //popup에서 전체 데이터 리스트를 요청했을 때
         //TODO: 실제 서버에서 데이터를 받아오도록 수정
         const startDate = new Date(2000, 0, 1);
