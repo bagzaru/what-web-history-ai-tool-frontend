@@ -1,4 +1,4 @@
-import networkManager from "../../networking/networkManager";
+import networkManager from "../../networking/networkManager.js";
 
 //deprecated: 프로토타입 코드
 

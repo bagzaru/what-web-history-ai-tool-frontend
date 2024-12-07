@@ -1,16 +1,22 @@
 import dummyModule from "../../debugging/dummyModule.js";
 import networkManager from "../networking/networkManager.js";
-import { domLoadHandler as updateCurrentTabOnDomLoad } from "../tabFocusManager.js";
-import { savePageData } from "../savePageData.js";
 import onDOMLoaded from "./domReadyHandler/onDOMLoaded.js";
 import onGetHistories from "./deprecated/onGetHistories.js";
+import onGetNetworkState from "./deprecated/onGetNetworkState.js";
+import onNetworkStateChanged from "./deprecated/onNetworkStateChanged.js";
+import onSavePageData from "./deprecated/onSavePageData.js";
+import onGetAllDataList from "./popup/onGetAllDataList.js";
 
 
+let senderEventMap = {};
 
 addMessageHandler(onDOMLoaded);
 addMessageHandler(onGetHistories);
+addMessageHandler(onGetNetworkState);
+addMessageHandler(onNetworkStateChanged);
+addMessageHandler(onSavePageData);
+addMessageHandler(onGetAllDataList);
 
-let senderEventMap = {};
 function onMessageReceived(message, sender, sendResponse) {
     console.log("message received: " + JSON.stringify(senderEventMap) + "from" + message.senderName + " " + message.action);
     for (const key in senderEventMap) {
@@ -48,22 +54,7 @@ function addMessageHandler({ senderName, eventName, listener }) {
 
 //content, popup 등에서 전송된 Message 값 처리
 function messageHandler(message, sender, sendResponse) {
-    if (message.action === "GET_ALL_DATA_LIST") {
-        //popup에서 전체 데이터 리스트를 요청했을 때
-        //TODO: 실제 서버에서 데이터를 받아오도록 수정
-        const startDate = new Date(2000, 0, 1);
-        const endDate = new Date();
-        networkManager.get.getHistories("visitTime", startDate, endDate)
-            .then((data) => {
-                console.log("GET_ALL_DATA_LIST: 데이터 요청 성공");
-                sendResponse({ data: data });
-            }).catch((e) => {
-                console.log("GET_ALL_DATA_LIST: 데이터 요청 실패: " + e.message);
-                sendResponse({ data: null, message: e.message });
-            });
-        return true;
-    }
-    else if (message.action === "GET_SEARCH_DATA_LIST") {
+    if (message.action === "GET_SEARCH_DATA_LIST") {
         //popup에서 전체 데이터 리스트를 요청했을 때
         //TODO: 실제 서버에서 데이터를 받아오도록 수정\
 
