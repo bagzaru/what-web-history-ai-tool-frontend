@@ -33,18 +33,16 @@ const onDOMLoaded = {
         tabFocusManagerEvent(sender.tab.id, message.data.url);
 
         //만약 autoSave가 켜져있을 경우, 페이지 데이터를 서버에 전송
-        const isSettingAutoSaveOn = await chrome.storage.sync.get(["settingAutoSave"]);
+        const isSettingAutoSaveOn = (await chrome.storage.sync.get(["settingAutoSave"])).settingAutoSave;
 
-        if (isSettingAutoSaveOn) {
+        console.log("DOM_LOADED: autoSave: " + JSON.stringify(isSettingAutoSaveOn));
+        if (isSettingAutoSaveOn === true) {
             //자동 저장이 켜져있을 경우
-            console.log("DOM_LOADED: autoSave 켜져있음");
-
             const saveHistoryResponse = await networkManager.post.saveHistory(dataToSend);
 
             console.log("DOM_Loaded: savePageData: 데이터 추출 완료: " + JSON.stringify(saveHistoryResponse));
             return { data: saveHistoryResponse };
         }
-
         return {};
     }
 }
