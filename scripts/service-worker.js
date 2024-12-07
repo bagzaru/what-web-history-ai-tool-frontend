@@ -1,7 +1,8 @@
 import { onMessageReceived } from "./service-worker/messageHandler/messageListener.js";
 import { tabActivationHandler, windowFocusChangeHandler } from "./service-worker/tabFocusManager.js";
-import { loginHandler, tokenRefreshHandler } from "./service-worker/loginHandler.js";
+import { loginHandler } from "./service-worker/loginHandler.js";
 import { logoutHandler } from "./service-worker/logoutHandler.js";
+import { tokenRefreshHandler, isTokenExpired } from "./service-worker/tokenRefreshHandler.js";
 import { savePageData } from "./service-worker/savePageData.js";
 
 console.log("service-worker on");
@@ -31,16 +32,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             sendResponse({ data: false });
         });
         return true; // keep the messaging channel open for sendResponse
-    }
-    else if (request.action === "REFRESH_REQUEST") {
-        tokenRefreshHandler().then((result) => {
-            console.log("tokenRefreshHandler result: ", result);
-            sendResponse({ data: result });
-        }).catch((error) => {
-            console.error("Error in tokenRefreshHandler:", error);
-            sendResponse({ data: false });
-        })
-        return true;
     }
 });
 
@@ -75,6 +66,34 @@ chrome.storage.sync.get(['settingAutoSave'], (result) => {
         chrome.storage.sync.set({ settingAutoSave: false });
     }
 });
+
+// 토큰 상태 체크
+chrome.alarms.create('tokenCheck', {
+    delayInMinutes: 0,
+    periodInMinutes: 60
+});
+chrome.alarms.onAlarm.addListener(async (alarm) => {
+    if (alarm.name === 'tokenCheck') {
+        if (await isTokenExpired()) {
+            console.log("토큰 만료됨");
+            if (await tokenRefreshHandler()){
+                console.log("토큰 갱신됨");
+                // 자동 갱신 시에는 오히려 알림이 없는 것이 나을 수 있음
+                // chrome.notifications.create({
+                //     type: "basic",
+                //     iconUrl: "../icon.png",
+                //     title: "로그인 알림",
+                //     message: "로그인 세션이 자동 갱신되었습니다."
+                // });
+            } else {
+                console.log("갱신 실패");
+            }
+        } else {
+            console.log("token is alived");
+        }
+    }
+})
+
 
 // chrome.webRequest.onCompleted.addListener(loginHandler,
 //     {
