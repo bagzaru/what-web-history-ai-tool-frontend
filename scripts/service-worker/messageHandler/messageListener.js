@@ -1,42 +1,51 @@
-import dummyModule from "../debugging/dummyModule.js";
-import networkManager from "./networkManager.js";
-import { domLoadHandler } from "./tabFocusManager.js";
-import { savePageData } from "./savePageData.js";
+import dummyModule from "../../debugging/dummyModule.js";
+import networkManager from "../networking/networkManager.js";
+import { domLoadHandler as updateCurrentTabOnDomLoad } from "../tabFocusManager.js";
+import { savePageData } from "../savePageData.js";
+import onDOMLoaded from "./domReadyHandler/onDOMLoaded.js";
+
+let senderEventMap = {};
+function onMessageReceived(message, sender, sendResponse) {
+    console.log("message received: " + JSON.stringify(senderEventMap) + "from" + message.senderName + " " + message.action);
+    for (const key in senderEventMap) {
+        if (key === message.senderName) {
+            if (senderEventMap[key][message.action] !== undefined) {
+                console.log(`sender: ${key}, action: ${message.action}`);
+                senderEventMap[key][message.action](message, sender)
+                    .then((response) => {
+                        sendResponse(response);
+                    }).catch((e) => {
+                        console.error(`sender: ${key}, action: ${message.action}에 대한 리스너 실행 중 에러: ${e.message}`);
+                        sendResponse({
+                            data: null, message: e.message
+                        });
+                        return true;
+                    });
+            }
+            else {
+                console.error(`sender: ${key}, action: ${message.action}에 대한 리스너가 없음`);
+                break;
+            }
+        }
+    }
+}
+function addMessageHandler({ senderName, eventName, listener }) {
+    if (senderEventMap[senderName] === undefined) {
+        senderEventMap[senderName] = {};
+    }
+    if (senderEventMap[senderName][eventName] === undefined) {
+        senderEventMap[senderName][eventName] = listener;
+    } else {
+        console.error(`이미 존재하는 senderName: ${senderName}, eventName: ${eventName}`);
+    }
+}
+
+addMessageHandler(onDOMLoaded);
 
 //content, popup 등에서 전송된 Message 값 처리
 function messageHandler(message, sender, sendResponse) {
     if (message.action === "DOM_LOADED") {
-        //content의 domReadyHandler에서 DOM이 Load됨을 감지되었을 때 실행
-        console.log("service-worker msg Handler: DOM LOADED!!" + message.data.url);
 
-        //데이터 서버에 전송할 데이터 제작
-        let data = {
-            title: message.data.title,
-            url: message.data.url,
-            content: message.data.pageData
-        }
-
-        //tabFocusManager의 url 업데이트함
-        domLoadHandler(sender.tab.id, message.data.url);
-
-        //만약 autoSave가 켜져있을 경우, 페이지 데이터를 서버에 전송
-        chrome.storage.sync.get(["settingAutoSave"], (result) => {
-
-            if (result.settingAutoSave) {
-                //자동 저장이 켜져있을 경우
-                console.log("DOM_LOADED: autoSave 켜져있음");
-                const tabId = sender.tab.id;
-                const onSaveFinished = (response) => {
-                    console.log("DOM_Loaded: savePageData: 데이터 추출 완료: " + JSON.stringify(response));
-                    sendResponse({ data: response });
-                }
-                const onSaveFailed = (e) => {
-                    console.error("DOM_Loaded savePageData: 데이터 추출 실패: " + e.message);
-                    sendResponse({ data: null, message: e.message });
-                }
-                savePageData(tabId, onSaveFinished, onSaveFailed);
-            }
-        });
 
         //DOM Distiller를 통해 요약된 데이터 추출
         /*chrome.tabs.sendMessage(
@@ -54,7 +63,7 @@ function messageHandler(message, sender, sendResponse) {
                 console.log("DOM extracted");
                 //console.log("원본: " + message.data.pageData);
                 //console.log("Sending Data title:" + data.title + ", content: " + data.content);
-
+    
                 //텍스트 데이터를 서버에 전송
                 networkManager.post.saveHistory(data)
                     .then(async () => {
@@ -189,4 +198,4 @@ function messageHandler(message, sender, sendResponse) {
     return false;
 }
 
-export { messageHandler };
+export { onMessageReceived };

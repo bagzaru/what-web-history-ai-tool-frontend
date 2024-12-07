@@ -1,7 +1,7 @@
 //tabFocusManager.js: 탭의 포커스 상태를 체크한다.
 // - 해당 탭 또는 창의 체류 시간을 체크하기 위해, tab이나 windows의 focus 상태를 조사하여 포커스 종료, 포커스 시작 상태에 대한 처리를 한다.
 // - 크롬에서는 탭과 창의 이벤트가 별개로 일어나기 때문에, 탭, 창 모두에 대한 이벤트를 확인해주어야 한다. 각 이벤트가 동시에 일어나거나, 둘 중 하나만 일어나는 경우에 대한 처리를 진행한다.
-import networkManager from "./networkManager.js";
+import networkManager from "./networking/networkManager.js";
 
 const tabFocusManager = {
     currentFocus: {

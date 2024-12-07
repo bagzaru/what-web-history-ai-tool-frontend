@@ -1,3 +1,5 @@
+const contentScriptName = "domReadyHandler";
+
 //domReadyHandler.js: HTML의 DOM이 준비되었을 때, 서비스워커에게 DOM이 준비되었음을 반환합니다.
 console.log("domReadyHandler working");
 
@@ -21,7 +23,7 @@ function onDOMLoaded() {
     }
 
     //service-worker에 전송
-    chrome.runtime.sendMessage({ action: "DOM_LOADED", data: data }, (response) => {
+    chrome.runtime.sendMessage({ senderName: contentScriptName, action: "DOM_LOADED", data: data }, (response) => {
         console.log("content:domReadyHandler: DOM load 완료");
     });
 }

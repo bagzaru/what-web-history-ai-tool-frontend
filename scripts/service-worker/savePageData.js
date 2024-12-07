@@ -1,4 +1,4 @@
-import networkManager from "./networkManager.js";
+import networkManager from "./networking/networkManager.js";
 
 function savePageData(tabId, onSaveFinished = (response) => { }, onSaveFailed = (response) => { }) {
     //해당 탭의 content에 메시지 전송
