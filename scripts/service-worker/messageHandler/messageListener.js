@@ -31,8 +31,9 @@ function onMessageReceived(message, sender, sendResponse) {
                         sendResponse({
                             data: null, message: e.message
                         });
-                        return true;
                     });
+
+                return true;
             }
             else {
                 console.error(`sender: ${key}, action: ${message.action}에 대한 리스너가 없음`);
