@@ -6,7 +6,7 @@ const table = document.getElementById('keyword-table').getElementsByTagName('tbo
 const log = document.getElementById('debugLog');
 
 //popup이 켜졌을때 network state 상태 조회 후, 해당 값으로 html element를 초기화해둠 
-chrome.runtime.sendMessage({ action: "GET_NETWORK_STATE" }, (response) => {
+chrome.runtime.sendMessage({ senderName: "popup", action: "GET_NETWORK_STATE" }, (response) => {
     if (response.data === true) {
         document.querySelector("#radio-on").checked = "checked";
     }
@@ -21,7 +21,7 @@ window.onload = function () {
         .addEventListener('change', (event) => {
             if (event.target.checked) {
                 //서버 연결 시작
-                chrome.runtime.sendMessage({ action: "NETWORK_STATE_CHANGED", data: true }, (response) => {
+                chrome.runtime.sendMessage({ senderName: "popup", action: "NETWORK_STATE_CHANGED", data: true }, (response) => {
                     const selected = document.getElementById('dropdown').value;
                     loadHistoryData(selected);
                 });
@@ -31,7 +31,7 @@ window.onload = function () {
         .addEventListener('change', (event) => {
             if (event.target.checked) {
                 //서버 연결 끊기                
-                chrome.runtime.sendMessage({ action: "NETWORK_STATE_CHANGED", data: false }, (response) => {
+                chrome.runtime.sendMessage({ senderName: "popup", action: "NETWORK_STATE_CHANGED", data: false }, (response) => {
                     const selected = document.getElementById('dropdown').value;
                     loadHistoryData(selected);
                 });
@@ -56,23 +56,8 @@ gptRequestButton.addEventListener('click', () => {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         const activeTab = tabs[0];
         const activeTabUrl = activeTab.url;
+        console.warn("{*deprecated*}: popup: gpt 키워드 추출 요청");
 
-        //gpt 이벤트 요청하기
-        chrome.runtime.sendMessage({ action: "GPT_REQUEST_EVENT", data: { url: activeTabUrl } }, (response) => {
-            //요청 전송 후 할 일
-            const date = new Date();
-            if (response.data === null) {
-                //에러 발생
-                log.innerText = `GPT 요청 실패: ${response.message}`;
-            }
-            else {
-                log.innerText = date.toString() + ": gpt 키워드추출 요청 완료";
-
-                //방문기록 새로고침
-                const selected = dropdown.value;
-                loadHistoryData(selected);
-            }
-        })
     });
 })
 
@@ -89,7 +74,7 @@ function loadHistoryData(orderBy) {
     table.insertRow().insertCell().textContent = "로딩 중...";
 
     //서비스 워커에 로드됨 보냄
-    chrome.runtime.sendMessage({ action: "POPUP_GET_HISTORY", data: { orderBy: orderBy } }, (response) => {
+    chrome.runtime.sendMessage({ senderName: "popup", action: "GET_HISTORIES", data: { orderBy: orderBy } }, (response) => {
         //서버에서 받아온 데이터 처리
         const data = response.data;
         table.innerHTML = '';
@@ -145,7 +130,7 @@ function loadHistoryData(orderBy) {
 //데이터 저장 테스트 버튼
 const testSaveButton = document.getElementById("save-button");
 testSaveButton.addEventListener('click', () => {
-    chrome.runtime.sendMessage({ action: "SAVE_PAGE_DATA" }, (response) => {
+    chrome.runtime.sendMessage({ senderName: "popup", action: "SAVE_PAGE_DATA" }, (response) => {
         //log.innerText += "밥김국";
     })
 })

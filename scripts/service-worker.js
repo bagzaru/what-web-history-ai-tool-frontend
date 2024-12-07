@@ -1,4 +1,4 @@
-import { messageHandler } from "./service-worker/messageHandler.js";
+import { onMessageReceived } from "./service-worker/messageHandler/messageListener.js";
 import { tabActivationHandler, windowFocusChangeHandler } from "./service-worker/tabFocusManager.js";
 import { loginHandler } from "./service-worker/loginHandler.js";
 import { logoutHandler } from "./service-worker/logoutHandler.js";
@@ -7,7 +7,7 @@ import { savePageData } from "./service-worker/savePageData.js";
 
 console.log("service-worker on");
 
-chrome.runtime.onMessage.addListener(messageHandler);
+chrome.runtime.onMessage.addListener(onMessageReceived);
 chrome.tabs.onActivated.addListener(tabActivationHandler);
 chrome.windows.onFocusChanged.addListener(windowFocusChangeHandler);
 

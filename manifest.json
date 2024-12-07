@@ -40,7 +40,7 @@
         "matches": ["https://*/*", "http://*/*"],
         "js": [
           "scripts/content-scripts/domReadyHandler.js",
-           "scripts/content-scripts/htmlExtractor.js"
+           "scripts/content-scripts/contentExtractor.js"
           ],
         "type": "module"
       }

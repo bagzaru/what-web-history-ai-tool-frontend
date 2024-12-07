@@ -1,6 +1,6 @@
-import { post, put, get } from "./networking/RestAPI.js";
-import { createHistoryRequestDTO, searchHistoryRequestDTO } from "./networking/historyDTO.js";
-import getJavaDateString from "./date/javaDateConverter.js";
+import { post, put, get } from "./RestAPI.js";
+import { createHistoryRequestDTO, searchHistoryRequestDTO } from "./historyDTO.js";
+import getJavaDateString from "../date/javaDateConverter.js";
 
 //defaultHost: 기본 연결 서버 주소
 const defaultHost = "https://capstonepractice.site";
