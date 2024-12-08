@@ -8,14 +8,21 @@ const domainInput = document.getElementById('domain-input');
 
 const resultContainer = document.getElementById('result-container');
 
+let optionData = {};
+
 //버튼 클릭 시 데이터 가져옴
 searchButton.addEventListener('click', () => {
     const searchOption = {
         query: searchInput.value,
-        startDate: startDateInput.value,
-        endDate: endDateInput.value,
-        domain: domainInput.value
+        startDate: "",
+        endDate: "",
+        domain: ""
     }
+    if (optionData.period !== undefined) {
+        searchOption.startDate = optionData.period.date;
+        searchOption.endDate = new Date();
+    }
+
     chrome.runtime.sendMessage({ senderName: "popup", action: "GET_SEARCH_DATA_LIST", data: searchOption }, (response) => {
         const data = response.data;
         if (data === null) {
@@ -28,35 +35,24 @@ searchButton.addEventListener('click', () => {
         resultContainer.appendChild(renderResult);
     });
 });
+
 document.addEventListener("DOMContentLoaded", () => {
+    const currentDate = new Date();
     const periodButton = document.getElementById("period-set-button");
     const dropdownMenu = document.getElementById("dropdown-menu");
     const periodSet = [
-        { text: "오늘", onClick: () => { } },
-        { text: "3일", onClick: () => { } },
-        { text: "일주일", onClick: () => { } },
-        { text: "한달", onClick: () => { } },
-        { text: "3개월", onClick: () => { } },
-        { text: "1년", onClick: () => { } },
-        { text: "직접선택", onClick: () => { } }
+        { type: "period", text: "24시간 이내", date: getSubtractDate(currentDate, 0, 0, 1) },
+        { type: "period", text: "일주일 이내", date: getSubtractDate(currentDate, 0, 0, 7) },
+        { type: "period", text: "한달 이내", date: getSubtractDate(currentDate, 0, 1) },
+        { type: "period", text: "3개월 이내", date: getSubtractDate(currentDate, 0, 3) },
+        { type: "period", text: "1년 이내", date: getSubtractDate(currentDate, 1) },
+        {
+            type: "period", text: "직접 선택",
+            onclick: () => {
+                //TODO: 직접 선택 구현
+            }
+        },
     ];
-
-    const domainButton = document.getElementById("domain-set-button");
-    const domainSet = [
-        { text: "everytime.kr", onclick: () => { } },
-        { text: "inven.co.kr", onclick: () => { } },
-        { text: "naver.com", onclick: () => { } },
-        { text: "tistory.com", onclick: () => { } },
-        { text: "namu.wiki", onclick: () => { } },
-    ]
-    const categoryButton = document.getElementById("category-set-button");
-    const categorySet = [
-        { text: "뉴스", onclick: () => { } },
-        { text: "메인", onclick: () => { } },
-        { text: "스포츠", onclick: () => { } },
-        { text: "컴퓨터 공학", onclick: () => { } },
-        { text: "게임", onclick: () => { } },
-    ]
 
     periodButton.addEventListener("click", () => {
         if (dropdownMenu.style.display === "none" || !dropdownMenu.style.display) {
@@ -65,6 +61,23 @@ document.addEventListener("DOMContentLoaded", () => {
             dettachDropdown();
         }
     });
+
+    const domainButton = document.getElementById("domain-set-button");
+    const domainSet = [
+        { type: "domain", text: "everytime.kr", onclick: () => { } },
+        { type: "domain", text: "inven.co.kr", onclick: () => { } },
+        { type: "domain", text: "naver.com", onclick: () => { } },
+        { type: "domain", text: "tistory.com", onclick: () => { } },
+        { type: "domain", text: "namu.wiki", onclick: () => { } },
+    ]
+    const categoryButton = document.getElementById("category-set-button");
+    const categorySet = [
+        { type: "category", text: "뉴스", onclick: () => { } },
+        { type: "category", text: "메인", onclick: () => { } },
+        { type: "category", text: "스포츠", onclick: () => { } },
+        { type: "category", text: "컴퓨터 공학", onclick: () => { } },
+        { type: "category", text: "게임", onclick: () => { } },
+    ]
 
     domainButton.addEventListener("click", () => {
         if (dropdownMenu.style.display === "none" || !dropdownMenu.style.display) {
@@ -102,7 +115,7 @@ function attachDropdown(items) {
         button.textContent = item.text;
         button.addEventListener('click', () => {
             //attach to top side
-            attachOption(item.text);
+            attachOption(item);
             dettachDropdown();
         });
         dropdownMenu.appendChild(button);
@@ -115,16 +128,29 @@ function dettachDropdown() {
     dropdownMenu.innerHTML = "";
 }
 
+function attachOption(option) {
+    optionData[option.type] = option;
+    renderOptionData();
+}
 
-function attachOption(optionName) {
+function renderOptionData() {
     const optionBox = document.getElementById("search-option-box");
-    const option = document.createElement('button');
-    option.textContent = optionName;
-    option.addEventListener('click', () => {
-        optionBox.removeChild(option);
-    });
+    optionBox.innerHTML = "";
+    for (let key in optionData) {
+        const value = optionData[key]; //데이터 꺼내옴
+        console.log(JSON.stringify(value));
 
-    optionBox.appendChild(option);
+        const optionButton = document.createElement('button');  //버튼 생성
+        optionButton.textContent = value.text;   //버튼 텍스트 설정
+        optionButton.addEventListener('click', () => {
+            optionData[key] = undefined;    //해당 데이터 삭제
+            renderOptionData();             //optionDataRender 재호출
+        });
+        optionBox.appendChild(optionButton);
+    }
+}
 
 
+function getSubtractDate(date, year = 0, month = 0, day = 0, hour = 0, minute = 0, second = 0) {
+    return new Date(date.getFullYear() - year, date.getMonth() - month, date.getDate() - day, date.getHours() - hour, date.getMinutes() - minute, date.getSeconds() - second);
 }
