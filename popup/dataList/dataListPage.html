@@ -11,16 +11,34 @@
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"/>
 </head>
 <body>
-    <div class="scroll-container">
-        <button class="scroll-btn" id="left-btn">
+    <div class="top-menu-container">
+        <div class="scroll-container">
+            <button class="scroll-btn" id="left-btn">
+                <img src="../../assets/chevron-back-outline.svg" alt="left"/>
+            </button>
+            <div class="scroll-menu">
+                <ul class="menu-list">
+                    <!-- 리스트 항목은 JavaScript로 동적으로 추가 -->
+                </ul>
+            </div>
+            <button class="scroll-btn" id="right-btn">
+                <img src="../../assets/chevron-forward-outline.svg" alt="right"/>
+            </button>
+        </div>
+        <div class="page-option">
+            페이지 보기 옵션
+        </div>
+    </div>
+    <div class="paging-container">
+        <button class="page-move-btn" id="prev-page">
             <img src="../../assets/chevron-back-outline.svg" alt="left"/>
         </button>
-        <div class="scroll-menu">
-            <ul class="menu-list">
-                <!-- 리스트 항목은 JavaScript로 동적으로 추가 -->
+        <div class="paging-menu">
+            <ul class="page-num-list">
+
             </ul>
         </div>
-        <button class="scroll-btn" id="right-btn">
+        <button class="page-move-btn" id="next-page">
             <img src="../../assets/chevron-forward-outline.svg" alt="right"/>
         </button>
     </div>
