@@ -44,6 +44,23 @@
     </div>
     <div id="result-container" class="result-container"></div>
   </div>
+
+  <!-- 팝업 HTML -->
+  <div class="popup-overlay" id="calendar-selection-popup">
+    <div class="popup-content">
+      <div class="calendar">
+        <div>
+          <h3>시작일</h3>
+          <input type="date" id="calendar-start-date-input" />
+        </div>
+        <div>
+          <h3>종료일</h3>
+          <input type="date" id="calendar-end-date-input" />
+        </div>
+        <button class="close-btn" id="calendar-selection-confirm-button">완료</button>
+      </div>
+    </div>
+  </div>
   <script src="searchPage.js"></script>
 </body>
 

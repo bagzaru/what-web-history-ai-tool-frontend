@@ -22,8 +22,16 @@ searchButton.addEventListener('click', () => {
 
     //기간 설정
     if (optionData.period !== undefined) {
-        searchOption.startDate = optionData.period.date;
-        searchOption.endDate = new Date();
+        if (optionData.period.date !== undefined) {
+            searchOption.startDate = optionData.period.date;
+            searchOption.endDate = new Date();
+        }
+        if (optionData.period.startDate !== undefined) {
+            searchOption.startDate = optionData.period.startDate;
+        }
+        if (optionData.period.endDate !== undefined) {
+            searchOption.endDate = optionData.period.endDate;
+        }
     }
 
     //도메인 설정
@@ -63,6 +71,26 @@ document.addEventListener("DOMContentLoaded", () => {
             type: "period", text: "직접 선택",
             onclick: () => {
                 //TODO: 직접 선택 구현
+                const calendarDiv = document.getElementById("calendar-selection-popup");
+                calendarDiv.style.display = "block";
+
+                const confirmButton = document.getElementById("calendar-selection-confirm-button");
+                confirmButton.addEventListener("click", () => {
+                    calendarDiv.style.display = "none";
+
+                    const calendarStart = document.getElementById("calendar-start-date-input");
+                    const calendarEnd = document.getElementById("calendar-end-date-input");
+
+                    attachOption({
+                        type: "period", text: `기간: ${calendarStart.value} ~ ${calendarEnd.value}`,
+                        startDate: new Date(calendarStart.value),
+                        endDate: new Date(calendarEnd.value)
+                    });
+
+                });
+                dettachDropdown();
+                //calendar input 가져와 선택한 날짜로 설정
+                //이후 
             }
         },
     ];
@@ -127,6 +155,11 @@ function attachDropdown(items) {
         const button = document.createElement('button');
         button.textContent = item.text;
         button.addEventListener('click', () => {
+            //TODO: onClick 존재 시 분기 처리
+            if (item.onclick !== undefined) {
+                item.onclick();
+                return;
+            }
             //attach to top side
             attachOption(item);
             dettachDropdown();
