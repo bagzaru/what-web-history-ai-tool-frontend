@@ -60,6 +60,21 @@ async function loginHandler() {
         const email = info.email;
         const profilePicture = info.picture;
         await storeUserInfo(email, profilePicture);
+
+        // 유저 카테고리 가져오기
+        const getCategoryResponse = await fetch('https://capstonepractice.site/api/category', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${jsonTokens.accessToken}`,
+                'accept': '*/*',
+            },
+        });
+        if (!getCategoryResponse.ok){
+            throw new Error(`Server responded with status: ${getCategoryResponse.status}`);
+        }
+        const categoryList = await getCategoryResponse.json();
+        console.log("list:", categoryList);
+        await storeUserCategories(categoryList);
         return true;
     } catch (error) {
         console.error("Error in loginHandler", error);
@@ -102,6 +117,18 @@ function storeUserInfo(email, picture) {
                 }
             }
         );
+    });
+}
+
+function storeUserCategories(categories) {
+    return new Promise ((resolve, reject) => {
+        chrome.storage.sync.set({ categories: categories}, () => {
+            if (chrome.runtime.lastError) {
+                reject (new Error(chrome.runtime.lastError));
+            } else {
+                resolve();
+            }
+        });
     });
 }
 
