@@ -22,7 +22,7 @@ const onGetSearchDataList = {
         console.log("GET_SEARCH_DATA_LIST: 수정된 start-end Date" + startDate + " ~ " + endDate);
         const domain = message.data.domain;
         const query = message.data.query;
-        const category = "";
+        const category = message.data.category;
 
         const searchData = await networkManager.post.search(startDate, endDate, query, domain, category);
 
