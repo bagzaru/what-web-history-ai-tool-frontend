@@ -49,7 +49,7 @@ a.tab {
     overflow: hidden;
 }
 #tab_content .content {
-    padding: 15px;
+    padding: 0px 15px;
     height: 400px;
     background: #F5F5F5;
 }

@@ -1,21 +1,142 @@
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            line-height: 1.6;
-        }
-        .article {
-            border: 1px solid #ddd;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-        .title {
-            font-size: 1.5em;
-            margin-bottom: 10px;
-        }
-        .keywords {
-            color: #555;
-            font-style: italic;
-        }
-        .content {
-            margin-top: 10px;
-        }
+*{
+    user-select: none;
+    font-family: 'Pretendard';
+}
+body{
+    margin: 0px;
+    padding: 0px;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+/* 스크롤바 트랙 */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 6px;
+    margin-top: 60px;
+}
+
+/* 스크롤바 핸들 */
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 6px;
+}
+
+/* 핸들 호버 시 */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+::-webkit-scrollbar-button:vertical:start:decrement,
+::-webkit-scrollbar-button:vertical:start:increment {
+    display: none; /* 버튼을 아예 숨깁니다 */
+    width: 0;
+}
+
+
+
+#article-container{
+    margin-top: 60px;
+}
+.article {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+.title {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+.keywords {
+    color: #555;
+    font-style: italic;
+}
+.category {
+    color: #121212;
+}
+.content {
+    margin-top: 10px;
+}
+/* 전체 스크롤 컨테이너 */
+.scroll-container {
+    margin-bottom: 15px;
+    padding: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 60px;
+    background-color: rgba(245,245,245,0.7);
+    backdrop-filter: blur(4px);
+}
+/* 스크롤 가능한 메뉴 컨테이너 */
+.scroll-menu {
+    overflow-x: hidden; /* 가로 스크롤 활성화 */
+    white-space: nowrap; /* 항목이 줄 바꿈되지 않고 가로로 나열됨 */
+    background-color: transparent;
+    width: 100%;
+    padding: 0px;
+}
+/* 리스트 항목 */
+.menu-list {
+    list-style-type: none;
+    display: flex; /* 유연한 가로 배치 */
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+}
+
+.menu-list li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    font-size: medium;
+    height: 25px;
+    margin-right: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    background-color: transparent;
+    color: #121212;
+    border-radius: 5px; /* 둥근 모서리 */
+    cursor: pointer;
+    white-space: nowrap; /* 긴 텍스트가 줄 바꿈되지 않도록 설정 */
+    transition: 0.2s;
+}
+
+.menu-list li:hover {
+    color: #757575;
+}
+
+/* 스크롤 버튼 */
+.scroll-btn {
+    display: flex;
+    background-color: transparent;
+    color: #121212;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    padding: 4px;
+    width: 30px;
+    height: 30px;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+}
+
+.scroll-btn:hover {
+    background-color: #9E9E9E;
+}
+
+#left-btn {
+    margin-left: 3px;
+    margin-right: 5px;
+}
+
+#right-btn {
+    margin-left: 5px;
+    margin-right: 3px;
+}

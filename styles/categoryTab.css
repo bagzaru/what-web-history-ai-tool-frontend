@@ -4,17 +4,49 @@
 }
 .container {
     background: #F5F5F5;
-    padding-left: 10px;
+}
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+/* 스크롤바 트랙 */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 6px;
+    margin-top: 60px;
+    margin-bottom: 5px;
+}
+
+/* 스크롤바 핸들 */
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 6px;
+}
+
+/* 핸들 호버 시 */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 .title {
-    margin-bottom: 20px;
     color: #121212;
     font-family: 'Pretendard';
     font-weight: 700;
     font-size: x-large;
+    margin-bottom: 15px;
+    padding: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 60px;
+    background-color: rgba(245,245,245,0.7);
+    backdrop-filter: blur(4px);
 }
+    
 #category-list {
-    margin: 0;
+    margin-top: 70px;
     padding: 0;
 }
 .category-item {
@@ -93,7 +125,7 @@
 #save-button {
     position: absolute;
     right: 0;
-    margin-right: 20px;
+    margin: 20px;
     user-select: none;
     padding: 0;
     height: 40px;
