@@ -34,8 +34,9 @@ const onDOMLoaded = {
 
         //만약 autoSave가 켜져있을 경우, 페이지 데이터를 서버에 전송
         const isSettingAutoSaveOn = await chrome.storage.sync.get(["settingAutoSave"]);
+        console.log("isettingautosaveon:", isSettingAutoSaveOn);
 
-        if (isSettingAutoSaveOn) {
+        if (isSettingAutoSaveOn.settingAutoSave) {
             //자동 저장이 켜져있을 경우
             console.log("DOM_LOADED: autoSave 켜져있음");
 
