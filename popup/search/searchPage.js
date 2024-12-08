@@ -16,11 +16,24 @@ searchButton.addEventListener('click', () => {
         query: searchInput.value,
         startDate: "",
         endDate: "",
-        domain: ""
+        domain: "",
+        category: ""
     }
+
+    //기간 설정
     if (optionData.period !== undefined) {
         searchOption.startDate = optionData.period.date;
         searchOption.endDate = new Date();
+    }
+
+    //도메인 설정
+    if (optionData.domain !== undefined) {
+        searchOption.domain = optionData.domain.text;
+    }
+
+    //카테고리 설정
+    if (optionData.category !== undefined) {
+        searchOption.category = optionData.category.text;
     }
 
     chrome.runtime.sendMessage({ senderName: "popup", action: "GET_SEARCH_DATA_LIST", data: searchOption }, (response) => {
@@ -64,19 +77,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const domainButton = document.getElementById("domain-set-button");
     const domainSet = [
-        { type: "domain", text: "everytime.kr", onclick: () => { } },
-        { type: "domain", text: "inven.co.kr", onclick: () => { } },
-        { type: "domain", text: "naver.com", onclick: () => { } },
-        { type: "domain", text: "tistory.com", onclick: () => { } },
-        { type: "domain", text: "namu.wiki", onclick: () => { } },
+        { type: "domain", text: "mportal.cau.ac.kr" },
+        { type: "domain", text: "maple.inven.co.kr" },
+        { type: "domain", text: "sports.news.naver.com" },
+        { type: "domain", text: "news.naver.com" },
+        { type: "domain", text: "namu.wiki" },
     ]
     const categoryButton = document.getElementById("category-set-button");
     const categorySet = [
-        { type: "category", text: "뉴스", onclick: () => { } },
-        { type: "category", text: "메인", onclick: () => { } },
-        { type: "category", text: "스포츠", onclick: () => { } },
-        { type: "category", text: "컴퓨터 공학", onclick: () => { } },
-        { type: "category", text: "게임", onclick: () => { } },
+        { type: "category", text: "게임" },
+        { type: "category", text: "학습" },
+        { type: "category", text: "업무" },
+        { type: "category", text: "뉴스" },
+        { type: "category", text: "기타" },
     ]
 
     domainButton.addEventListener("click", () => {
