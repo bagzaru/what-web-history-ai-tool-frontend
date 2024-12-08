@@ -41,7 +41,7 @@ window.onload = function () {
 }
 
 //popup이 켜졌을 때, history data 최신 정보로 로드 시도
-loadHistoryData(dropdown.checked);
+// loadHistoryData(dropdown.checked);
 
 //표의 dropdown(정렬 기준)이 변경되면, histoyr data 최신 정보로 로드 시도
 dropdown.addEventListener('change', function () {
