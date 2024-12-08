@@ -7,7 +7,7 @@ import onNetworkStateChanged from "./deprecated/onNetworkStateChanged.js";
 import onSavePageData from "./deprecated/onSavePageData.js";
 import onGetAllDataList from "./popup/onGetAllDataList.js";
 import onGetSearchDataList from "./popup/onGetSearchDataList.js";
-
+import onGetStatistics from "./popup/onGetStatistics.js";
 
 let senderEventMap = {};
 
@@ -18,6 +18,7 @@ addMessageHandler(onNetworkStateChanged);
 addMessageHandler(onSavePageData);
 addMessageHandler(onGetAllDataList);
 addMessageHandler(onGetSearchDataList);
+addMessageHandler(onGetStatistics);
 
 function onMessageReceived(message, sender, sendResponse) {
     console.log("message received: " + JSON.stringify(senderEventMap) + "from" + message.senderName + " " + message.action);

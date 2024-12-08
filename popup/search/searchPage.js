@@ -2,9 +2,6 @@
 
 const searchButton = document.getElementById('search-button');
 const searchInput = document.getElementById('search-input');
-const startDateInput = document.getElementById('startDate-input');
-const endDateInput = document.getElementById('endDate-input');
-const domainInput = document.getElementById('domain-input');
 
 const resultContainer = document.getElementById('result-container');
 
@@ -57,43 +54,11 @@ searchButton.addEventListener('click', () => {
     });
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-    const currentDate = new Date();
+document.addEventListener("DOMContentLoaded", async () => {
     const periodButton = document.getElementById("period-set-button");
     const dropdownMenu = document.getElementById("dropdown-menu");
-    const periodSet = [
-        { type: "period", text: "24시간 이내", date: getSubtractDate(currentDate, 0, 0, 1) },
-        { type: "period", text: "일주일 이내", date: getSubtractDate(currentDate, 0, 0, 7) },
-        { type: "period", text: "한달 이내", date: getSubtractDate(currentDate, 0, 1) },
-        { type: "period", text: "3개월 이내", date: getSubtractDate(currentDate, 0, 3) },
-        { type: "period", text: "1년 이내", date: getSubtractDate(currentDate, 1) },
-        {
-            type: "period", text: "직접 선택",
-            onclick: () => {
-                //TODO: 직접 선택 구현
-                const calendarDiv = document.getElementById("calendar-selection-popup");
-                calendarDiv.style.display = "block";
 
-                const confirmButton = document.getElementById("calendar-selection-confirm-button");
-                confirmButton.addEventListener("click", () => {
-                    calendarDiv.style.display = "none";
-
-                    const calendarStart = document.getElementById("calendar-start-date-input");
-                    const calendarEnd = document.getElementById("calendar-end-date-input");
-
-                    attachOption({
-                        type: "period", text: `기간: ${calendarStart.value} ~ ${calendarEnd.value}`,
-                        startDate: new Date(calendarStart.value),
-                        endDate: new Date(calendarEnd.value)
-                    });
-
-                });
-                dettachDropdown();
-                //calendar input 가져와 선택한 날짜로 설정
-                //이후 
-            }
-        },
-    ];
+    const periodSet = await getPeriodOptions();
 
     periodButton.addEventListener("click", () => {
         if (dropdownMenu.style.display === "none" || !dropdownMenu.style.display) {
@@ -103,25 +68,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    const domainSet = await getDomainOptions();
     const domainButton = document.getElementById("domain-set-button");
-    const domainSet = [
-        { type: "domain", text: "mportal.cau.ac.kr" },
-        { type: "domain", text: "maple.inven.co.kr" },
-        { type: "domain", text: "sports.news.naver.com" },
-        { type: "domain", text: "news.naver.com" },
-        { type: "domain", text: "namu.wiki" },
-    ]
+
+    const categorySet = await getCategoryOptions();
     const categoryButton = document.getElementById("category-set-button");
-    const categorySet = [
-        { type: "category", text: "게임" },
-        { type: "category", text: "학습" },
-        { type: "category", text: "업무" },
-        { type: "category", text: "뉴스" },
-        { type: "category", text: "기타" },
-    ]
 
     domainButton.addEventListener("click", () => {
         if (dropdownMenu.style.display === "none" || !dropdownMenu.style.display) {
+            console.log("domainSet:" + JSON.stringify(domainSet));
             attachDropdown(domainSet);
         }
         else {
@@ -199,4 +154,86 @@ function renderOptionData() {
 
 function getSubtractDate(date, year = 0, month = 0, day = 0, hour = 0, minute = 0, second = 0) {
     return new Date(date.getFullYear() - year, date.getMonth() - month, date.getDate() - day, date.getHours() - hour, date.getMinutes() - minute, date.getSeconds() - second);
+}
+
+async function getPeriodOptions() {
+    const currentDate = new Date();
+    return [
+        { type: "period", text: "24시간 이내", date: getSubtractDate(currentDate, 0, 0, 1) },
+        { type: "period", text: "일주일 이내", date: getSubtractDate(currentDate, 0, 0, 7) },
+        { type: "period", text: "한달 이내", date: getSubtractDate(currentDate, 0, 1) },
+        { type: "period", text: "3개월 이내", date: getSubtractDate(currentDate, 0, 3) },
+        { type: "period", text: "1년 이내", date: getSubtractDate(currentDate, 1) },
+        {
+            type: "period", text: "직접 선택",
+            onclick: () => {
+                //TODO: 직접 선택 구현
+                const calendarDiv = document.getElementById("calendar-selection-popup");
+                calendarDiv.style.display = "block";
+
+                const confirmButton = document.getElementById("calendar-selection-confirm-button");
+                confirmButton.addEventListener("click", () => {
+                    calendarDiv.style.display = "none";
+
+                    const calendarStart = document.getElementById("calendar-start-date-input");
+                    const calendarEnd = document.getElementById("calendar-end-date-input");
+
+                    attachOption({
+                        type: "period", text: `기간: ${calendarStart.value} ~ ${calendarEnd.value}`,
+                        startDate: new Date(calendarStart.value),
+                        endDate: new Date(calendarEnd.value)
+                    });
+
+                });
+                dettachDropdown();
+                //calendar input 가져와 선택한 날짜로 설정
+                //이후 
+            }
+        },
+    ];
+}
+
+async function getCategoryOptions() {
+    const categoryLength = 5;
+    const result = [];
+    result.push({ type: "category", text: "직접 입력", onclick: () => { } });
+
+    const sendData = { type: "category", k: categoryLength, startDate: "", endDate: "" };
+
+    chrome.runtime.sendMessage({ senderName: "popup", action: "GET_STATISTICS", data: sendData }, (response) => {
+        const data = response.data;
+        if (data === null) {
+            console.error(`GET_STATISTICS:category: 데이터 요청 실패: ${response.message}`);
+            return;
+        }
+        for (let i = categoryLength - 1; i >= 0; i--) {
+            const domain = { type: "category", text: `${data[i]}` };
+            result.unshift(domain);
+        }
+        console.log("categorySet:" + JSON.stringify(result));
+    });
+    return result;
+
+}
+
+async function getDomainOptions() {
+    const domainLength = 5;
+    const result = [];
+    result.push({ type: "domain", text: "직접 입력", onclick: () => { } });
+
+    const sendData = { type: "domain", k: domainLength, startDate: "", endDate: "" };
+
+    chrome.runtime.sendMessage({ senderName: "popup", action: "GET_STATISTICS", data: sendData }, (response) => {
+        const data = response.data;
+        if (data === null) {
+            console.error(`GET_STATISTICS:domain: 데이터 요청 실패: ${response.message}`);
+            return;
+        }
+        for (let i = domainLength - 1; i >= 0; i--) {
+            const domain = { type: "domain", text: `${data[i]}` };
+            result.unshift(domain);
+        }
+        console.log("domainSet:" + JSON.stringify(result));
+    });
+    return result;
 }
