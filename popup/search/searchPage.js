@@ -61,11 +61,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const periodSet = await getPeriodOptions();
 
     periodButton.addEventListener("click", () => {
-        if (dropdownMenu.style.display === "none" || !dropdownMenu.style.display) {
-            attachDropdown(periodSet);
-        } else {
-            dettachDropdown();
-        }
+        attachDropdown(periodSet);
     });
 
     const domainSet = await getDomainOptions();
@@ -75,51 +71,63 @@ document.addEventListener("DOMContentLoaded", async () => {
     const categoryButton = document.getElementById("category-set-button");
 
     domainButton.addEventListener("click", () => {
-        if (dropdownMenu.style.display === "none" || !dropdownMenu.style.display) {
-            console.log("domainSet:" + JSON.stringify(domainSet));
-            attachDropdown(domainSet);
-        }
-        else {
-            dettachDropdown();
-        }
+        attachDropdown(domainSet);
     });
 
 
     categoryButton.addEventListener("click", () => {
-        if (dropdownMenu.style.display === "none" || !dropdownMenu.style.display) {
-            attachDropdown(categorySet);
-        }
-        else {
-            dettachDropdown();
-        }
+        attachDropdown(categorySet);
     });
 
-    document.addEventListener("click", (event) => {
-        if (!dropdownMenu.contains(event.target) && event.target !== periodButton && event.target !== domainButton && event.target !== categoryButton) {
-            dettachDropdown();
-        }
-    });
+    //드랍다운 이외 다른 곳 눌리면 드랍다운 닫힘
+    // document.addEventListener("click", (event) => {
+    //     if (!dropdownMenu.contains(event.target) && event.target !== periodButton && event.target !== domainButton && event.target !== categoryButton) {
+    //         dettachDropdown();
+    //     }
+    // });
 });
 
-
+//드랍다운 생성
 function attachDropdown(items) {
     dettachDropdown();
     const dropdownMenu = document.getElementById("option-container");
 
     items.forEach((item) => {
-        const button = document.createElement('div');
-        button.textContent = item.text;
-        button.addEventListener('click', () => {
-            //TODO: onClick 존재 시 분기 처리
-            if (item.onclick !== undefined) {
-                item.onclick();
-                return;
-            }
-            //attach to top side
-            attachOption(item);
-            dettachDropdown();
-        });
-        dropdownMenu.appendChild(button);
+        const selector = document.createElement('div');
+        let clickable = selector;
+        if (item.tag === "input") {
+            selector.classList.add("input");
+            selector.type = "text";
+            selector.placeholder = item.text;
+
+            const input = document.createElement('input');
+            input.placeholder = item.text;
+            selector.appendChild(input);
+
+            const inputButton = document.createElement('button');
+            inputButton.textContent = "✅";
+            inputButton.addEventListener('click', () => {
+                attachOption({ type: item.type, text: input.value });
+                dettachDropdown();
+            });
+            selector.appendChild(inputButton);
+        }
+        else {
+            selector.textContent = item.text;
+            selector.classList.add("selector");
+            selector.addEventListener('click', () => {
+                //TODO: onClick 존재 시 분기 처리
+                if (item.onclick !== undefined) {
+                    item.onclick();
+                    return;
+                }
+                //attach to top side
+                attachOption(item);
+                dettachDropdown();
+            });
+        }
+
+        dropdownMenu.appendChild(selector);
     });
 }
 
@@ -195,7 +203,7 @@ async function getPeriodOptions() {
 async function getCategoryOptions() {
     const categoryLength = 5;
     const result = [];
-    result.push({ type: "category", text: "직접 입력", onclick: () => { } });
+    result.push({ type: "category", text: "직접 입력", tag: "input" });
 
     const sendData = { type: "category", k: categoryLength, startDate: "", endDate: "" };
 
@@ -218,7 +226,7 @@ async function getCategoryOptions() {
 async function getDomainOptions() {
     const domainLength = 5;
     const result = [];
-    result.push({ type: "domain", text: "직접 입력", onclick: () => { } });
+    result.push({ type: "domain", text: "직접 입력", tag: "input" });
 
     const sendData = { type: "domain", k: domainLength, startDate: "", endDate: "" };
 
