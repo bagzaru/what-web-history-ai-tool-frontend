@@ -577,8 +577,11 @@ function extract(isResultHTML = false) {
     return undefined;
 }
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.action === 'DOM_DISTILLER_EXTRACT') {
+const domDistillerName = 'domDistiller';
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.receiverName !== domDistillerName) return false;
+    if (message.action === 'EXTRACT_CONTENT') {
         const data = extract();
         sendResponse({ data: data });
         return true;
