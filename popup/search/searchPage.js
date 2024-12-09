@@ -103,11 +103,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
 function attachDropdown(items) {
-    const dropdownMenu = document.getElementById("dropdown-menu");
-    dropdownMenu.style.display = "flex";
+    dettachDropdown();
+    const dropdownMenu = document.getElementById("option-container");
 
     items.forEach((item) => {
-        const button = document.createElement('button');
+        const button = document.createElement('div');
         button.textContent = item.text;
         button.addEventListener('click', () => {
             //TODO: onClick 존재 시 분기 처리
@@ -124,8 +124,7 @@ function attachDropdown(items) {
 }
 
 function dettachDropdown() {
-    const dropdownMenu = document.getElementById("dropdown-menu");
-    dropdownMenu.style.display = "none";
+    const dropdownMenu = document.getElementById("option-container");
     dropdownMenu.innerHTML = "";
 }
 

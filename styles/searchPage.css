@@ -199,3 +199,22 @@
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
       z-index: 1001;
     }
+
+    .option-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin: 10px;
+    }
+
+    .option-container div {
+      width: 100%;
+      padding: 7px;
+      border-radius: 8px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .option-container div:hover {
+      background-color: #ddd;
+    }
