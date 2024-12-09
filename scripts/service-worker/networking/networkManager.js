@@ -131,6 +131,34 @@ const networkManager = {
             console.log(`GET: getKeywordFrequency 완료, 반환된 값: ${JSON.stringify(data)}`);
 
             return data;
+        },
+        getBestDomain: async function (k, startTime, endTime) {
+            if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다. networkState: false`);
+
+            //getBestDomain: 전체 데이터 중 방문 빈도수가 높은 도메인을 가져옵니다.
+            const path = `/api/history/statistics/domain?`;
+            const queryString = 'startTime=' + getJavaDateString(startTime) + '&' + 'endTime=' + getJavaDateString(endTime) + '&' + 'k=' + k;
+            const fullPath = getFullPath(defaultHost, path + queryString);
+
+            console.log("getBestDomain 요청, 쿼리스트링: " + fullPath);
+            const data = await get(fullPath);
+            console.log(`GET: getBestDomain 완료, 반환된 값: ${JSON.stringify(data)}`);
+
+            return data;
+        },
+        getBestCategory: async function (k, startTime, endTime) {
+            if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다. networkState: false`);
+
+            //getBestCategory: 전체 데이터 중 방문 빈도수가 높은 카테고리를 가져옵니다.
+            const path = `/api/history/statistics/category?`;
+            const queryString = 'k=' + k + '&' + 'startTime=' + getJavaDateString(startTime) + '&' + 'endTime=' + getJavaDateString(endTime);
+            const fullPath = getFullPath(defaultHost, path + queryString);
+
+            console.log("getBestCategory 요청, 쿼리스트링: " + fullPath);
+            const data = await get(fullPath);
+            console.log(`GET: getBestCategory 완료, 반환된 값: ${JSON.stringify(data)}`);
+
+            return data;
         }
     },
     del: {
