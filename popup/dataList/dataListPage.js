@@ -15,6 +15,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     await renderMenu();
     loadDataList(currentQueries);
     addMovePageButton();
+    const dropdowns = document.querySelectorAll('.dropdown');
+    dropdowns.forEach((dropdown) => {
+        dropdown.addEventListener('click', (event) => {
+            event.stopPropagation(); // Prevent event bubbling
+            const menuId = dropdown.getAttribute('data-menu');
+            toggleDropdown(menuId);
+        });
+    });
+    document.addEventListener('click', () => {
+        const allDropdowns = document.querySelectorAll('.dropdown-menu');
+        allDropdowns.forEach((dropdown) => {
+            dropdown.style.display = 'none';
+        });
+    });
 });
 
 // 방문기록 데이터 렌더링
@@ -51,7 +65,7 @@ function loadDataList({startTime, endTime, domain, category, page, size, sortBy,
             renderPaging(data.totalPages);
         }
         const elementTop = articleContainer.offsetTop - 70;
-        window.scrollTo({ top: elementTop, behavior:'smooth'});
+        window.scrollTo({ top: elementTop, behavior:'auto'});
     });
 }
 
@@ -286,4 +300,18 @@ function updateVisibleItems() {
             item.style.display = index >= activeIndex - 2 && index <= activeIndex + 2 ? "flex" : "none";
         }
     });
+}
+
+function toggleDropdown(id) {
+    const dropdown = document.getElementById(id);
+
+    // Close other dropdowns
+    document.querySelectorAll('.dropdown-menu').forEach((menu) => {
+        if (menu !== dropdown) {
+            menu.style.display = 'none';
+        }
+    });
+
+    // Toggle current dropdown
+    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
 }
