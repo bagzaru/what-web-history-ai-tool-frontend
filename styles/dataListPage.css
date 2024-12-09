@@ -35,31 +35,6 @@ html{
     display: none; /* 버튼을 아예 숨깁니다 */
     width: 0;
 }
-
-
-
-#article-container{
-    margin-top: 70px;
-}
-.article {
-    border: 1px solid #ddd;
-    padding: 15px;
-    margin-bottom: 20px;
-}
-.title {
-    font-size: 1.5em;
-    margin-bottom: 10px;
-}
-.keywords {
-    color: #555;
-    font-style: italic;
-}
-.category {
-    color: #121212;
-}
-.content {
-    margin-top: 10px;
-}
 /* 상단바 컨테이너 */
 .top-menu-container{
     display: flex;
@@ -67,8 +42,8 @@ html{
     position: fixed;
     top: 0;
     width: 360px;
-    background-color: rgba(245,245,245,0.7);
-    backdrop-filter: blur(4px);
+    background-color: rgba(245,245,245,0.5);
+    backdrop-filter: blur(8px);
 }
 /* 상단 메뉴 스크롤 컨테이너 */
 .scroll-container {
@@ -118,7 +93,7 @@ html{
 
 .menu-list li.active{
     color: #F5F5F5;
-    background-color: rgba(18,18,18,0.7);
+    background-color: rgba(18,18,18,0.5);
 }
 
 .menu-list li:hover {
@@ -167,8 +142,8 @@ html{
     position: fixed;
     bottom: 0;
     width: 100%;
-    background-color: rgba(245,245,245,0.7);
-    backdrop-filter: blur(4px);
+    background-color: rgba(245,245,245,0.5);
+    backdrop-filter: blur(8px);
 }
 /* 스크롤 가능한 메뉴 컨테이너 */
 .paging-menu {
@@ -245,16 +220,16 @@ html{
 .page-option {
     display: flex;
     width: 100%;
-    height: 30px;
+    height: 35px;
     background-color: transparent;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
     color: #121212;
 }
 /* 드롭다운 기본 스타일 */
 .dropdown {
     position: relative;
-    margin: 0 10px;
+    margin-right: 5px;
     cursor: pointer;
     font-size: 10px;
     color: #121212;
@@ -265,6 +240,11 @@ html{
     border: 1px solid #ccc;
     border-radius: 3px;
     background-color: transparent;
+    max-width: 95px;
+}
+.dropdown:hover {
+    background-color: #FFFFFF;
+    transition: 0.3s;
 }
 
 /* 드롭다운 라벨 */
@@ -299,7 +279,6 @@ html{
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     display: none;
     z-index: 10;
-    min-width: 150px;
 }
 
 .dropdown-menu ul {
@@ -310,14 +289,76 @@ html{
 
 .dropdown-menu li {
     padding: 10px;
+    white-space: nowrap;
 }
-
-.dropdown-menu li a {
-    text-decoration: none;
-    color: #121212;
-    font-size: 14px;
-}
-
 .dropdown-menu li:hover {
     background-color: #f0f0f0;
+}
+
+/* 기본 스타일 */
+.toggle-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    margin-right: 5px;
+}
+.toggle-container:hover {
+    background-color: rgba(18,18,18,0.5);
+    transition: 0.3s;
+}
+
+/* 체크박스 숨기기 */
+.toggle-checkbox {
+    display: none; /* 화면에서 완전히 숨김 */
+}
+
+/* 라벨 스타일 */
+.toggle-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: 25px;
+    background-color: transparent;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.3s ease;
+}
+
+/* 토글 아이콘 스타일 */
+.toggle-icon {
+    width: 15px;
+    height: 15px;
+    background-image: url('../assets/Filter-Sort-Lines-Descending--Streamline-Ultimate.svg'); /* 꺼진 상태의 아이콘 */
+    background-size: cover;
+    position: absolute;
+    transition: transform 0.3s ease, background-image 0.3s ease;
+}
+
+/* 토글 켜짐 상태 */
+.toggle-checkbox:checked + .toggle-label .toggle-icon {
+    transform: scaleY(-1); /* 180도 회전 */
+}
+
+#apply-button {
+    margin-right: 5px;
+    user-select: none;
+    height: 20px;
+    width: 30px;
+    background-color: #007bff;
+    color: #F5F5F5;
+    font-family: 'Pretendard';
+    font-size: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+}
+#apply-button:hover {
+    background-color: #0056b3;
 }
