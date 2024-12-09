@@ -71,14 +71,24 @@ const networkManager = {
         }
     },
     get: {
-        getHistories: async function (orderBy, startDate, endDate) {
+        getHistories: async function (orderBy, startDate, endDate, page, size, sortOrder, domain, category) {
             if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다. networkState: false`);
 
             //getHistoryByDate: 서버에서 지정된 기간에 저장한 페이지 데이터를 가져옵니다.
             //TODO: 외부에서 기간을 지정받아, 해당 기간 내의 방문기록 데이터 가져오기
 
             const path = '/api/history' + '?';
-            const queryString = 'startTime=' + getJavaDateString(startDate) + '&' + 'endTime=' + getJavaDateString(endDate) + '&orderBy=' + orderBy;
+            let queryString = 'startTime=' + getJavaDateString(startDate) + 
+                                '&endTime=' + getJavaDateString(endDate) + 
+                                '&page=' + page +
+                                '&size=' + size +
+                                '&sort=' + orderBy + ',' + sortOrder;
+            if (domain) {
+                queryString += '&domain=' + domain;
+            }
+            if (category) {
+                queryString += '&category=' + category;
+            }
             const fullPath = getFullPath(defaultHost, path + queryString);
 
             console.log("getHistories 요청, 쿼리스트링: " + fullPath);
