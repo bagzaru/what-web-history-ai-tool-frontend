@@ -3,7 +3,8 @@ import { tabActivationHandler, windowFocusChangeHandler } from "./service-worker
 import { loginHandler } from "./service-worker/loginHandler.js";
 import { logoutHandler } from "./service-worker/logoutHandler.js";
 import { tokenRefreshHandler, isTokenExpired } from "./service-worker/tokenRefreshHandler.js";
-import { savePageData } from "./service-worker/savePageData.js";
+import { loadPageContent } from "./service-worker/pageContentLoader.js";
+import networkManager from "./service-worker/networking/networkManager.js";
 
 console.log("service-worker on");
 
@@ -47,16 +48,16 @@ chrome.runtime.onInstalled.addListener(() => {
 // 컨텍스트 메뉴 클릭 시 동작 정의
 chrome.contextMenus.onClicked.addListener((info, tab) => {
     if (info.menuItemId === "savePageData") {
-        // 메뉴 클릭 시 실행할 함수
-        const onSaveFinished = (response) => {
-
-            console.log("savePageData: 데이터 저장 완료");
-        }
-        const onSaveFailed = (e) => {
-            console.error("savePageData: 데이터 저장 실패: " + e.message);
-        }
-
-        savePageData(tab.id, onSaveFinished, onSaveFailed);
+        loadPageContent(tab.id).then((pageContentData) => {
+            //해당 탭의 content에 메시지 전송
+            networkManager.post.saveHistory(pageContentData).then((response) => {
+                console.log("service-worker: 페이지 저장 완료: " + JSON.stringify(response));
+            }).catch((error) => {
+                console.error("service-worker: 페이지 컨텐츠 서버에 전송 중 에러 발생: " + error.message);
+            });
+        }).catch((error) => {
+            console.error("service-worker: 페이지 컨텐츠 로드 중 에러 발생: " + error.message);
+        });
     }
 });
 
@@ -76,7 +77,7 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
     if (alarm.name === 'tokenCheck') {
         if (await isTokenExpired()) {
             console.log("토큰 만료됨");
-            if (await tokenRefreshHandler()){
+            if (await tokenRefreshHandler()) {
                 console.log("토큰 갱신됨");
                 // 자동 갱신 시에는 오히려 알림이 없는 것이 나을 수 있음
                 // chrome.notifications.create({
