@@ -1,0 +1,22 @@
+#article-container{
+    margin-top: 70px;
+}
+.article {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+.title {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+.keywords {
+    color: #555;
+    font-style: italic;
+}
+.category {
+    color: #121212;
+}
+.content {
+    margin-top: 10px;
+}
