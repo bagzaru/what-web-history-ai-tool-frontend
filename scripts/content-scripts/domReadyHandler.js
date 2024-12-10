@@ -3,23 +3,30 @@ const domReadyHandlerName = "domReadyHandler";
 
 console.log("domReadyHandler working");
 
-//readyState가 loading중이 아니면, DOM은 로드되었으므로 즉시 DOMLoaded 이벤트 발생, loading이면 loading이 끝났을 때 이벤트 발생하도록 걸어둠
-// 참고: content script가 로드되었을 때 DOM은 어지간하면 로드 되어있는듯하다.
+onDOMLoaded("empty");
 if (document.readyState === "loading") {
-    document.addEventListener('DOMContentLoaded', onDOMLoaded);
+    document.addEventListener('DOMContentLoaded', () => { onDOMLoaded('document') });
+    window.addEventListener('load', () => { onDOMLoaded('window') });
 }
-else {
-    onDOMLoaded();
+else if (document.readyState === "interactive") {
+    onDOMLoaded('document');
+    window.addEventListener('load', () => { onDOMLoaded('window') });
+}
+else if (document.readyState === "complete") {
+    onDOMLoaded('document');
+    onDOMLoaded('window');
 }
 
+//현재 일부 페이지에서 텍스트 데이터가 전부 로드되지 않는 문제가 있음
 //extension의 service-worker에 text 전송하는 함수
-function onDOMLoaded() {
+function onDOMLoaded(loadType = "empty") {
     //데이터 추출
     const innerText = document.querySelector("body").innerText;
     const data = {
         title: document.title,
         url: window.location.href,
-        pageData: innerText
+        pageData: innerText,
+        type: loadType
     }
 
     //service-worker에 전송
