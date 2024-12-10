@@ -1,240 +1,290 @@
-    /* 페이지 전체를 가운데 정렬하고 배경 색상 설정 */
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #f2f2f2;
-    }
+@font-face {
+  font-family: 'Noto Sans KR';
+  src: url('../assets/fonts/NotoSansKR-VariableFont_wght.ttf') format('truetype');
+}
 
-    /* 컨테이너 스타일 */
-    .container {
-      text-align: center;
-      width: 100%;
-      max-width: 500px;
-      min-width: 300px;
-      max-height: 500px;
-      min-height: 250px;
-      margin-top: 300px;
-      margin-bottom: 300px;
-      margin-left: 100px;
-      margin-right: 100px;
-    }
+@font-face {
+  font-family: 'Raleway';
+  src: url('../assets/fonts/Raleway-VariableFont_wght.ttf') format('truetype');
+}
 
-    /* 로고 스타일 */
-    .logo {
-      font-size: 2em;
-      color: #3e3e3e;
-      font-weight: bold;
-      margin-top: 50px;
-    }
+/* 페이지 전체를 가운데 정렬하고 배경 색상 설정 */
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  font-family: Arial, sans-serif, ;
+  background-color: #fefbee;
 
-    /* 검색창 스타일 */
-    .search-box {
-      display: flex;
-      align-items: center;
-      border: 1px solid #ddd;
-      border-radius: 2px;
-      padding: 10px 10px;
-      margin-top: 20px;
-      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
-      background-color: #fff;
-    }
+}
 
-    .search-box-inner {
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
+/* 컨테이너 스타일 */
+.container {
+  text-align: center;
+  width: 100%;
+  max-width: 500px;
+  min-width: 300px;
+  max-height: 500px;
+  min-height: 250px;
+  margin-top: 300px;
+  margin-bottom: 300px;
+  margin-left: 100px;
+  margin-right: 100px;
+}
 
-    .search-box-inner-top {
-      display: flex;
-      flex-direction: column;
-      flex: 1 1 auto;
-      min-height: 50px;
-      border: none;
-      outline: none;
-      font-size: 16px;
-      color: #3e3e3e;
-      background-color: #fff;
+/* 로고 스타일 */
+.logo {
+  font-size: 2em;
+  color: #3e3e3e;
+  font-weight: bold;
+  margin-top: 50px;
+  font-family: 'Noto Sans KR', serif;
+}
 
-    }
+.logo h1 {
+  font-size: 36px;
+  font-weight: bold;
+  font-family: "Raleway", serif;
+  margin: 0px;
+  padding: 0px;
+}
 
-    .search-box-inner-top input {
-      flex: 0 1 auto;
-      margin-top: auto;
-      border: none;
-      outline: none;
-      font-size: 16px;
-      padding: 4px;
-    }
+.logo hr {
+  width: 120px;
+  margin: 0 auto;
+  padding: 0;
+  border: none;
+  /* 기본 테두리 제거 */
+  background: #000;
+  /* 원하는 색상으로 배경 지정 */
+  height: 1px;
+  /* 굵기 1px로 지정 */
+  box-sizing: content-box;
+}
 
-    .search-box-inner-bottom {
-      display: grid;
-      grid-template-columns: 7fr 3fr;
-      width: 100%;
-      height: 100%;
-    }
+.logo p {
+  font-family: 'Noto Sans KR', serif;
+  font-size: 12px;
+  font-weight: 200;
+  margin-top: 1px;
+  margin-bottom: 0px;
+  padding: 0px;
+}
 
-    .search-box-inner-bottom-left {
-      display: flex;
-      width: 100%;
-      height: 100%;
-    }
+.logo h3 {
+  font-family: 'Noto Sans KR', serif;
+  font-size: 16px;
+  font-weight: 500;
+  margin: 10px;
+  padding: 0px;
+  color: #3e3e3e;
+}
 
-    .search-box-inner-bottom-left div {
-      flex: 0 0 40px;
-      font-size: 11px;
-      height: 20px;
-      border: 1px solid #000;
-    }
+/* 검색창 스타일 */
+.search-box {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 2px;
+  padding: 10px 10px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+  background-color: #fff;
+}
 
-    /* 검색 입력 필드 스타일 */
-    .search-input {
-      flex: 1;
-      border: none;
-      outline: none;
-      font-size: 16px;
-      padding: 8px;
-      color: #3e3e3e;
-      background-color: #fff;
-    }
+.search-box-inner {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
 
-    /* 버튼 스타일 */
-    .search-button {
-      background-color: #fff;
-      color: #5e5e5e;
-      border-radius: 1px;
-      padding: 8px 16px;
-      font-size: 16px;
-      cursor: pointer;
-      border: 1px solid #ccc;
-    }
+.search-box-inner-top {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 50px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  color: #3e3e3e;
+  background-color: #fff;
 
-    /* 버튼 호버 효과 */
-    .search-button:hover {
-      background-color: #ddd;
-    }
+}
 
+.search-box-inner-top input {
+  flex: 0 1 auto;
+  margin-top: auto;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  padding: 4px;
+}
 
-    .dropdown-menu {
-      width: 100%;
-      /* 박스 너비에 맞춤 */
-      background-color: white;
-      border: #fff 0px;
-      display: none;
-      flex-direction: column;
-    }
+.search-box-inner-bottom {
+  display: grid;
+  grid-template-columns: 7fr 3fr;
+  width: 100%;
+  height: 100%;
+}
 
-    .dropdown-item {
-      padding: 10px;
-      font-size: 16px;
-      cursor: pointer;
-    }
+.search-box-inner-bottom-left {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
 
-    .search-box-inner-option {
-      flex: 0 1 auto;
-      display: flex;
-      border: none;
-      margin: 0px;
-      padding: 1px 1px;
-      flex-direction: row;
-      flex-wrap: wrap;
-      align-content: flex-start;
-    }
+.search-box-inner-bottom-left div {
+  flex: 0 0 40px;
+  font-size: 11px;
+  height: 20px;
+  border: 1px solid #000;
+}
 
-    .search-box-inner-option button {
-      flex: 0 0 auto;
-      border: 1px solid #ababab;
-      background-color: #fff;
-      border-radius: 2px;
-      color: #ababab;
-      margin: 4px;
-    }
+/* 검색 입력 필드 스타일 */
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  padding: 8px;
+  color: #3e3e3e;
+  background-color: #fff;
+}
 
+/* 버튼 스타일 */
+.search-button {
+  background-color: #fff;
+  color: #5e5e5e;
+  border-radius: 1px;
+  padding: 8px 16px;
+  font-size: 16px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+}
 
-    .search-box-inner-bottom-left button {
-      flex: 0 0 auto;
-      border: 1px solid #ababab;
-      background-color: #fff;
-      border-radius: 2px;
-      color: #ababab;
-      margin: 4px;
-    }
-
-    .button-box {
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-end;
-      flex-wrap: wrap;
-
-    }
+/* 버튼 호버 효과 */
+.search-button:hover {
+  background-color: #ddd;
+}
 
 
+.dropdown-menu {
+  width: 100%;
+  /* 박스 너비에 맞춤 */
+  background-color: white;
+  border: #fff 0px;
+  display: none;
+  flex-direction: column;
+}
 
-    .popup-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 1000;
-    }
+.dropdown-item {
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.search-box-inner-option {
+  flex: 0 1 auto;
+  display: flex;
+  border: none;
+  margin: 0px;
+  padding: 1px 1px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: flex-start;
+}
+
+.search-box-inner-option button {
+  flex: 0 0 auto;
+  border: 1px solid #ababab;
+  background-color: #fff;
+  border-radius: 2px;
+  color: #ababab;
+  margin: 4px;
+}
 
 
-    .popup-content {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-      z-index: 1001;
-    }
+.search-box-inner-bottom-left button {
+  flex: 0 0 auto;
+  border: 1px solid #ababab;
+  background-color: #fff;
+  border-radius: 2px;
+  color: #ababab;
+  margin: 4px;
+}
 
-    .option-container {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      margin: 10px;
-    }
+.button-box {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  flex-wrap: wrap;
 
-    .option-container div {
-      display: flex;
-      width: 100%;
-      padding: 7px;
-      border-bottom: 1px solid #ddd;
-    }
+}
 
-    .option-container div.input input {
-      flex: 1;
-      padding: 1px;
-      border: none;
-      background-color: #f2f2f2;
-    }
 
-    .option-container div.input button {
-      height: 100%;
-      aspect-ratio: 1 / 1;
-      padding: 7px;
-      border: none;
-      text-align: center;
-      box-shadow: 0 0 50px 1px #e2e2e2;
-    }
 
-    .option-container div.input button:hover {
-      background-color: #ddd;
-    }
+.popup-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
 
-    .option-container div.selector:hover {
-      background-color: #ddd;
-    }
+
+.popup-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  z-index: 1001;
+}
+
+.option-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+}
+
+.option-container div {
+  display: flex;
+  width: 100%;
+  padding: 7px;
+  border-bottom: 1px solid #ddd;
+}
+
+.option-container div.input input {
+  flex: 1;
+  padding: 1px;
+  border: none;
+  background-color: #f2f2f2;
+}
+
+.option-container div.input button {
+  height: 100%;
+  aspect-ratio: 1 / 1;
+  padding: 7px;
+  border: none;
+  text-align: center;
+  box-shadow: 0 0 50px 1px #e2e2e2;
+}
+
+.option-container div.input button:hover {
+  background-color: #ddd;
+}
+
+.option-container div.selector:hover {
+  background-color: #ddd;
+}
