@@ -127,7 +127,7 @@ function loadDataList({startTime, endTime, domain, category, page, size, sortBy,
         if (pageNumList.children.length === 0) {
             renderPaging(data.totalPages);
         }
-        const elementTop = articleContainer.offsetTop - 70;
+        const elementTop = articleContainer.offsetTop - 85;
         window.scrollTo({ top: elementTop, behavior:'auto'});
     });
 }
