@@ -1,4 +1,4 @@
-//import renderArticles from "../renderArticles/renderArticles.js";
+import renderArticles from "../renderArticles/renderArticles.js";
 
 const searchButton = document.getElementById('search-button');
 const searchInput = document.getElementById('search-input');
@@ -7,8 +7,38 @@ const resultContainer = document.getElementById('result-container');
 
 let optionData = {};
 
-//버튼 클릭 시 데이터 가져옴
-searchButton.addEventListener('click', () => {
+document.addEventListener("DOMContentLoaded", async () => {
+    //검색 기능 초기화
+    //버튼 클릭 시 데이터 가져옴
+    searchButton.addEventListener('click', loadSearchData);
+    searchInput.addEventListener('keydown', (e) => {
+        if (e.key === "Enter") {
+            loadSearchData();
+        }
+    });
+
+    //옵션 초기화
+    const periodSet = await getPeriodOptions();
+    const periodButton = document.getElementById("period-set-button");
+    periodButton.addEventListener("click", () => {
+        attachDropdown(periodSet);
+    });
+
+    const domainSet = await getDomainOptions();
+    const domainButton = document.getElementById("domain-set-button");
+    domainButton.addEventListener("click", () => {
+        attachDropdown(domainSet);
+    });
+
+    const categorySet = await getCategoryOptions();
+    const categoryButton = document.getElementById("category-set-button");
+    categoryButton.addEventListener("click", () => {
+        attachDropdown(categorySet);
+    });
+});
+
+
+function loadSearchData() {
     const searchOption = {
         query: searchInput.value,
         startDate: "",
@@ -47,45 +77,15 @@ searchButton.addEventListener('click', () => {
             console.error(`GET_SEARCH_DATA_LIST: 데이터 요청 실패: ${response.message}`);
             return;
         }
+
+        console.log("검색창 검색 결과 로드 완료");
+
         const renderResult = renderArticles(data, resultContainer);
 
         resultContainer.innerHTML = "";
         resultContainer.appendChild(renderResult);
     });
-});
-
-document.addEventListener("DOMContentLoaded", async () => {
-    const periodButton = document.getElementById("period-set-button");
-    const dropdownMenu = document.getElementById("dropdown-menu");
-
-    const periodSet = await getPeriodOptions();
-
-    periodButton.addEventListener("click", () => {
-        attachDropdown(periodSet);
-    });
-
-    const domainSet = await getDomainOptions();
-    const domainButton = document.getElementById("domain-set-button");
-
-    const categorySet = await getCategoryOptions();
-    const categoryButton = document.getElementById("category-set-button");
-
-    domainButton.addEventListener("click", () => {
-        attachDropdown(domainSet);
-    });
-
-
-    categoryButton.addEventListener("click", () => {
-        attachDropdown(categorySet);
-    });
-
-    //드랍다운 이외 다른 곳 눌리면 드랍다운 닫힘
-    // document.addEventListener("click", (event) => {
-    //     if (!dropdownMenu.contains(event.target) && event.target !== periodButton && event.target !== domainButton && event.target !== categoryButton) {
-    //         dettachDropdown();
-    //     }
-    // });
-});
+}
 
 //드랍다운 생성
 function attachDropdown(items) {
@@ -94,22 +94,28 @@ function attachDropdown(items) {
 
     items.forEach((item) => {
         const selector = document.createElement('div');
-        let clickable = selector;
         if (item.tag === "input") {
             selector.classList.add("input");
             selector.type = "text";
             selector.placeholder = item.text;
 
+            const onButtonClick = () => {
+                attachOption({ type: item.type, text: input.value });
+                dettachDropdown();
+            };
+
             const input = document.createElement('input');
             input.placeholder = item.text;
+            input.addEventListener('keydown', (e) => {
+                if (e.key === "Enter") {
+                    onButtonClick();
+                }
+            });
             selector.appendChild(input);
 
             const inputButton = document.createElement('button');
             inputButton.textContent = "✅";
-            inputButton.addEventListener('click', () => {
-                attachOption({ type: item.type, text: input.value });
-                dettachDropdown();
-            });
+            inputButton.addEventListener('click', onButtonClick);
             selector.appendChild(inputButton);
         }
         else {
