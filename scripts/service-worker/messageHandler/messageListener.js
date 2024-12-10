@@ -8,6 +8,7 @@ import onSavePageData from "./deprecated/onSavePageData.js";
 import onGetAllDataList from "./popup/onGetAllDataList.js";
 import onGetSearchDataList from "./popup/onGetSearchDataList.js";
 import onGetStatistics from "./popup/onGetStatistics.js";
+import onDeleteData from "./popup/onDeleteData.js";
 
 let senderEventMap = {};
 
@@ -19,6 +20,7 @@ addMessageHandler(onSavePageData);
 addMessageHandler(onGetAllDataList);
 addMessageHandler(onGetSearchDataList);
 addMessageHandler(onGetStatistics);
+addMessageHandler(onDeleteData)
 
 function onMessageReceived(message, sender, sendResponse) {
     console.log(`messageListener: message recieved, sender: ${message.senderName}, action: ${message.action}`);
