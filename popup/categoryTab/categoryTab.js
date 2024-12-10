@@ -1,11 +1,25 @@
-let categories = ["게임", "학습", "엔터테인먼트", "업무", "뉴스", "소셜", "기타"]
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async () => {
+    //chrome storage에 저장된 카테고리 리스트 가져오기
+    const categories = await getCategories();
     // 저장된 카테고리 리스트를 보여줌.
     categories.forEach((category) => {
         addCategoryItem(category);
     });
 });
+
+// 카테고리를 가져오는 함수
+function getCategories() {
+    return new Promise((resolve, reject) => {
+        chrome.storage.sync.get("categories", (result) => {
+            if (chrome.runtime.lastError) {
+                reject(chrome.runtime.lastError);
+            } else {
+                resolve(result.categories); //return token
+            }
+        });
+    });
+}
 
 const addButton = document.getElementById('add-category-button');
 const newCategoryInput = document.getElementById('new-category-name');
