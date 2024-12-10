@@ -6,6 +6,7 @@ html{
     margin: 0px;
     padding: 0px;
     overflow-y: scroll;
+    background-color: #fefbee;
 }
 
 ::-webkit-scrollbar {
@@ -41,8 +42,10 @@ html{
     flex-direction: column;
     position: fixed;
     top: 0;
-    width: 360px;
-    background-color: rgba(245,245,245,0.5);
+    left: 0;
+    width: 100%;
+    /* width: 360px; */
+    background-color: rgba(254,251,238,0.5);
     backdrop-filter: blur(8px);
 }
 /* 상단 메뉴 스크롤 컨테이너 */
@@ -92,12 +95,11 @@ html{
 }
 
 .menu-list li.active{
-    color: #F5F5F5;
-    background-color: rgba(18,18,18,0.5);
+    background-color: rgba(168,143,86,0.5);
 }
 
 .menu-list li:hover {
-    color: #757575;
+    color: #9E9E9E;
 }
 
 /* 스크롤 버튼 */
@@ -141,8 +143,9 @@ html{
     height: 30px;
     position: fixed;
     bottom: 0;
+    left: 0;
     width: 100%;
-    background-color: rgba(245,245,245,0.5);
+    background-color: rgba(254,251,238,0.5);
     backdrop-filter: blur(8px);
 }
 /* 스크롤 가능한 메뉴 컨테이너 */
@@ -347,8 +350,8 @@ html{
     user-select: none;
     height: 20px;
     width: 30px;
-    background-color: #007bff;
-    color: #F5F5F5;
+    background-color: #5cb85c;
+    color: #FFFFFF;
     font-family: 'Pretendard';
     font-size: 10px;
     border: none;
@@ -360,5 +363,5 @@ html{
     transition: 0.2s;
 }
 #apply-button:hover {
-    background-color: #0056b3;
+    background-color: #4cae4c;
 }
