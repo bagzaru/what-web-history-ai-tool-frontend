@@ -1,4 +1,4 @@
-import { post, put, get } from "./RestAPI.js";
+import { post, put, get, del } from "./RestAPI.js";
 import { createHistoryRequestDTO, searchHistoryRequestDTO } from "./historyDTO.js";
 import getJavaDateString from "../date/javaDateConverter.js";
 
@@ -177,13 +177,13 @@ const networkManager = {
             if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다.`);
 
             //get.search: 해당 시간대에 검색한 키워드를 가져옵니다.
-            const path = `/api/history/search/`;
-            const queryString = 'url=' + url;
+            const path = `/api/history?`;
+            const queryString = `url=${encodeURIComponent(url)}`;
             const fullPath = getFullPath(defaultHost, path + queryString);
 
             console.log("deleteHistory 요청, 쿼리스트링: " + fullPath);
-            const data = await get(fullPath);
-            console.log(`DELETE: deleteHistory 완료, 반환된 값: ${JSON.stringify(data)}`);
+            const data = await del(fullPath);
+            console.log(`DELETE: deleteHistory 완료, 반환된 값: ${data}`);
 
             return data;
         }
