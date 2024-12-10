@@ -21,6 +21,7 @@ const networkManager = {
             const jsonBody = createHistoryRequestDTO(url, content);
             const stringBody = JSON.stringify(jsonBody);    //saveHistory는 json dto 형태로 주고받는다.
 
+            console.log("POST: saveHistory 요청, url: " + url);
             const data = await post(fullPath, stringBody);
             console.log(`POST: saveHistory 완료: ${url}, 반환된 값: ${JSON.stringify(data)}`);
             return data;
@@ -78,11 +79,11 @@ const networkManager = {
             //TODO: 외부에서 기간을 지정받아, 해당 기간 내의 방문기록 데이터 가져오기
 
             const path = '/api/history' + '?';
-            let queryString = 'startTime=' + getJavaDateString(startDate) + 
-                                '&endTime=' + getJavaDateString(endDate) + 
-                                '&page=' + page +
-                                '&size=' + size +
-                                '&sort=' + orderBy + ',' + sortOrder;
+            let queryString = 'startTime=' + getJavaDateString(startDate) +
+                '&endTime=' + getJavaDateString(endDate) +
+                '&page=' + page +
+                '&size=' + size +
+                '&sort=' + orderBy + ',' + sortOrder;
             if (domain) {
                 queryString += '&domain=' + domain;
             }

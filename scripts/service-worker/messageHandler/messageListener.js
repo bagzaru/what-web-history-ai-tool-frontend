@@ -21,11 +21,11 @@ addMessageHandler(onGetSearchDataList);
 addMessageHandler(onGetStatistics);
 
 function onMessageReceived(message, sender, sendResponse) {
-    console.log("message received: " + JSON.stringify(senderEventMap) + "from" + message.senderName + " " + message.action);
+    console.log(`messageListener: message recieved, sender: ${message.senderName}, action: ${message.action}`);
     for (const key in senderEventMap) {
         if (key === message.senderName) {
             if (senderEventMap[key][message.action] !== undefined) {
-                console.log(`sender: ${key}, action: ${message.action}`);
+                //console.log(`sender: ${key}, action: ${message.action}`);
                 senderEventMap[key][message.action](message, sender)
                     .then((response) => {
                         sendResponse(response);
