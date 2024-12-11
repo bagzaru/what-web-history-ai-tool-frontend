@@ -50,7 +50,7 @@ const networkManager = {
             if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다.`);
             // 카테고리를 추가합니다
             const path = '/api/category?';
-            const queryString = `categoryName=${categoryName}`;
+            const queryString = `categoryName=${encodeURIComponent(categoryName)}`;
             const fullPath = getFullPath(defaultHost, path + queryString);
 
             console.log('POST: 카테고리 추가 쿼리스트링:', fullPath);
@@ -94,9 +94,11 @@ const networkManager = {
             if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다.`);
             const body = { originalName: originalName, newName:newName };
             const path = '/api/category';
+
             const fullPath = getFullPath(defaultHost, path);
+            const stringBody = JSON.stringify(body);
             console.log("PUT요청: 카테고리 수정");
-            const data = await put(fullPath, body);
+            const data = await put(fullPath, stringBody);
             console.log(`PUT: updateCategory 완료, 반환된 값: ${data}`);
             return data;
         }
@@ -231,7 +233,7 @@ const networkManager = {
             if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다.`);
             // deleteCategory: 특정 카테고리를 삭제합니다
             const path = '/api/history?';
-            const queryString = `categoryName=${categoryName}`;
+            const queryString = `categoryName=${encodeURIComponent(categoryName)}`;
             const fullPath = getFullPath(defaultHost, path + queryString);
 
             console.log('deleteCategory 요청, 쿼리스트링:', fullPath);
