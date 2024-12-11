@@ -80,12 +80,17 @@
     margin-left: 10px;
     background-color: transparent;
     border: 1px solid red;
-    border-radius: 10px;
+    border-radius: 8px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: 0.2s;
+    transition: 0.3s;
+}
+.category-item button.on-edit {
+    pointer-events: none;
+    opacity: 0.5;
+    transition: 0.3s;
 }
 .category-item button:hover {
     background-color: #ffcccc;
@@ -110,9 +115,28 @@
     background-color: #ccf2e1;
 }
 
+#edit-category-button {
+    user-select: none;
+    padding: 0;
+    height: 25px;
+    width: 25px;
+    margin-left: 10px;
+    background-color: transparent;
+    border: 1px solid #121212;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+}
+#edit-category-button:hover {
+    background-color: #E0E0E0;
+}
+
 .button-img {
-    width: 22px;
-    height: 22px;
+    width: 20px;
+    height: 20px;
     pointer-events: none;
 }
 
@@ -125,6 +149,8 @@
 }
 
 #save-button {
+    opacity: 0.5;
+    pointer-events: none;
     margin-top: 10px;
     user-select: none;
     padding: 0;
