@@ -75,7 +75,9 @@ const networkManager = {
 
             const fullPath = getFullPath(defaultHost, path + queryString);
             console.log("PUT요청 쿼리스트링:", fullPath);
-            put(fullPath);
+            const data = await put(fullPath);
+            console.log(`PUT: updateHistoryData 완료, 반환된 값: ${JSON.stringify(data)}`);
+            return data;
         }
     },
     get: {
