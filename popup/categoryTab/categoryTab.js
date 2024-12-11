@@ -170,11 +170,38 @@ function addCategoryItem(category) {
 
     // 삭제 동작
     delButton.addEventListener('click', (event) => {
-        const parent = event.target.parentElement;
-        parent.style.opacity = '0';
-        setTimeout(() => {
-            parent.remove();
-        }, 200);
+        const categoryName = input.getAttribute('data-original-value');
+        input.style.opacity = '0.5';
+        input.style.pointerEvents = 'none';
+        event.target.style.opacity = '0.5';
+        event.target.style.pointerEvents = 'none';
+
+        chrome.runtime.sendMessage({ senderName: "popup", action: "DELETE_CATEGORY", data: categoryName }, async(response) => {
+            const data = response.data;
+            if (data === null) {
+                console.error(`DELETE_CATEGORY: 카테고리 삭제 실패: ${response.message}`);
+                input.style.opacity = '1';
+                input.style.pointerEvents = 'auto';
+                event.target.style.opacity = '1';
+                event.target.style.pointerEvents = 'auto';
+                return;
+            }
+            const newCategoryLIst = getCurrentCategoryList();
+            await storeUserCategories(newCategoryLIst);
+            console.log("categorySet:" + JSON.stringify(data));
+            somethingChangedMessage.style.display = 'block';
+            applyButton.style.opacity = '1';
+            applyButton.style.pointerEvents = 'auto';
+            const parent = event.target.parentElement;
+            parent.style.opacity = '0';
+            setTimeout(() => {
+                parent.remove();
+            }, 200);
+        });
+        input.style.pointerEvents = 'auto';
+        input.style.opacity = '1';
+        event.target.style.pointerEvents = 'auto';
+        event.target.style.opacity = '1';
     });
 
     // 수정 버튼
@@ -198,7 +225,7 @@ function addCategoryItem(category) {
             chrome.runtime.sendMessage({ senderName: "popup", action: "UPDATE_CATEGORY", data: { originalName: originalName, newName: input.value } }, async(response) => {
                 const data = response.data;
                 if (data === null) {
-                    console.error(`GET_STATISTICS:category: 데이터 요청 실패: ${response.message}`);
+                    console.error(`UPDATE_CATEGORY: 카테고리 수정 실패 : ${response.message}`);
                     input.style.pointerEvents = 'auto';
                     input.style.opacity = '1';
                     event.target.style.pointerEvents = 'auto';
