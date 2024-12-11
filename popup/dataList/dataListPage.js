@@ -88,7 +88,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     //적용 버튼 리스너
     const applyButton = document.getElementById('apply-button');
     applyButton.addEventListener('click', () => {
-        const periodMenu = document.getElementById('period-menu');
         const domainMenu = document.getElementById('domain-menu');
         const sortMenu = document.getElementById('sort-menu');
         const orderMenu = document.getElementById('toggle-button');
@@ -104,7 +103,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         currentQueries.sortBy = sortValue;
         currentQueries.sortOrder = orderValue;
         currentQueries.domain = domainValue;
+        currentQueries.page = 0;
         console.log('currentQueries', currentQueries);
+        loadDataList(currentQueries);
     })
 
     // 기간 설정 버튼 리스너
