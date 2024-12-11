@@ -17,19 +17,27 @@ async function post(path, body, headers = {}) {
     };
 
     const response = await fetch(url, options);
-    const data = await response.json();
 
     if (response.ok) {
-        return data;
+        // 응답에 body가 있는지 체크 후 적절한 결과를 반환
+        const readableData = await response.text();
+        if(readableData){
+            const data = JSON.parse(readableData);
+            return data;
+        } else {
+            return true;
+        }
     }
     else {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        throw new Error(`HTTP error! status: ${response.status}, ${data.message}`);
     }
 }
 async function put(path, body = {}, headers = {}) {
     const token = await getToken();
 
     const defaultHeader = {
+        "Content-Type": "application/json",
         "Accept": "*/*",
         "Authorization": `Bearer ${token}`,
     };
@@ -44,13 +52,20 @@ async function put(path, body = {}, headers = {}) {
     };
 
     const response = await fetch(url, options);
-    const data = await response.json();
-    console.log("put response", data);
 
     if (response.ok) {
-        return data;
+        // 응답에 body가 있는지 체크 후 적절한 결과를 반환
+        const readableData = await response.text();
+        console.log('check readableData', readableData);
+        if(readableData){
+            const data = JSON.parse(readableData);
+            return data;
+        } else {
+            return true;
+        }
     }
     else {
+        const data = await response.json();
         throw new Error(`HTTP error! status: ${response.status}, ${data.message}`);
     }
 }
