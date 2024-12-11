@@ -17,7 +17,7 @@ html{
 ::-webkit-scrollbar-track {
     background: #f1f1f1;
     border-radius: 6px;
-    margin-top: 70px;
+    margin-top: 80px;
     margin-bottom: 40px;
 }
 
@@ -47,6 +47,7 @@ html{
     /* width: 360px; */
     background-color: rgba(254,251,238,0.5);
     backdrop-filter: blur(8px);
+    z-index: 10;
 }
 /* 상단 메뉴 스크롤 컨테이너 */
 .scroll-container {
@@ -147,6 +148,7 @@ html{
     width: 100%;
     background-color: rgba(254,251,238,0.5);
     backdrop-filter: blur(8px);
+    z-index: 10;
 }
 /* 스크롤 가능한 메뉴 컨테이너 */
 .paging-menu {
@@ -172,7 +174,7 @@ html{
     display: flex;
     justify-content: center;
     align-items: center;
-    font-weight: 700;
+    font-weight: 400;
     font-size: small;
     height: 20px;
     margin-right: 10px;
@@ -182,7 +184,7 @@ html{
     color: #121212;
     cursor: pointer;
     white-space: nowrap; /* 긴 텍스트가 줄 바꿈되지 않도록 설정 */
-    border: rgba(0,0,0,0.0) solid 1px;
+    border: rgba(0,0,0,0.0) solid 0.5px;
     border-radius: 5px;
 }
 

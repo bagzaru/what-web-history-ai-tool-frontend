@@ -112,7 +112,7 @@ function loadDataList({startTime, endTime, domain, category, page, size, sortBy,
                 sortBy: sortBy,
                 sortOrder: sortOrder
             } 
-        }, (response) => {
+        }, async (response) => {
         const data = response.data;
         if (data === null) {
             console.log("데이터 요청 실패: " + response.message);
@@ -122,7 +122,8 @@ function loadDataList({startTime, endTime, domain, category, page, size, sortBy,
         }
         console.log("데이터: " + JSON.stringify(data));
         resetData();
-        const articles = renderArticles(data.content);
+        const categories = await getCategories();
+        const articles = renderArticles(data.content, categories);
         articleContainer.appendChild(articles);
         if (pageNumList.children.length === 0) {
             renderPaging(data.totalPages);
