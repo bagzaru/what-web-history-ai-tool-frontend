@@ -232,7 +232,7 @@ const networkManager = {
         deleteCategory: async function (categoryName) {
             if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다.`);
             // deleteCategory: 특정 카테고리를 삭제합니다
-            const path = '/api/history?';
+            const path = '/api/category?';
             const queryString = `categoryName=${encodeURIComponent(categoryName)}`;
             const fullPath = getFullPath(defaultHost, path + queryString);
 
