@@ -11,6 +11,10 @@ import onGetStatistics from "./popup/onGetStatistics.js";
 import onDeleteData from "./popup/onDeleteData.js";
 import onUpdateData from "./popup/onUpdateData.js";
 import onGetDetailData from "./popup/onGetDetailData.js";
+import onGetAllCategories from "./popup/onGetAllCategories.js";
+import onDeleteCategory from "./popup/onDeleteCategory.js";
+import onUpdateCategory from "./popup/onUpdateCategory.js";
+import onAddCategory from "./popup/onAddCategory.js";
 
 let senderEventMap = {};
 
@@ -25,6 +29,10 @@ addMessageHandler(onGetStatistics);
 addMessageHandler(onDeleteData);
 addMessageHandler(onUpdateData);
 addMessageHandler(onGetDetailData);
+addMessageHandler(onGetAllCategories);
+addMessageHandler(onDeleteCategory);
+addMessageHandler(onUpdateCategory);
+addMessageHandler(onAddCategory);
 
 function onMessageReceived(message, sender, sendResponse) {
     console.log(`messageListener: message recieved, sender: ${message.senderName}, action: ${message.action}`);
