@@ -48,27 +48,34 @@ const networkManager = {
         }
     },
     put: {
-        updateHistorySpentTime: async function ({ url, startTime, endTime }) {
+        updateHistoryData: async function ({ url, startTime = 0, endTime = 0, category }) {
             if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다. networkState: false`);
 
-            //updateHistory: 해당 사이트의 체류 시간(visitTime)값을 업데이트합니다.
+            //updateHistory: 해당 사이트의 체류 시간(visitTime) 및 배정된 카테고리를 업데이트합니다.
 
             //체류 시간 계산
             const spentTime = endTime - startTime;
-            console.log(`PUT: url: ${url}, 머문 시간: ${spentTime} `)
+            console.log(`PUT: url: ${url}, 머문 시간: ${spentTime}, 카테고리: ${category}`);
 
-            const path = '/api/history';
             // const body = {
             //     url: url,
             //     spentTime: spentTime,
             // };
-            const body = new FormData();    //PUT: updatehistory의 body는 formdata 형식으로 주고받는다.
-            body.append("url", url);
-            body.append("spentTime", spentTime);
+            //PUT: updatehistory의 body는 formdata 형식으로 주고받는다.
+            // const body = new FormData();
+            // body.append("url", url);
+            // body.append("spentTime", spentTime);
 
-            const fullPath = getFullPath(defaultHost, path);
+            // query string으로 방식 변경
+            const path = '/api/history?';
+            let queryString = `url=${encodeURIComponent(url)}&category=${encodeURIComponent(category)}`;
+            if (spentTime) {
+                queryString += `&spentTime=${spentTime}`;
+            }
 
-            put(fullPath, body);
+            const fullPath = getFullPath(defaultHost, path + queryString);
+            console.log("PUT요청 쿼리스트링:", fullPath);
+            put(fullPath);
         }
     },
     get: {

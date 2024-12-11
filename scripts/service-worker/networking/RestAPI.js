@@ -26,7 +26,7 @@ async function post(path, body, headers = {}) {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
 }
-async function put(path, body, headers = {}) {
+async function put(path, body = {}, headers = {}) {
     const token = await getToken();
 
     const defaultHeader = {
@@ -45,6 +45,7 @@ async function put(path, body, headers = {}) {
 
     const response = await fetch(url, options);
     const data = await response.json();
+    console.log("put response", data);
 
     if (response.ok) {
         return data;
