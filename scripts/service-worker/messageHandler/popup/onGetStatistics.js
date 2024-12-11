@@ -12,12 +12,14 @@ const onGetStatistics = {
 
         const endDate
             = (message.endDate !== undefined || message.data.endDate !== "")
-                ? new Date(message.endDate)
+                ? new Date(message.data.endDate)
                 : new Date();
         const startDate
             = (message.startDate !== undefined || message.data.startDate !== "")
-                ? new Date(message.startDate)
+                ? new Date(message.data.startDate)
                 : new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate() - 7);
+                
+        console.log("수정전 시간", startDate, endDate);
         startDate.setHours(0, 0, 0, 0);
         endDate.setHours(23, 59, 59, 999);
         console.log("GET_STATSTICS: 수정된 start-end Date: " + startDate + " ~ " + endDate);
