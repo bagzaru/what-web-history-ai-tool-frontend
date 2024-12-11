@@ -27,6 +27,7 @@ export default function renderArticles(data, categories) {
         // 카테고리
         const category = document.createElement('div');
         category.className = 'category';
+        category.id = `${article.id}-category`;
         category.textContent = `${article.category}`;
         // 삭제 버튼
         const deleteButton = document.createElement('button');
@@ -190,7 +191,8 @@ export default function renderArticles(data, categories) {
             if (targetElement) {
                 const newCategory = targetElement.getAttribute('data-value');
                 const upperParent = document.getElementById(`${article.id}`);
-                upperParent.style.opcity = "0.5"
+                const upperParentCategoryLabel = document.getElementById(`${article.id}-category`);
+                upperParent.style.opacity = "0.5"
                 chrome.runtime.sendMessage({ senderName: "popup", action: "UPDATE_HISTORY_DATA", data: {url:article.url, category:newCategory} }, (response) => {
                     const data = response.data;
                     if (data === null) {
@@ -198,10 +200,9 @@ export default function renderArticles(data, categories) {
                         upperParent.style.opacity = '1';
                         return;
                     }
-                    console.log("데이터 업데이트 성공: " + data);
+                    console.log("데이터 업데이트 성공: " + data.category);
                     upperParent.style.opacity = '1';
-                    const categoryLabel = upperParent.querySelector('category');
-                    categoryLabel.textContent = newCategory;
+                    upperParentCategoryLabel.textContent = data.category;
                 });
             }
         })
