@@ -137,15 +137,15 @@ export default function renderArticles(data, categories) {
         modifyCategoryLabel.textContent = '이 데이터의 카테고리를 수정';
         // 카테고리 선택 드롭다운
         const categoryDropdown = document.createElement('div');
-        categoryDropdown.className = 'dropdown';
+        categoryDropdown.className = 'render-ariticle-dropdown';
         categoryDropdown.setAttribute('data-value', 'category-menu');
         const dropdownLabel = document.createElement('span');
-        dropdownLabel.className = 'dropdown-label';
+        dropdownLabel.className = 'render-ariticle-dropdown-label';
         dropdownLabel.textContent = '카테고리 선택';
         const dropdownArrow = document.createElement('span');
-        dropdownArrow.className = 'dropdown-arrow';
+        dropdownArrow.className = 'render-ariticle-dropdown-arrow';
         const dropdownMenu = document.createElement('div');
-        dropdownMenu.className = 'dropdown-menu';
+        dropdownMenu.className = 'render-ariticle-dropdown-menu';
         dropdownMenu.id = 'category-menu';
         dropdownMenu.setAttribute('data-value', article.category);
         const ul = document.createElement('ul');

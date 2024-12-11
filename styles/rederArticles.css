@@ -146,7 +146,8 @@
     margin-top: 5px;
 }
 /* 드롭다운 기본 스타일 */
-.dropdown {
+.render-ariticle-dropdown {
+    position: relative;
     margin-right: 5px;
     cursor: pointer;
     font-size: 10px;
@@ -161,13 +162,13 @@
     max-width: 95px;
     height: 20px;
 }
-.dropdown:hover {
+.render-ariticle-dropdown:hover {
     background-color: #F5F5F5;
     transition: 0.3s;
 }
 
 /* 드롭다운 라벨 */
-.dropdown-label {
+.render-ariticle-dropdown-label {
     background-color: transparent;
     flex-grow: 1;
     display: inline-block;
@@ -175,7 +176,7 @@
 }
 
 /* 드롭다운 화살표 */
-.dropdown-arrow {
+.render-ariticle-dropdown-arrow {
     width: 12px;
     height: 12px;
     background-image: url('../assets/chevron-down-outline.svg'); /* 화살표 이미지 경로 */
@@ -184,7 +185,7 @@
     transition: transform 0.3s ease; /* 부드러운 회전 효과 */
 }
 /* 드롭다운 열릴 때 화살표 회전 */
-.dropdown.open .dropdown-arrow {
+.render-ariticle-dropdown.open .render-ariticle-dropdown-arrow {
     transform: rotate(180deg); /* 180도 회전 */
 }
 
@@ -200,7 +201,7 @@
     margin-right: 5px;
 }
 /* 드롭다운 메뉴 */
-.dropdown-menu {
+.render-ariticle-dropdown-menu {
     position: absolute;
     top: 30px;
     left: 0;
@@ -211,17 +212,17 @@
     z-index: 10;
 }
 
-.dropdown-menu ul {
+.render-ariticle-dropdown-menu ul {
     list-style: none;
     margin: 0;
     padding: 0;
 }
 
-.dropdown-menu li {
+.render-ariticle-dropdown-menu li {
     padding: 10px;
     white-space: nowrap;
 }
-.dropdown-menu li:hover {
+.render-ariticle-dropdown-menu li:hover {
     background-color: #f0f0f0;
 }
 
