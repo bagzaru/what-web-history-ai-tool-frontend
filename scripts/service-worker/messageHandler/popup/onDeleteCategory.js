@@ -6,7 +6,7 @@ const onDeleteCategory = {
 
     listener: async function (message, sender) {
         //popup에서 전체 카테고리 목록을 요청했을 때
-        console.log("DELETE_CATEGORY: 카테고리 삭제 요청");
+        console.log("DELETE_CATEGORY: 카테고리 삭제 요청:", message.data);
 
         if (!message.data){
             console.log('필수값 없음');
@@ -14,6 +14,7 @@ const onDeleteCategory = {
         }
         const categoryName = message.data;
         
+
         const response = await networkManager.del.deleteCategory(categoryName);
 
         console.log("DELETE_CATEGORY: 카테고리 삭제 요청 완료");
