@@ -235,6 +235,10 @@ export default function renderArticles(data, categories) {
                 showDetailButton.style.pointerEvents = 'auto';
                 modifyCategoryContainer.style.display = 'none';
                 visitCountContainer.style.display = 'none';
+                if (categoryDropdown.classList.contains('open')){
+                    dropdownMenu.style.display = 'none';
+                    categoryDropdown.classList.remove('open');
+                }
             } else {
                 content.classList.add('content-open');
                 showDetailButton.style.display = 'flex';
