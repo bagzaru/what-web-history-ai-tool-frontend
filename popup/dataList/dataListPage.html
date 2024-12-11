@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dynamic Data Rendering</title>
     <link rel="stylesheet" href="../../styles/dataListPage.css">
+    <link rel="stylesheet" href="../../styles/rederArticles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -26,39 +27,49 @@
             </button>
         </div>
         <div class="page-option">
-            <div class="dropdown" data-menu="dropdown-menu-1">
+            <div class="dropdown" data-menu="period-menu">
                 <span class="dropdown-label">기간</span>
                 <span class="dropdown-arrow"></span>
-                <div class="dropdown-menu" id="dropdown-menu-1">
+                <div class="dropdown-menu" id="period-menu" data-value="">
                     <ul>
-                        <li><a href="#" data-value="옵션 1-1">옵션 1-1</a></li>
-                        <li><a href="#" data-value="옵션 1-2">옵션 1-2</a></li>
-                        <li><a href="#" data-value="옵션 1-3">옵션 1-3</a></li>
+                        <li data-value="">전체(기본)</li>
+                        <li data-value="a-day">24시간 이내</li>
+                        <li data-value="a-week">일주일 이내</li>
+                        <li data-value="a-month">한달 이내</li>
+                        <li data-value="three-month">3개월 이내</li>
+                        <li data-value="a-year">1년 이내</li>
+                        <li data-value="user-defined-period">직접 설정</li>
                     </ul>
                 </div>
             </div>
-            <div class="dropdown" data-menu="dropdown-menu-2">
+            <div class="dropdown" data-menu="domain-menu">
                 <span class="dropdown-label">도메인 필터</span>
                 <span class="dropdown-arrow"></span>
-                <div class="dropdown-menu" id="dropdown-menu-2">
+                <div class="dropdown-menu" id="domain-menu" data-value="">
                     <ul>
-                        <li><a href="#" data-value="옵션 2-1">옵션 2-1</a></li>
-                        <li><a href="#" data-value="옵션 2-2">옵션 2-2</a></li>
-                        <li><a href="#" data-value="옵션 2-3">옵션 2-3</a></li>
+                        <li data-value="">없음(기본)</li>
+                        <li data-value="user-defined-domain">직접입력</li>
                     </ul>
                 </div>
             </div>
-            <div class="dropdown" data-menu="dropdown-menu-3">
-                <span class="dropdown-label">다음으로 정렬</span>
+            <div class="dropdown" data-menu="sort-menu">
+                <span class="dropdown-label">정렬기준</span>
                 <span class="dropdown-arrow"></span>
-                <div class="dropdown-menu" id="dropdown-menu-3">
+                <div class="dropdown-menu" id="sort-menu" data-value="">
                     <ul>
-                        <li><a href="#" data-value="옵션 3-1">옵션 3-1</a></li>
-                        <li><a href="#" data-value="옵션 3-2">옵션 3-2</a></li>
-                        <li><a href="#" data-value="옵션 3-3">옵션 3-3</a></li>
+                        <li data-value="">방문시간(기본)</li>
+                        <li data-value="visitCount">방문횟수</li>
+                        <li data-value="spentTime">체류시간</li>
                     </ul>
                 </div>
             </div>
+            <div class="toggle-container">
+                <input type="checkbox" id="toggle-button" class="toggle-checkbox" />
+                <label for="toggle-button" class="toggle-label">
+                    <span class="toggle-icon"></span>
+                </label>
+            </div>
+            <button id="apply-button">적용</button>
         </div>
     </div>
     <div class="paging-container">

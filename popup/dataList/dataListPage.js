@@ -15,21 +15,84 @@ document.addEventListener("DOMContentLoaded", async () => {
     await renderMenu();
     loadDataList(currentQueries);
     addMovePageButton();
+
     const dropdowns = document.querySelectorAll('.dropdown');
     dropdowns.forEach((dropdown) => {
+        const label = dropdown.querySelector('.dropdown-label');
+        const arrow = dropdown.querySelector('.dropdown-arrow');
+        const menuId = dropdown.getAttribute('data-menu');
+        const menu = document.getElementById(menuId);
+
         dropdown.addEventListener('click', (event) => {
-            event.stopPropagation(); // Prevent event bubbling
-            const menuId = dropdown.getAttribute('data-menu');
-            toggleDropdown(menuId);
+            event.stopPropagation(); // 드롭다운 내부 클릭 이벤트가 상위로 전달되지 않도록 방지
+            // 다른 드롭다운 닫기
+            dropdowns.forEach((otherDropdown) => {
+                if (otherDropdown !== dropdown) {
+                    const otherMenu = document.getElementById(
+                        otherDropdown.getAttribute('data-menu')
+                    );
+                    otherDropdown.classList.remove('open');
+                    if (otherMenu) otherMenu.style.display = 'none';
+                }
+            });
+            // 현재 드롭다운 토글
+            if (dropdown.classList.contains('open')) {
+                menu.style.display = 'none';
+                dropdown.classList.remove('open');
+            } else {
+                menu.style.display = 'block';
+                dropdown.classList.add('open');
+            }
+        });
+        // `li` 태그 클릭 이벤트 처리
+        menu.querySelectorAll('li').forEach((option) => {
+            option.addEventListener('click', (event) => {
+                event.stopPropagation();
+                const selectedOption = option.textContent;
+                const selectedValue = option.getAttribute('data-value');
+                label.textContent = selectedOption; // 선택된 값으로 레이블 변경
+                // 드롭다운 닫기
+                menu.style.display = 'none';
+                menu.setAttribute('data-value', `${selectedValue}`);
+                dropdown.classList.remove('open'); // 클래스 제거
+            });
         });
     });
+    // 외부 클릭 감지 및 드롭다운 닫기
     document.addEventListener('click', () => {
-        const allDropdowns = document.querySelectorAll('.dropdown-menu');
-        allDropdowns.forEach((dropdown) => {
-            dropdown.style.display = 'none';
+        dropdowns.forEach((dropdown) => {
+            const menu = document.getElementById(dropdown.getAttribute('data-menu'));
+            dropdown.classList.remove('open');
+            if (menu) menu.style.display = 'none';
         });
     });
+    //적용 버튼 리스너
+    const applyButton = document.getElementById('apply-button');
+    applyButton.addEventListener('click', () => {
+        const periodMenu = document.getElementById('period-menu');
+        const domainMenu = document.getElementById('domain-menu');
+        const sortMenu = document.getElementById('sort-menu');
+        const orderMenu = document.getElementById('toggle-button');
+
+        const periodValue = periodMenu.getAttribute('data-value');
+        const domainValue = domainMenu.getAttribute('data-value');
+        const sortValue = sortMenu.getAttribute('data-value');
+        let orderValue = 'desc';
+        if (orderMenu.checked) {
+            orderValue = 'asc';
+        } else {
+            orderValue = 'desc';
+        }
+        currentQueries.sortBy = sortValue;
+        currentQueries.sortOrder = orderValue;
+        currentQueries.domain = domainValue;
+    })
+
 });
+
+function getSubtractDate(date, year = 0, month = 0, day = 0, hour = 0, minute = 0, second = 0) {
+    return new Date(date.getFullYear() - year, date.getMonth() - month, date.getDate() - day, date.getHours() - hour, date.getMinutes() - minute, date.getSeconds() - second);
+}
 
 // 방문기록 데이터 렌더링
 function loadDataList({startTime, endTime, domain, category, page, size, sortBy, sortOrder}) {
@@ -49,7 +112,7 @@ function loadDataList({startTime, endTime, domain, category, page, size, sortBy,
                 sortBy: sortBy,
                 sortOrder: sortOrder
             } 
-        }, (response) => {
+        }, async (response) => {
         const data = response.data;
         if (data === null) {
             console.log("데이터 요청 실패: " + response.message);
@@ -59,12 +122,13 @@ function loadDataList({startTime, endTime, domain, category, page, size, sortBy,
         }
         console.log("데이터: " + JSON.stringify(data));
         resetData();
-        const articles = renderArticles(data.content);
+        const categories = await getCategories();
+        const articles = renderArticles(data.content, categories);
         articleContainer.appendChild(articles);
         if (pageNumList.children.length === 0) {
             renderPaging(data.totalPages);
         }
-        const elementTop = articleContainer.offsetTop - 70;
+        const elementTop = articleContainer.offsetTop - 85;
         window.scrollTo({ top: elementTop, behavior:'auto'});
     });
 }
@@ -300,18 +364,4 @@ function updateVisibleItems() {
             item.style.display = index >= activeIndex - 2 && index <= activeIndex + 2 ? "flex" : "none";
         }
     });
-}
-
-function toggleDropdown(id) {
-    const dropdown = document.getElementById(id);
-
-    // Close other dropdowns
-    document.querySelectorAll('.dropdown-menu').forEach((menu) => {
-        if (menu !== dropdown) {
-            menu.style.display = 'none';
-        }
-    });
-
-    // Toggle current dropdown
-    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
 }

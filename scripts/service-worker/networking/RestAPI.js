@@ -26,7 +26,7 @@ async function post(path, body, headers = {}) {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
 }
-async function put(path, body, headers = {}) {
+async function put(path, body = {}, headers = {}) {
     const token = await getToken();
 
     const defaultHeader = {
@@ -45,6 +45,7 @@ async function put(path, body, headers = {}) {
 
     const response = await fetch(url, options);
     const data = await response.json();
+    console.log("put response", data);
 
     if (response.ok) {
         return data;
@@ -82,6 +83,35 @@ async function get(path, headers = {}) {
     }
 }
 
+async function del(path, headers = {}) {
+    const token = await getToken();
+
+    const defaultHeader = {
+        "Content-Type": "application/json",
+        "Accept": "*/*",
+        "Authorization": `Bearer ${token}`,
+    };
+    const url = path;
+    const options = {
+        method: "DELETE",
+        headers: {
+            ...defaultHeader,
+            ...headers
+        }
+    };
+
+    const response = await fetch(url, options);
+
+    if (response.ok) {
+        console.log('del response ok');
+        return true;
+    }
+    else {
+        const data = await response.json();
+        throw new Error(`HTTP error! status: ${response.status}, ${data.message}`);
+    }
+}
+
 function getToken() {
     return new Promise((resolve, reject) => {
         chrome.storage.sync.get("jwtToken", (result) => {
@@ -94,4 +124,4 @@ function getToken() {
     });
 }
 
-export { post, put, get };
+export { post, put, get, del };
