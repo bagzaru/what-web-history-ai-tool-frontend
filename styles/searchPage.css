@@ -161,6 +161,10 @@ body {
   cursor: pointer;
   border: none;
 }
+.search-button img {
+  width: 25px;
+  height: 25px;
+}
 
 /* 버튼 호버 효과 */
 .search-button:hover {
