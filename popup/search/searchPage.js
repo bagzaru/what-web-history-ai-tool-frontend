@@ -410,13 +410,14 @@ function toggleSearchOptionUIOnOff(flag = true) {
 }
 
 function toggleSearchBoxUIUp(up = true) {
+    const searchBoxContainer = document.getElementById("search-box-container");
     const searchBox = document.getElementById("search-box");
     const searchBoxInner = document.getElementById("search-box-inner");
     const optionBox = document.getElementById("search-option-box");
     const searchInputContainer = document.getElementById("search-input-container");
     if (up === true) {
-        searchBox.classList.add("top");
-        searchBox.classList.remove("bottom");
+        searchBoxContainer.classList.add("top");
+        searchBoxContainer.classList.remove("bottom");
 
         //dropdown들 아래로 나오게
         const dropdowns = document.querySelectorAll('.dropdown-menu');
@@ -431,8 +432,8 @@ function toggleSearchBoxUIUp(up = true) {
         }
     }
     else {
-        searchBox.classList.add("top");
-        searchBox.classList.remove("bottom");
+        searchBoxContainer.classList.add("top");
+        searchBoxContainer.classList.remove("bottom");
 
         //dropdown들 위로 나오게
         dropdowns.forEach((dropdown) => {

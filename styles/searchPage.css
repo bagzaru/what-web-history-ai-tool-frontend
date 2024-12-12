@@ -48,11 +48,17 @@ body {
   box-sizing: border-box;
 }
 
-/* 검색창 스타일 */
-.search-box {
+.search-box-container {
+  background-color: rgba(254, 251, 238, 0.5);
+  backdrop-filter: blur(8px);
   width: 100%;
 
   position: absolute;
+}
+
+/* 검색창 스타일 */
+.search-box {
+  width: 100%;
 
   flex: 0;
   width: calc(100% - 14px);
@@ -61,16 +67,15 @@ body {
   align-items: center;
 
   box-sizing: border-box;
-
   transition: all 1.9s ease;
 }
 
-.search-box.top {
+.search-box-container.top {
   top: 0;
   bottom: auto;
 }
 
-.search-box.bottom {
+.search-box-container.bottom {
   top: auto;
   bottom: 0;
 }
