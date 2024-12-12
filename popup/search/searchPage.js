@@ -5,6 +5,8 @@ const searchInput = document.getElementById('search-input');
 
 const contentBox = document.getElementById('content-box');
 
+let allCategories = [];
+
 let optionData = {};
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -49,11 +51,14 @@ function loadSearchData() {
     contentBox.innerHTML = "";
 
     //로딩 스피너 
-    const loadingContainer = document.querySelector('.loading-spinner');
-    loadingContainer.style.opacity = 1;
+    const loadingSpinner = document.querySelector('.loading-spinner');
+    loadingSpinner.classList.remove('hidden');
+    loadingSpinner.style.opacity = 1;
 
     const loadingFailureText = document.querySelector('#loading-failure-text');
     loadingFailureText.classList.add('hidden');
+    const loadingEmptyText = document.querySelector('#loading-empty-text');
+    loadingEmptyText.classList.add('hidden');
 
     //검색창 맨 위로, option 안보이게
     toggleSearchBoxUIUp(true);
@@ -94,15 +99,23 @@ function loadSearchData() {
     chrome.runtime.sendMessage({ senderName: "popup", action: "GET_SEARCH_DATA_LIST", data: searchOption }, (response) => {
         const data = response.data;
         //로딩 스피너 안보이게
-        loadingContainer.style.opacity = 0;
+        loadingSpinner.style.opacity = 0;
         if (data === null) {
             console.error(`GET_SEARCH_DATA_LIST: 데이터 요청 실패: ${response.message}`);
             const loadingFailureText = document.querySelector('#loading-failure-text');
             loadingFailureText.classList.remove('hidden');
+            loadingSpinner.classList.add('hidden');
             return;
         }
 
         console.log("검색창 검색 결과 로드 완료");
+
+        if (data.length === 0) {
+            const loadingEmptyText = document.querySelector('#loading-empty-text');
+            loadingEmptyText.classList.remove('hidden');
+            loadingSpinner.classList.add('hidden');
+            return;
+        }
 
         const articleContainer = document.createElement("div");
         articleContainer.id = "article-container";
@@ -112,7 +125,8 @@ function loadSearchData() {
         articleContainer.style.marginBottom = "0px";
         articleContainer.style.marginTop = "96px";
 
-        const renderResult = renderArticles(data, [searchOption.category]);
+        const copiedCategories = [...allCategories];
+        const renderResult = renderArticles(data, copiedCategories);
 
         articleContainer.appendChild(renderResult);
         contentBox.appendChild(articleContainer);
@@ -201,7 +215,9 @@ async function getPeriodOptions() {
 }
 
 async function getCategoryOptions() {
-    const categoryLength = 5;
+    const tempCategories = await getCategories();
+    const categoryLength = tempCategories.length;
+    console.log("카테고리옵션: " + JSON.stringify(tempCategories));
     const result = [];
     const sendData = { type: "category", k: categoryLength, startDate: "", endDate: "" };
     result.push({ type: "category", text: "모든 카테고리", tag: "all" });
@@ -226,9 +242,11 @@ async function getCategoryOptions() {
         console.error(`GET_STATISTICS:category: 데이터 요청 실패: ${response.message}`);
         return;
     }
+    allCategories = [];
     for (let i = categoryLength - 1; i >= 0; i--) {
         const domain = { type: "category", text: `${data[i]}` };
         result.unshift(domain);
+        allCategories.push(data[i]);
     }
     console.log("categorySet:" + JSON.stringify(result));
 
@@ -315,6 +333,7 @@ function initDropdown(items, menuName, menuText) {
 
     const label = dropdown.querySelector('.dropdown-label');
     label.textContent = menuText;
+    label.style.maxWidth = "100%";
 
     const arrow = document.createElement('span');
     arrow.classList.add("dropdown-arrow");
@@ -385,19 +404,20 @@ function initDropdown(items, menuName, menuText) {
 function toggleSearchOptionUIOnOff(flag = true) {
     const searchOptionBox = document.getElementById("search-option-box");
     searchOptionBox.classList.remove("hidden");
-    if (flag === false) {
-        searchOptionBox.classList.add("hidden");
-    }
+    // if (flag === false) {
+    //     searchOptionBox.classList.add("hidden");
+    // }
 }
 
 function toggleSearchBoxUIUp(up = true) {
+    const searchBoxContainer = document.getElementById("search-box-container");
     const searchBox = document.getElementById("search-box");
     const searchBoxInner = document.getElementById("search-box-inner");
     const optionBox = document.getElementById("search-option-box");
     const searchInputContainer = document.getElementById("search-input-container");
     if (up === true) {
-        searchBox.classList.add("top");
-        searchBox.classList.remove("bottom");
+        searchBoxContainer.classList.add("top");
+        searchBoxContainer.classList.remove("bottom");
 
         //dropdown들 아래로 나오게
         const dropdowns = document.querySelectorAll('.dropdown-menu');
@@ -412,8 +432,8 @@ function toggleSearchBoxUIUp(up = true) {
         }
     }
     else {
-        searchBox.classList.add("top");
-        searchBox.classList.remove("bottom");
+        searchBoxContainer.classList.add("top");
+        searchBoxContainer.classList.remove("bottom");
 
         //dropdown들 위로 나오게
         dropdowns.forEach((dropdown) => {
@@ -426,4 +446,17 @@ function toggleSearchBoxUIUp(up = true) {
         }
     }
 
+}
+
+// 카테고리를 가져오는 함수
+function getCategories() {
+    return new Promise((resolve, reject) => {
+        chrome.storage.sync.get("categories", (result) => {
+            if (chrome.runtime.lastError) {
+                reject(chrome.runtime.lastError);
+            } else {
+                resolve(result.categories); //return token
+            }
+        });
+    });
 }
