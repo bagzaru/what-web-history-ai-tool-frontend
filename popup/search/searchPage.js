@@ -322,6 +322,7 @@ function initDropdown(items, menuName, menuText) {
 
     const label = dropdown.querySelector('.dropdown-label');
     label.textContent = menuText;
+    label.style.maxWidth = "100%";
 
     const arrow = document.createElement('span');
     arrow.classList.add("dropdown-arrow");
