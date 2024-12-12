@@ -16,6 +16,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             loadSearchData();
         }
     });
+    searchInput.addEventListener('focus', () => {
+        toggleSearchOptionUIOnOff(true);
+    });
+    searchInput.addEventListener('blur', () => {
+        toggleSearchOptionUIOnOff(false);
+    });
 
     //옵션 초기화
     const periodSet = await getPeriodOptions();
@@ -28,7 +34,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     initDropdown(categorySet, "category-menu", "카테고리");
 });
 
-
+//검색 시도
 function loadSearchData() {
     //로고 사라지게
     const logo = document.querySelector(".logo-container");
@@ -37,6 +43,10 @@ function loadSearchData() {
     //로딩 스피너 보이게
     const loadingContainer = document.querySelector('.loading-container');
     loadingContainer.style.opacity = 1;
+
+    //검색창 맨 위로, option 안보이게
+    toggleSearchBoxUIUp(true);
+    toggleSearchOptionUIOnOff(false);
 
     const searchOption = {
         query: searchInput.value,
@@ -316,4 +326,27 @@ function initDropdown(items, menuName, menuText) {
 
     dropdown.classList.remove('open');
     dropdownMenu.style.display = 'none';
+}
+
+function toggleSearchOptionUIOnOff(flag = true) {
+    const searchOptionBox = document.getElementById("search-option-box");
+    searchOptionBox.classList.remove("hidden");
+    if (flag === false) {
+        searchOptionBox.classList.add("hidden");
+    }
+}
+
+function toggleSearchBoxUIUp(up = true) {
+    const container = document.getElementById("container");
+    const searchBox = document.getElementById("search-box");
+    const contentBox = document.getElementById("content-box");
+
+    if (up === true) {
+        if (contentBox.nextElementSibling === searchBox)
+            container.insertBefore(searchBox, contentBox);
+    }
+    else {
+        if (searchBox.nextElementSibling === contentBox)
+            container.insertBefore(contentBox, searchBox);
+    }
 }
