@@ -1,19 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Setting Tab</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../styles/settingTab.css">
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"/>
+    <title>Setting Tab</title>
 </head>
 <body>
-  <div class="container">
-    <h1>설정</h1>
-    <!-- 로고 -->
-    <div id="autoSave" style="display: flex">
-        <input type="checkbox" id="autoSaveCheckbox" class="autoSaveCheckbox">
-        <p>자동 저장 기능</p>
+    <div class="title">
+        설정
     </div>
-  </div>
-  <script src="settingTab.js" type="module"></script>
+    <div class="container">
+        <div class="title">
+            설정
+        </div>
+        <!-- 로고 -->
+        <div id="autoSave">
+            <input type="checkbox" id="autoSaveCheckbox" class="autoSaveCheckbox">
+            <label for="autoSaveCheckbox" id="autoSaveLabel">자동 저장 기능 </label>
+        </div>
+    </div>
+    <script src="settingTab.js" type="module"></script>
 </body>
 </html>

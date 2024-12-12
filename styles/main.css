@@ -22,7 +22,7 @@
     margin: 0 auto;
     width: 550px;
     overflow: hidden;
-    background: #BDBDBD;
+    background: #a39b7b;
 }
 
 li {
@@ -41,11 +41,12 @@ li {
 }
 
 li:hover {
-    background-color: #9E9E9E;
+    background-color: rgba(100, 100, 100, 0.4);
+    color: #121212;
 }
 
 li.active {
-    background: #F5F5F5;
+    background: #fefbee;
     box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 }
 
@@ -67,20 +68,6 @@ a.tab {
     padding: 0px 0px;
     height: 400px;
     background: #fefbee;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 150px;
-    height: 50px;
-    background: #BDBDBD;
-    color: #121212;
-    font-family: 'Raleway', serif;
-    font-weight: 700;
-    font-size: 20px;
-    user-select: none;
 }
 
 .login-info {
@@ -123,12 +110,12 @@ a.tab {
     width: 150px;
     height: 50px;
     cursor: pointer;
-    background: #E0E0E0;
+    background: #e6e2cb;
     transition: all 0.2s ease-out;
 }
 
 #label:hover {
-    background: #EEEEEE;
+    background: #ebe8d8;
 }
 
 #toggle:checked+#label #arrow {
