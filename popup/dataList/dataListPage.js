@@ -13,6 +13,7 @@ let currentQueries = {
 
 document.addEventListener("DOMContentLoaded", async () => {
     await renderMenu();
+    await updateDomainList({});
     loadDataList(currentQueries);
     addMovePageButton();
 
@@ -46,7 +47,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
         // `li` 태그 클릭 이벤트 처리
         menu.querySelectorAll('li').forEach((option) => {
-            option.addEventListener('click', (event) => {
+            option.addEventListener('click', async(event) => {
                 event.stopPropagation();
                 const selectedOption = option.textContent;
                 const selectedValue = option.getAttribute('data-value');
@@ -55,6 +56,24 @@ document.addEventListener("DOMContentLoaded", async () => {
                 menu.style.display = 'none';
                 menu.setAttribute('data-value', `${selectedValue}`);
                 dropdown.classList.remove('open'); // 클래스 제거
+                // 기간 설정 메뉴일 때
+                if (menu.id === 'period-menu'){
+                    if (selectedValue === 'user-defined-period') {
+                        const selectPeriodPopup = document.getElementById('select-period-overlay');
+                        selectPeriodPopup.style.display = 'block';
+                    } else {
+                        const period = getPeriodOptions(selectedValue);
+                        console.log('period:',period)
+                        await updateDomainList(period);
+                        currentQueries.startTime = period.startDate;
+                        currentQueries.endTime = period.endDate;
+                    }
+                }
+                // 도메인 설정 메뉴이면서 user-defined-domain 일 떄
+                if (menu.id === 'domain-menu' && selectedValue === 'user-defined-domain') {
+                    const setDomainPopup = document.getElementById('set-domain-overlay');
+                    setDomainPopup.style.display = 'block';
+                }
             });
         });
     });
@@ -69,12 +88,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     //적용 버튼 리스너
     const applyButton = document.getElementById('apply-button');
     applyButton.addEventListener('click', () => {
-        const periodMenu = document.getElementById('period-menu');
         const domainMenu = document.getElementById('domain-menu');
         const sortMenu = document.getElementById('sort-menu');
         const orderMenu = document.getElementById('toggle-button');
 
-        const periodValue = periodMenu.getAttribute('data-value');
         const domainValue = domainMenu.getAttribute('data-value');
         const sortValue = sortMenu.getAttribute('data-value');
         let orderValue = 'desc';
@@ -86,8 +103,96 @@ document.addEventListener("DOMContentLoaded", async () => {
         currentQueries.sortBy = sortValue;
         currentQueries.sortOrder = orderValue;
         currentQueries.domain = domainValue;
+        currentQueries.page = 0;
+        console.log('currentQueries', currentQueries);
+        loadDataList(currentQueries);
     })
 
+    // 기간 설정 버튼 리스너
+    const selectPeriodButton = document.getElementById('select-period-button');
+    selectPeriodButton.addEventListener('click', async (event) => {
+        event.stopPropagation();
+        const parent = document.getElementById('select-period-overlay');
+        const startTimeInput = document.getElementById('startDate');
+        const endTimeInput = document.getElementById('endDate');
+        if (!startTimeInput.value){
+            alert('시작일을 선택하세요');
+            startTimeInput.focus();
+            return;
+        }
+        if (!endTimeInput.value){
+            alert('종료일을 선택하세요');
+            endTimeInput.focus();
+            return;
+        }
+        if (startTimeInput.value > endTimeInput.value) {
+            alert('시작일은 종료일보다 빨라야 합니다');
+            startTimeInput.focus();
+            return;
+        }
+        const periodLabel = document.getElementById('period-label');
+        const period = getPeriodOptions('user-defined-period');
+        await updateDomainList(period);
+        periodLabel.textContent = `${startTimeInput.value.slice(2)}~${endTimeInput.value.slice(2)}`;
+        currentQueries.startTime = period.startDate;
+        currentQueries.endTime = period.endDate;
+        parent.style.display = 'none'
+    });
+    //기간 설정 팝업 닫기 버튼
+    const closePeriodPopup = document.getElementById('close-period-popup-button');
+    closePeriodPopup.addEventListener('click', async(event) => {
+        event.stopPropagation();
+        const periodLabel = document.getElementById('period-label');
+        const setPeriodPopup = document.getElementById('select-period-overlay');
+        await updateDomainList({});
+        periodLabel.textContent = '기간';
+        setPeriodPopup.style.display = 'none';
+        currentQueries.startTime = "";
+        currentQueries.endTime = "";
+    });
+
+    // 도메인 설정 버튼 리스너
+    const setDomainButton = document.getElementById('set-domain-button');
+    setDomainButton.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const domainInput = document.getElementById('domain-input');
+        const domainMenu = document.getElementById('domain-menu');
+        const domainLabel = document.getElementById('domain-label');
+        const setDomainPopup = document.getElementById('set-domain-overlay');
+        if (!domainInput.value) {
+            alert('값을 입력하세요');
+            domainInput.focus();
+            return;
+        }
+        domainMenu.setAttribute('data-value', `${domainInput.value}`);
+        domainLabel.textContent = domainInput.value;
+        setDomainPopup.style.display = 'none';
+    })
+    // 도메인 설정시 엔터키 리스너
+    const setDomainInput = document.getElementById('domain-input');
+    setDomainInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            const domainMenu = document.getElementById('domain-menu');
+            const domainLabel = document.getElementById('domain-label');
+            const setDomainPopup = document.getElementById('set-domain-overlay');
+            if (!event.target.value) {
+                alert('값을 입력하세요');
+                event.target.focus();
+                return;
+            }
+            domainMenu.setAttribute('data-value', `${event.target.value}`);
+            domainLabel.textContent = event.target.value;
+            setDomainPopup.style.display = 'none';
+        }
+    });
+    //도메인 설정 팝업 닫기 버튼
+    const closeDomainPopup = document.getElementById('close-domain-popup-button');
+    closeDomainPopup.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const setDomainPopup = document.getElementById('set-domain-overlay');
+        setDomainPopup.style.display = 'none';
+    });
 });
 
 function getSubtractDate(date, year = 0, month = 0, day = 0, hour = 0, minute = 0, second = 0) {
@@ -364,4 +469,90 @@ function updateVisibleItems() {
             item.style.display = index >= activeIndex - 2 && index <= activeIndex + 2 ? "flex" : "none";
         }
     });
+}
+
+async function updateDomainList({ startDate = '', endDate = '' }) {
+    const domainLength = 5;
+    const result = [];
+
+    const sendData = { type: "domain", k: domainLength, startDate: startDate, endDate: endDate };
+
+    chrome.runtime.sendMessage({ senderName: "popup", action: "GET_STATISTICS", data: sendData }, (response) => {
+        const data = response.data;
+        if (data === null) {
+            console.error(`GET_STATISTICS:domain: 데이터 요청 실패: ${response.message}`);
+            return;
+        }
+        for (let i = 0; i < domainLength && data[i]; i++) {
+            const domain = data[i];
+            result.push(domain);
+        }
+        console.log("domainSet:" + result);
+        const domainList = document.getElementById('domain-list');
+        // 도메인 리스트에서 동적으로 추가된 항목만 삭제
+        const dynamicItems = document.querySelectorAll('#domain-list .dynamic');
+        if (dynamicItems) {
+            dynamicItems.forEach(item => {
+                item.remove();
+            })
+        }
+        // 새로 받아온 도메인 리스트 추가
+        result.forEach(domain => {
+            const li = document.createElement('li');
+            li.textContent = domain;
+            li.classList.add('dynamic');
+            li.setAttribute('data-value', `${domain}`);
+            li.addEventListener('click', (event) => {
+                event.stopPropagation();
+                const domainMenu = document.getElementById('domain-menu');
+                const domainLabel = document.getElementById('domain-label');
+                const domainValue = event.target.getAttribute('data-value');
+                domainMenu.style.display = 'none';
+                domainMenu.parentElement.classList.remove('open');
+                domainMenu.setAttribute('data-value', domainValue);
+                domainLabel.textContent = domainValue;
+            });
+            domainList.appendChild(li);
+        })
+    });
+
+}
+
+function getPeriodOptions(period) {
+    const currentDate = new Date();
+    let start_date;
+    let end_date;
+    switch (period) {
+        case 'a-day':
+            start_date = getSubtractDate(currentDate, 0, 0, 1);
+            end_date = currentDate;
+            break;
+        case 'a-week':
+            start_date = getSubtractDate(currentDate, 0, 0, 7);
+            end_date = currentDate;
+            break;
+        case 'a-month':
+            start_date = getSubtractDate(currentDate, 0, 1);
+            end_date = currentDate;
+            break;
+        case 'three-month':
+            start_date = getSubtractDate(currentDate, 0, 3);
+            end_date = currentDate;
+            break;
+        case 'a-year':
+            start_date = getSubtractDate(currentDate, 1);
+            end_date = currentDate;
+            break;
+        case 'user-defined-period':
+            const startDateInput = document.getElementById('startDate');
+            const endDateInput = document.getElementById('endDate');
+            start_date = new Date(startDateInput.value);
+            end_date = new Date(endDateInput.value);
+            break;
+        default:
+            start_date = "";
+            end_date = "";
+            break;
+    }
+    return { startDate: start_date, endDate: end_date };
 }

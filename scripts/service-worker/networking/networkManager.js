@@ -45,6 +45,17 @@ const networkManager = {
             console.log(`POST: search 완료, 반환된 값: ${JSON.stringify(data)}`);
 
             return data;
+        },
+        addCategory: async function (categoryName) {
+            if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다.`);
+            // 카테고리를 추가합니다
+            const path = '/api/category?';
+            const queryString = `categoryName=${encodeURIComponent(categoryName)}`;
+            const fullPath = getFullPath(defaultHost, path + queryString);
+
+            console.log('POST: 카테고리 추가 쿼리스트링:', fullPath);
+            const data = await post(fullPath);
+            console.log(`POST: 카테고리 추가 완료, 반환된 값: ${data}`);
         }
     },
     put: {
@@ -77,6 +88,18 @@ const networkManager = {
             console.log("PUT요청 쿼리스트링:", fullPath);
             const data = await put(fullPath);
             console.log(`PUT: updateHistoryData 완료, 반환된 값: ${JSON.stringify(data)}`);
+            return data;
+        },
+        updateCategory: async function ({ originalName, newName }) {
+            if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다.`);
+            const body = { originalName: originalName, newName:newName };
+            const path = '/api/category';
+
+            const fullPath = getFullPath(defaultHost, path);
+            const stringBody = JSON.stringify(body);
+            console.log("PUT요청: 카테고리 수정");
+            const data = await put(fullPath, stringBody);
+            console.log(`PUT: updateCategory 완료, 반환된 값: ${data}`);
             return data;
         }
     },
@@ -121,6 +144,16 @@ const networkManager = {
             console.log("getHistoryById 요청, 쿼리스트링: " + fullPath);
             const data = await get(fullPath);
             console.log(`GET: getHistoryById 완료, 반환된 값: ${JSON.stringify(data)}`);
+
+            return data;
+        },
+        getCategories: async function () {
+            if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다. networkState: false`);
+            const path = '/api/category';
+            const fullPath = getFullPath(defaultHost, path);
+            console.log("getCategories 요청");
+            const data = await get(fullPath);
+            console.log(`GET: getCategories 완료, 반환된 값: ${JSON.stringify(data)}`);
 
             return data;
         },
@@ -185,7 +218,7 @@ const networkManager = {
         deleteHistory: async function (url) {
             if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다.`);
 
-            //get.search: 해당 시간대에 검색한 키워드를 가져옵니다.
+            //deleteHistory: 특정 데이터를 삭제합니다
             const path = `/api/history?`;
             const queryString = `url=${encodeURIComponent(url)}`;
             const fullPath = getFullPath(defaultHost, path + queryString);
@@ -194,6 +227,18 @@ const networkManager = {
             const data = await del(fullPath);
             console.log(`DELETE: deleteHistory 완료, 반환된 값: ${data}`);
 
+            return data;
+        },
+        deleteCategory: async function (categoryName) {
+            if (getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다.`);
+            // deleteCategory: 특정 카테고리를 삭제합니다
+            const path = '/api/category?';
+            const queryString = `categoryName=${encodeURIComponent(categoryName)}`;
+            const fullPath = getFullPath(defaultHost, path + queryString);
+
+            console.log('deleteCategory 요청, 쿼리스트링:', fullPath);
+            const data = await del(fullPath);
+            console.log(`DELETE: deleteCategory 완료, 반환된 값: ${data}`);
             return data;
         }
     }

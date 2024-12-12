@@ -28,7 +28,7 @@
         </div>
         <div class="page-option">
             <div class="dropdown" data-menu="period-menu">
-                <span class="dropdown-label">기간</span>
+                <span class="dropdown-label" id="period-label">기간</span>
                 <span class="dropdown-arrow"></span>
                 <div class="dropdown-menu" id="period-menu" data-value="">
                     <ul>
@@ -43,12 +43,12 @@
                 </div>
             </div>
             <div class="dropdown" data-menu="domain-menu">
-                <span class="dropdown-label">도메인 필터</span>
+                <span class="dropdown-label" id="domain-label">도메인 필터</span>
                 <span class="dropdown-arrow"></span>
                 <div class="dropdown-menu" id="domain-menu" data-value="">
-                    <ul>
-                        <li data-value="">없음(기본)</li>
-                        <li data-value="user-defined-domain">직접입력</li>
+                    <ul id="domain-list">
+                        <li data-value="" class="static">없음(기본)</li>
+                        <li data-value="user-defined-domain" class="static">직접입력</li>
                     </ul>
                 </div>
             </div>
@@ -70,6 +70,29 @@
                 </label>
             </div>
             <button id="apply-button">적용</button>
+        </div>
+    </div>
+    <div id="select-period-overlay">
+        <div id="select-period-popup">
+            <div id="select-period-popup-label">기간을 선택하세요</div>
+            <div id="select-period-popup-label">시작일</div>
+            <input type="date" class="date-selector" id="startDate" placeholder="시작 날짜">
+            <div id="select-period-popup-label">종료일</div>
+            <input type="date" class="date-selector" id="endDate" placeholder="종료 날짜">
+            <div class="popup-button-container">
+                <button id="select-period-button">설정</button>
+                <button id="close-period-popup-button">취소</button>
+            </div>
+        </div>
+    </div>
+    <div id="set-domain-overlay">
+        <div id="set-domain-popup">
+            <div id="set-domain-popup-label">도메인을 입력하세요</div>
+            <input type="text" class="domain-selector" id="domain-input" placeholder="(ex www.google.com)">
+            <div class="popup-button-container">
+                <button id="set-domain-button">설정</button>
+                <button id="close-domain-popup-button">취소</button>
+            </div>
         </div>
     </div>
     <div class="paging-container">

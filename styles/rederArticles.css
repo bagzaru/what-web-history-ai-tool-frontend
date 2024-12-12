@@ -71,6 +71,7 @@
     margin-bottom: 10px;
     font-weight: 700;
     width: 300px;
+    overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
