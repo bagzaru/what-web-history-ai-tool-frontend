@@ -48,9 +48,12 @@ function loadSearchData() {
     const contentBox = document.getElementById("content-box");
     contentBox.innerHTML = "";
 
-    //로딩 스피너 보이게
-    const loadingContainer = document.querySelector('.loading-container');
+    //로딩 스피너 
+    const loadingContainer = document.querySelector('.loading-spinner');
     loadingContainer.style.opacity = 1;
+
+    const loadingFailureText = document.querySelector('#loading-failure-text');
+    loadingFailureText.classList.add('hidden');
 
     //검색창 맨 위로, option 안보이게
     toggleSearchBoxUIUp(true);

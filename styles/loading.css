@@ -23,7 +23,6 @@ body {
     margin: 0;
     background-color: none;
     font-family: Arial, sans-serif;
-    opacity: 0;
     transition: opacity 0.5s ease;
 }
 
@@ -34,6 +33,7 @@ body {
     border-top: 5px solid #3498db;
     border-radius: 50%;
     animation: spin 1s linear infinite;
+    opacity: 0;
 }
 
 @keyframes spin {
