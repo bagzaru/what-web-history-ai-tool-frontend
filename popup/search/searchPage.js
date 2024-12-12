@@ -48,9 +48,12 @@ function loadSearchData() {
     const contentBox = document.getElementById("content-box");
     contentBox.innerHTML = "";
 
-    //로딩 스피너 보이게
-    const loadingContainer = document.querySelector('.loading-container');
+    //로딩 스피너 
+    const loadingContainer = document.querySelector('.loading-spinner');
     loadingContainer.style.opacity = 1;
+
+    const loadingFailureText = document.querySelector('#loading-failure-text');
+    loadingFailureText.classList.add('hidden');
 
     //검색창 맨 위로, option 안보이게
     toggleSearchBoxUIUp(true);
@@ -79,12 +82,12 @@ function loadSearchData() {
     }
 
     //도메인 설정
-    if (optionData.domain !== undefined) {
+    if (optionData.domain !== undefined && optionData.domain.tag !== "all") {
         searchOption.domain = optionData.domain.text;
     }
 
     //카테고리 설정
-    if (optionData.category !== undefined) {
+    if (optionData.category !== undefined && optionData.category.tag !== "all") {
         searchOption.category = optionData.category.text;
     }
 
@@ -160,27 +163,38 @@ async function getPeriodOptions() {
         {
             type: "period", text: "직접 선택",
             onclick: (label) => {
+                const hid = document.getElementById("popup-calendar");
+                hid.classList.remove("hidden");
                 //TODO: 직접 선택 구현
-                const calendarDiv = document.getElementById("calendar-selection-popup");
-                calendarDiv.style.display = "block";
+                const selectionPopup = document.getElementById("selection-popup");
+                selectionPopup.style.display = "block";
 
                 const confirmButton = document.getElementById("calendar-selection-confirm-button");
                 confirmButton.addEventListener("click", () => {
-                    calendarDiv.style.display = "none";
+                    selectionPopup.style.display = "none";
+                    hid.classList.add("hidden");
 
                     const calendarStart = document.getElementById("calendar-start-date-input");
                     const calendarEnd = document.getElementById("calendar-end-date-input");
 
-                    attachOption(label, {
-                        type: "period", text: `기간: ${calendarStart.value} ~ ${calendarEnd.value}`,
-                        startDate: new Date(calendarStart.value),
-                        endDate: new Date(calendarEnd.value)
-                    });
-
+                    if (calendarStart.value !== "" || calendarEnd.value !== "") {
+                        attachOption(label, {
+                            type: "period", text: `기간: ${calendarStart.value} ~ ${calendarEnd.value}`,
+                            startDate: new Date(calendarStart.value),
+                            endDate: new Date(calendarEnd.value)
+                        });
+                    }
                 });
-                dettachDropdown();
                 //calendar input 가져와 선택한 날짜로 설정
                 //이후 
+            }
+        },
+        {
+            type: "period", text: "모든 기간",
+            onclick: (label) => {
+                attachOption(label, {
+                    type: "period", text: "모든 기간"
+                });
             }
         },
     ];
@@ -190,6 +204,7 @@ async function getCategoryOptions() {
     const categoryLength = 5;
     const result = [];
     const sendData = { type: "category", k: categoryLength, startDate: "", endDate: "" };
+    result.push({ type: "category", text: "모든 카테고리", tag: "all" });
 
     const waitToMessage = () => {
         return new Promise((resolve, reject) => {
@@ -223,7 +238,33 @@ async function getCategoryOptions() {
 async function getDomainOptions() {
     const domainLength = 5;
     const result = [];
-    result.push({ type: "domain", text: "직접 입력", tag: "input" });
+    result.push({
+        type: "domain", text: "직접 입력", tag: "input",
+        onclick: (label) => {
+            const hid = document.getElementById("domain-input-container");
+            hid.classList.remove("hidden");
+            //TODO: 직접 선택 구현
+            const selectionPopup = document.getElementById("selection-popup");
+            selectionPopup.style.display = "block";
+
+            const popupInput = document.getElementById("popup-input");
+
+            const confirmButton = document.getElementById("input-selection-confirm-button");
+            confirmButton.addEventListener("click", () => {
+                hid.classList.add("hidden");
+                selectionPopup.style.display = "none";
+
+                const targetDomain = popupInput.value;
+
+                if (targetDomain !== "") {
+                    attachOption(label, {
+                        type: "domain", text: `${targetDomain}`
+                    });
+                }
+            });
+        }
+    });
+    result.push({ type: "domain", text: "모든 도메인", tag: "all" });
 
     const sendData = { type: "domain", k: domainLength, startDate: "", endDate: "" };
 
@@ -317,13 +358,12 @@ function initDropdown(items, menuName, menuText) {
             //TODO: onClick 존재 시 분기 처리
             if (item.onclick !== undefined) {
                 item.onclick(label);
-                return;
             }
             else {
                 //attach to top side
                 attachOption(label, item);
+                label.textContent = item.text;
             }
-            label.textContent = item.text;
 
             dropdownMenu.style.display = "none";
             dropdown.classList.remove("open");
