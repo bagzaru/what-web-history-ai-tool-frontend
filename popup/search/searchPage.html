@@ -7,55 +7,61 @@
   <title>Google Style Search Page</title>
   <link rel="stylesheet" href="../../styles/searchPage.css">
   <link rel="stylesheet" href="../../styles/dataListPage.css">
+  <link rel="stylesheet" href="../../styles/rederArticles.css">
+  <link rel="stylesheet" href="../../styles/logo.css">
+  <link rel="stylesheet" href="../../styles/loading.css">
 </head>
 
 <body>
-  <div class="container">
-    <!-- 로고 -->
+  <!-- 로고 -->
+  <div class="logo-container">
     <div id="logo" class="logo">
       <h1>WHAT</h1>
       <hr>
       <p>Web History AI Tool</p>
       <h3>방문한 페이지에서 검색하세요.</h3>
     </div>
-
+  </div>
+  <!--로딩 스피너-->
+  <div class="loading-container">
+    <div class="loading-spinner"></div>
+    <div class="hidden" id="loading-failure-text">로딩 실패, 확장프로그램을 다시 열어주세요</div>
+  </div>
+  <!--실제 페이지-->
+  <div class="container" id="container">
     <!-- 검색 박스 -->
-    <div class="search-box">
-      <div class="search-box-inner">
-        <!--검색창 상단 선택된 옵션-->
-        <div id="search-option-box" class="search-box-inner-option">
-        </div>
+    <div class="content-box" id="content-box">
 
-        <!--중앙 검색창-->
-        <div id="" class="search-box-inner-top">
-          <input id="search-input" type="text" class="search-box-inner-top" placeholder="검색">
-        </div>
+    </div>
+  </div>
 
-        <!--검색창 하단 옵션 선택-->
-        <div id="gridcell" class="search-box-inner-bottom">
-          <div class="search-box-inner-bottom-left">
-            <button id="period-set-button">
-              기간
-            </button>
-            <button id="domain-set-button">
-              도메인
-            </button>
-            <button id="category-set-button">
-              카테고리
-            </button>
-            <div id="dropdown-menu" class="dropdown-menu">
-            </div>
+  <div class="search-box bottom" id="search-box">
+    <div class="search-box-inner">
+      <!--검색창 상단 선택된 옵션-->
+      <div id="search-option-box" class="option-container hidden">
+        <div class="search-option">
+          <div class="dropdown" id="period-menu">
+            <span class="dropdown-label"></span>
           </div>
-          <div class="button-box">
-            <button id="search-button" class="search-button">🔍</button>
+          <div class="dropdown" id="domain-menu">
+            <span class="dropdown-label">도메인</span>
+          </div>
+          <div class="dropdown" id="category-menu">
+            <span class="dropdown-label">카테고리</span>
           </div>
         </div>
       </div>
-    </div>
 
-    <div id="option-container" class="option-container">
+      <!--중앙 검색창-->
+      <div id="" class="search-box-inner-top">
+        <input id="search-input" type="text" class="" placeholder="검색">
+        <div class="button-box">
+          <button id="search-button" class="search-button">🔍</button>
+        </div>
+      </div>
+
     </div>
-    <div id="result-container" class="result-container"></div>
+  </div>
   </div>
 
   <!-- 팝업 HTML -->
