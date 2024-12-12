@@ -1,5 +1,6 @@
 html {
   overflow-y: scroll;
+  user-select: none;
 }
 ::-webkit-scrollbar {
   width: 5px;
