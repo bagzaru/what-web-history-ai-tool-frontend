@@ -19,22 +19,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     //옵션 초기화
     const periodSet = await getPeriodOptions();
-    const periodButton = document.getElementById("period-set-button");
-    periodButton.addEventListener("click", () => {
-        attachDropdown(periodSet);
-    });
+    initDropdown(periodSet, "period-menu", "기간");
 
     const domainSet = await getDomainOptions();
-    const domainButton = document.getElementById("domain-set-button");
-    domainButton.addEventListener("click", () => {
-        attachDropdown(domainSet);
-    });
+    initDropdown(domainSet, "domain-menu", "도메인");
 
     const categorySet = await getCategoryOptions();
-    const categoryButton = document.getElementById("category-set-button");
-    categoryButton.addEventListener("click", () => {
-        attachDropdown(categorySet);
-    });
+    initDropdown(categorySet, "category-menu", "카테고리");
 });
 
 
@@ -91,64 +82,15 @@ function loadSearchData() {
     });
 }
 
-//드랍다운 생성
-function attachDropdown(items) {
-    dettachDropdown();
-    const dropdownMenu = document.getElementById("option-container");
-
-    items.forEach((item) => {
-        const selector = document.createElement('div');
-        if (item.tag === "input") {
-            selector.classList.add("input");
-            selector.type = "text";
-            selector.placeholder = item.text;
-
-            const onButtonClick = () => {
-                attachOption({ type: item.type, text: input.value });
-                dettachDropdown();
-            };
-
-            const input = document.createElement('input');
-            input.placeholder = item.text;
-            input.addEventListener('keydown', (e) => {
-                if (e.key === "Enter") {
-                    onButtonClick();
-                }
-            });
-            selector.appendChild(input);
-
-            const inputButton = document.createElement('button');
-            inputButton.textContent = "✅";
-            inputButton.addEventListener('click', onButtonClick);
-            selector.appendChild(inputButton);
-        }
-        else {
-            selector.textContent = item.text;
-            selector.classList.add("selector");
-            selector.addEventListener('click', () => {
-                //TODO: onClick 존재 시 분기 처리
-                if (item.onclick !== undefined) {
-                    item.onclick();
-                    return;
-                }
-                //attach to top side
-                attachOption(item);
-                dettachDropdown();
-            });
-        }
-
-        dropdownMenu.appendChild(selector);
-    });
-}
-
 function dettachDropdown() {
     const dropdownMenu = document.getElementById("option-container");
     dropdownMenu.innerHTML = "";
 }
 
-function attachOption(option) {
+function attachOption(label, option) {
     optionData[option.type] = option;
-    renderOptionData();
+    label.textContent = option.text;
+
 }
 
 function renderOptionData() {
@@ -183,7 +125,7 @@ async function getPeriodOptions() {
         { type: "period", text: "1년 이내", date: getSubtractDate(currentDate, 1) },
         {
             type: "period", text: "직접 선택",
-            onclick: () => {
+            onclick: (label) => {
                 //TODO: 직접 선택 구현
                 const calendarDiv = document.getElementById("calendar-selection-popup");
                 calendarDiv.style.display = "block";
@@ -195,7 +137,7 @@ async function getPeriodOptions() {
                     const calendarStart = document.getElementById("calendar-start-date-input");
                     const calendarEnd = document.getElementById("calendar-end-date-input");
 
-                    attachOption({
+                    attachOption(label, {
                         type: "period", text: `기간: ${calendarStart.value} ~ ${calendarEnd.value}`,
                         startDate: new Date(calendarStart.value),
                         endDate: new Date(calendarEnd.value)
@@ -213,24 +155,35 @@ async function getPeriodOptions() {
 async function getCategoryOptions() {
     const categoryLength = 5;
     const result = [];
-    result.push({ type: "category", text: "직접 입력", tag: "input" });
-
     const sendData = { type: "category", k: categoryLength, startDate: "", endDate: "" };
 
-    chrome.runtime.sendMessage({ senderName: "popup", action: "GET_STATISTICS", data: sendData }, (response) => {
-        const data = response.data;
-        if (data === null) {
-            console.error(`GET_STATISTICS:category: 데이터 요청 실패: ${response.message}`);
-            return;
-        }
-        for (let i = categoryLength - 1; i >= 0; i--) {
-            const domain = { type: "category", text: `${data[i]}` };
-            result.unshift(domain);
-        }
-        console.log("categorySet:" + JSON.stringify(result));
-    });
-    return result;
+    const waitToMessage = () => {
+        return new Promise((resolve, reject) => {
+            chrome.runtime.sendMessage({ senderName: "popup", action: "GET_STATISTICS", data: sendData }, (response) => {
+                if (chrome.runtime.lastError) {
+                    reject(chrome.runtime.lastError);
+                } else {
+                    resolve(response);
+                }
+            });
+        });
+    }
 
+    // 사용 예시
+    const response = await waitToMessage();
+
+    const data = response.data;
+    if (data === null) {
+        console.error(`GET_STATISTICS:category: 데이터 요청 실패: ${response.message}`);
+        return;
+    }
+    for (let i = categoryLength - 1; i >= 0; i--) {
+        const domain = { type: "category", text: `${data[i]}` };
+        result.unshift(domain);
+    }
+    console.log("categorySet:" + JSON.stringify(result));
+
+    return result;
 }
 
 async function getDomainOptions() {
@@ -240,17 +193,115 @@ async function getDomainOptions() {
 
     const sendData = { type: "domain", k: domainLength, startDate: "", endDate: "" };
 
-    chrome.runtime.sendMessage({ senderName: "popup", action: "GET_STATISTICS", data: sendData }, (response) => {
-        const data = response.data;
-        if (data === null) {
-            console.error(`GET_STATISTICS:domain: 데이터 요청 실패: ${response.message}`);
-            return;
-        }
-        for (let i = domainLength - 1; i >= 0; i--) {
-            const domain = { type: "domain", text: `${data[i]}` };
-            result.unshift(domain);
-        }
-        console.log("domainSet:" + JSON.stringify(result));
-    });
+    const waitToMessage = () => {
+        return new Promise((resolve, reject) => {
+            chrome.runtime.sendMessage({ senderName: "popup", action: "GET_STATISTICS", data: sendData }, (response) => {
+                if (chrome.runtime.lastError) {
+                    reject(chrome.runtime.lastError);
+                } else {
+                    resolve(response);
+                }
+            });
+        });
+    }
+
+
+    // 사용 예시
+    const response = await waitToMessage();
+    const data = response.data;
+    if (data === null) {
+        console.error(`GET_STATISTICS:domain: 데이터 요청 실패: ${response.message}`);
+        return;
+    }
+    for (let i = domainLength - 1; i >= 0; i--) {
+        const domain = { type: "domain", text: `${data[i]}` };
+        result.unshift(domain);
+    }
+    console.log("domainSet:" + JSON.stringify(result));
+
     return result;
+}
+
+function closeAllDropdowns(exceptDropdown) {
+    // 다른 드롭다운 닫기
+    const dropdowns = document.querySelectorAll('.dropdown');
+    dropdowns.forEach((dropdown) => {
+        dropdown.classList.remove('open');
+    });
+    const dropdownMenus = document.querySelectorAll('.dropdown-menu');
+    dropdownMenus.forEach((menu) => {
+        menu.style.display = 'none';
+    });
+}
+
+function initDropdown(items, menuName, menuText) {
+    const dropdown = document.getElementById(menuName);
+    console.log("initDropdown" + dropdown);
+
+    const label = document.createElement('span');
+    label.textContent = menuText;
+    label.classList.add("dropdown-label");
+    dropdown.appendChild(label);
+
+    const arrow = document.createElement('span');
+    arrow.classList.add("dropdown-arrow");
+    dropdown.appendChild(arrow);
+
+    const dropdownMenu = document.createElement('div');
+    dropdownMenu.id = "dropdown-menu";
+    dropdownMenu.classList.add('dropdown-menu');
+    dropdown.appendChild(dropdownMenu);
+
+    const ul = document.createElement('ul');
+    dropdownMenu.appendChild(ul);
+
+    //드랍다운 클릭 시 이벤트
+    dropdown.addEventListener('click', (event) => {
+        event.stopPropagation(); // 드롭다운 내부 클릭 이벤트가 상위로 전달되지 않도록 방지
+        // 다른 드롭다운 닫기
+        closeAllDropdowns(dropdown);
+        // 현재 드롭다운 토글
+        if (dropdown.classList.contains('open')) {
+            dropdownMenu.style.display = 'none';
+            dropdown.classList.remove('open');
+        } else {
+            dropdownMenu.style.display = 'block';
+            dropdown.classList.add('open');
+        }
+    });
+
+    //각 아이템에 대해 요소 추가
+    items.forEach((item) => {
+        const li = document.createElement('li');
+        li.textContent = item.text;
+        console.log("item:" + item.text);
+
+        li.addEventListener('click', (event) => {
+            event.stopPropagation();
+            //TODO: onClick 존재 시 분기 처리
+            if (item.onclick !== undefined) {
+                item.onclick(label);
+                return;
+            }
+            else {
+                //attach to top side
+                attachOption(label, item);
+            }
+            label.textContent = item.text;
+
+            dropdownMenu.style.display = "none";
+            dropdown.classList.remove("open");
+        });
+        ul.appendChild(li);
+    });
+
+
+    // 외부 클릭 감지 및 드롭다운 닫기
+    document.addEventListener('click', () => {
+        dropdown.classList.remove('open');
+        dropdownMenu.style.display = 'none';
+    });
+
+    dropdown.classList.remove('open');
+    dropdownMenu.style.display = 'none';
 }
