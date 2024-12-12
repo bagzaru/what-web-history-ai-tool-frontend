@@ -51,11 +51,14 @@ function loadSearchData() {
     contentBox.innerHTML = "";
 
     //로딩 스피너 
-    const loadingContainer = document.querySelector('.loading-spinner');
-    loadingContainer.style.opacity = 1;
+    const loadingSpinner = document.querySelector('.loading-spinner');
+    loadingSpinner.classList.remove('hidden');
+    loadingSpinner.style.opacity = 1;
 
     const loadingFailureText = document.querySelector('#loading-failure-text');
     loadingFailureText.classList.add('hidden');
+    const loadingEmptyText = document.querySelector('#loading-empty-text');
+    loadingEmptyText.classList.add('hidden');
 
     //검색창 맨 위로, option 안보이게
     toggleSearchBoxUIUp(true);
@@ -96,15 +99,23 @@ function loadSearchData() {
     chrome.runtime.sendMessage({ senderName: "popup", action: "GET_SEARCH_DATA_LIST", data: searchOption }, (response) => {
         const data = response.data;
         //로딩 스피너 안보이게
-        loadingContainer.style.opacity = 0;
+        loadingSpinner.style.opacity = 0;
         if (data === null) {
             console.error(`GET_SEARCH_DATA_LIST: 데이터 요청 실패: ${response.message}`);
             const loadingFailureText = document.querySelector('#loading-failure-text');
             loadingFailureText.classList.remove('hidden');
+            loadingSpinner.classList.add('hidden');
             return;
         }
 
         console.log("검색창 검색 결과 로드 완료");
+
+        if (data.length === 0) {
+            const loadingEmptyText = document.querySelector('#loading-empty-text');
+            loadingEmptyText.classList.remove('hidden');
+            loadingSpinner.classList.add('hidden');
+            return;
+        }
 
         const articleContainer = document.createElement("div");
         articleContainer.id = "article-container";
