@@ -65,9 +65,9 @@
   </div>
 
   <!-- 팝업 HTML -->
-  <div class="popup-overlay" id="calendar-selection-popup">
+  <div class="popup-overlay" id="selection-popup">
     <div class="popup-content">
-      <div class="calendar">
+      <div class="calendar hidden" id="popup-calendar">
         <div>
           <h3>시작일</h3>
           <input type="date" id="calendar-start-date-input" />
@@ -78,7 +78,12 @@
         </div>
         <button class="close-btn" id="calendar-selection-confirm-button">완료</button>
       </div>
+      <div class="hidden" id="domain-input-container">
+        <input type="text" id="popup-input" placeholder="도메인 입력" />
+        <button class="close-btn" id="input-selection-confirm-button">완료</button>
+      </div>
     </div>
+
   </div>
   <script src="searchPage.js" type="module"></script>
 </body>

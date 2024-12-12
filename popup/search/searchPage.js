@@ -163,13 +163,16 @@ async function getPeriodOptions() {
         {
             type: "period", text: "직접 선택",
             onclick: (label) => {
+                const hid = document.getElementById("popup-calendar");
+                hid.classList.remove("hidden");
                 //TODO: 직접 선택 구현
-                const calendarDiv = document.getElementById("calendar-selection-popup");
-                calendarDiv.style.display = "block";
+                const selectionPopup = document.getElementById("selection-popup");
+                selectionPopup.style.display = "block";
 
                 const confirmButton = document.getElementById("calendar-selection-confirm-button");
                 confirmButton.addEventListener("click", () => {
-                    calendarDiv.style.display = "none";
+                    selectionPopup.style.display = "none";
+                    hid.classList.add("hidden");
 
                     const calendarStart = document.getElementById("calendar-start-date-input");
                     const calendarEnd = document.getElementById("calendar-end-date-input");
@@ -235,7 +238,32 @@ async function getCategoryOptions() {
 async function getDomainOptions() {
     const domainLength = 5;
     const result = [];
-    result.push({ type: "domain", text: "직접 입력", tag: "input" });
+    result.push({
+        type: "domain", text: "직접 입력", tag: "input",
+        onclick: (label) => {
+            const hid = document.getElementById("domain-input-container");
+            hid.classList.remove("hidden");
+            //TODO: 직접 선택 구현
+            const selectionPopup = document.getElementById("selection-popup");
+            selectionPopup.style.display = "block";
+
+            const popupInput = document.getElementById("popup-input");
+
+            const confirmButton = document.getElementById("input-selection-confirm-button");
+            confirmButton.addEventListener("click", () => {
+                hid.classList.add("hidden");
+                selectionPopup.style.display = "none";
+
+                const targetDomain = popupInput.value;
+
+                if (targetDomain !== "") {
+                    attachOption(label, {
+                        type: "domain", text: `${targetDomain}`
+                    });
+                }
+            });
+        }
+    });
     result.push({ type: "domain", text: "모든 도메인", tag: "all" });
 
     const sendData = { type: "domain", k: domainLength, startDate: "", endDate: "" };
