@@ -5,6 +5,8 @@ const searchInput = document.getElementById('search-input');
 
 const contentBox = document.getElementById('content-box');
 
+let allCategories = [];
+
 let optionData = {};
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -112,7 +114,8 @@ function loadSearchData() {
         articleContainer.style.marginBottom = "0px";
         articleContainer.style.marginTop = "96px";
 
-        const renderResult = renderArticles(data, [searchOption.category]);
+        const copiedCategories = [...allCategories];
+        const renderResult = renderArticles(data, copiedCategories);
 
         articleContainer.appendChild(renderResult);
         contentBox.appendChild(articleContainer);
@@ -226,9 +229,11 @@ async function getCategoryOptions() {
         console.error(`GET_STATISTICS:category: 데이터 요청 실패: ${response.message}`);
         return;
     }
+    allCategories = [];
     for (let i = categoryLength - 1; i >= 0; i--) {
         const domain = { type: "category", text: `${data[i]}` };
         result.unshift(domain);
+        allCategories.push(data[i]);
     }
     console.log("categorySet:" + JSON.stringify(result));
 
