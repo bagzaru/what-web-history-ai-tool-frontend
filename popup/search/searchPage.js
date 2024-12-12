@@ -105,7 +105,7 @@ function loadSearchData() {
         //TODO: css로 해결
         articleContainer.style.margin = "8px";
         articleContainer.style.marginBottom = "0px";
-        articleContainer.style.marginTop = "106px";
+        articleContainer.style.marginTop = "96px";
 
         const renderResult = renderArticles(data, [searchOption.category]);
 
@@ -350,7 +350,9 @@ function toggleSearchOptionUIOnOff(flag = true) {
 
 function toggleSearchBoxUIUp(up = true) {
     const searchBox = document.getElementById("search-box");
+    const searchBoxInner = document.getElementById("search-box-inner");
     const optionBox = document.getElementById("search-option-box");
+    const searchInputContainer = document.getElementById("search-input-container");
     if (up === true) {
         searchBox.classList.add("top");
         searchBox.classList.remove("bottom");
@@ -361,6 +363,11 @@ function toggleSearchBoxUIUp(up = true) {
             dropdown.style.top = "0";
             dropdown.style.bottom = "auto";
         });
+
+        //optionBox 아래로 나오게
+        if (optionBox.nextElementSibling === searchInputContainer) {
+            searchBoxInner.insertBefore(searchInputContainer, optionBox);
+        }
     }
     else {
         searchBox.classList.add("top");
@@ -371,6 +378,10 @@ function toggleSearchBoxUIUp(up = true) {
             dropdown.style.top = "auto";
             dropdown.style.bottom = "0";
         });
+
+        if (searchInputContainer.nextElementSibling === optionBox) {
+            searchBoxInner.insertBefore(optionBox, searchInputContainer);
+        }
     }
 
 }
