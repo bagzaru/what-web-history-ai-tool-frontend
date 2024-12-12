@@ -96,11 +96,11 @@ html{
 }
 
 .menu-list li.active{
-    background-color: rgba(168,143,86,0.5);
+    background-color: rgba(168,143,86,0.7);
 }
 
 .menu-list li:hover {
-    color: #9E9E9E;
+    color: #b3b3b3;
 }
 
 /* 스크롤 버튼 */

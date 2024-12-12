@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const menuId = dropdown.getAttribute('data-menu');
         const menu = document.getElementById(menuId);
 
-        dropdown.addEventListener('click', (event) => {
+        dropdown.addEventListener('click', async(event) => {
             event.stopPropagation(); // 드롭다운 내부 클릭 이벤트가 상위로 전달되지 않도록 방지
             // 다른 드롭다운 닫기
             dropdowns.forEach((otherDropdown) => {
@@ -36,6 +36,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                     if (otherMenu) otherMenu.style.display = 'none';
                 }
             });
+            // 도메인 설정 드롭다운 일 때
+            if (dropdown.getAttribute('data-menu') === 'domain-menu'){
+                await updateDomainList({startDate: currentQueries.startTime, endDate: currentQueries.endTime});
+            }
             // 현재 드롭다운 토글
             if (dropdown.classList.contains('open')) {
                 menu.style.display = 'none';
@@ -64,7 +68,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                     } else {
                         const period = getPeriodOptions(selectedValue);
                         console.log('period:',period)
-                        await updateDomainList(period);
                         currentQueries.startTime = period.startDate;
                         currentQueries.endTime = period.endDate;
                     }
@@ -132,7 +135,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
         const periodLabel = document.getElementById('period-label');
         const period = getPeriodOptions('user-defined-period');
-        await updateDomainList(period);
         periodLabel.textContent = `${startTimeInput.value.slice(2)}~${endTimeInput.value.slice(2)}`;
         currentQueries.startTime = period.startDate;
         currentQueries.endTime = period.endDate;
@@ -144,7 +146,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         event.stopPropagation();
         const periodLabel = document.getElementById('period-label');
         const setPeriodPopup = document.getElementById('select-period-overlay');
-        await updateDomainList({});
         periodLabel.textContent = '기간';
         setPeriodPopup.style.display = 'none';
         currentQueries.startTime = "";
