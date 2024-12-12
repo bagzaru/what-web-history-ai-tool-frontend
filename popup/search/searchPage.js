@@ -45,6 +45,9 @@ function loadSearchData() {
     const logo = document.querySelector(".logo-container");
     logo.style.opacity = 0;
 
+    const contentBox = document.getElementById("content-box");
+    contentBox.innerHTML = "";
+
     //로딩 스피너 보이게
     const loadingContainer = document.querySelector('.loading-container');
     loadingContainer.style.opacity = 1;
@@ -98,9 +101,13 @@ function loadSearchData() {
 
         console.log("검색창 검색 결과 로드 완료");
 
-        const contentBox = document.getElementById("content-box");
         const articleContainer = document.createElement("div");
         articleContainer.id = "article-container";
+        //article-renderer 마진 바텀 강제 조정
+        //TODO: css로 해결
+        articleContainer.style.margin = "8px";
+        articleContainer.style.marginBottom = "0px";
+        articleContainer.style.marginTop = "96px";
 
         const renderResult = renderArticles(data, [searchOption.category]);
 
@@ -345,7 +352,9 @@ function toggleSearchOptionUIOnOff(flag = true) {
 
 function toggleSearchBoxUIUp(up = true) {
     const searchBox = document.getElementById("search-box");
+    const searchBoxInner = document.getElementById("search-box-inner");
     const optionBox = document.getElementById("search-option-box");
+    const searchInputContainer = document.getElementById("search-input-container");
     if (up === true) {
         searchBox.classList.add("top");
         searchBox.classList.remove("bottom");
@@ -356,6 +365,11 @@ function toggleSearchBoxUIUp(up = true) {
             dropdown.style.top = "0";
             dropdown.style.bottom = "auto";
         });
+
+        //optionBox 아래로 나오게
+        if (optionBox.nextElementSibling === searchInputContainer) {
+            searchBoxInner.insertBefore(searchInputContainer, optionBox);
+        }
     }
     else {
         searchBox.classList.add("top");
@@ -366,6 +380,10 @@ function toggleSearchBoxUIUp(up = true) {
             dropdown.style.top = "auto";
             dropdown.style.bottom = "0";
         });
+
+        if (searchInputContainer.nextElementSibling === optionBox) {
+            searchBoxInner.insertBefore(optionBox, searchInputContainer);
+        }
     }
 
 }
