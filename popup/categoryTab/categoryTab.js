@@ -4,7 +4,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     const categories = await getCategories();
     // 저장된 카테고리 리스트를 보여줌.
     categories.forEach((category) => {
-        addCategoryItem(category);
+        if (category !== '기타'){
+            addCategoryItem(category);
+        }
     });
     const saveButton = document.getElementById('save-button');
     saveButton.addEventListener('click', () => {
