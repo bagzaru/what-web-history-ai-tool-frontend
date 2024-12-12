@@ -30,6 +30,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
 function loadSearchData() {
+    //로고 사라지게
+    const logo = document.querySelector(".logo-container");
+    logo.style.opacity = 0;
+
+
     const searchOption = {
         query: searchInput.value,
         startDate: "",
