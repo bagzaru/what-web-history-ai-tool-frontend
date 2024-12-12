@@ -385,9 +385,9 @@ function initDropdown(items, menuName, menuText) {
 function toggleSearchOptionUIOnOff(flag = true) {
     const searchOptionBox = document.getElementById("search-option-box");
     searchOptionBox.classList.remove("hidden");
-    if (flag === false) {
-        searchOptionBox.classList.add("hidden");
-    }
+    // if (flag === false) {
+    //     searchOptionBox.classList.add("hidden");
+    // }
 }
 
 function toggleSearchBoxUIUp(up = true) {
