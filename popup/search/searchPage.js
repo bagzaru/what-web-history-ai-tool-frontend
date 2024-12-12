@@ -45,6 +45,9 @@ function loadSearchData() {
     const logo = document.querySelector(".logo-container");
     logo.style.opacity = 0;
 
+    const contentBox = document.getElementById("content-box");
+    contentBox.innerHTML = "";
+
     //로딩 스피너 보이게
     const loadingContainer = document.querySelector('.loading-container');
     loadingContainer.style.opacity = 1;
@@ -98,7 +101,6 @@ function loadSearchData() {
 
         console.log("검색창 검색 결과 로드 완료");
 
-        const contentBox = document.getElementById("content-box");
         const articleContainer = document.createElement("div");
         articleContainer.id = "article-container";
         //article-renderer 마진 바텀 강제 조정
