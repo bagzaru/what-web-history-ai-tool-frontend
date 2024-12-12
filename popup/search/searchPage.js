@@ -342,16 +342,14 @@ function toggleSearchOptionUIOnOff(flag = true) {
 }
 
 function toggleSearchBoxUIUp(up = true) {
-    const container = document.getElementById("container");
     const searchBox = document.getElementById("search-box");
-    const contentBox = document.getElementById("content-box");
-
     if (up === true) {
-        if (contentBox.nextElementSibling === searchBox)
-            container.insertBefore(searchBox, contentBox);
+        searchBox.classList.add("top");
+        searchBox.classList.remove("bottom");
     }
     else {
-        if (searchBox.nextElementSibling === contentBox)
-            container.insertBefore(contentBox, searchBox);
+        searchBox.classList.add("top");
+        searchBox.classList.remove("bottom");
     }
+
 }
