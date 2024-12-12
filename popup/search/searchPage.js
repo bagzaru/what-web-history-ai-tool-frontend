@@ -101,6 +101,11 @@ function loadSearchData() {
         const contentBox = document.getElementById("content-box");
         const articleContainer = document.createElement("div");
         articleContainer.id = "article-container";
+        //article-renderer 마진 바텀 강제 조정
+        //TODO: css로 해결
+        articleContainer.style.margin = "8px";
+        articleContainer.style.marginBottom = "0px";
+        articleContainer.style.marginTop = "106px";
 
         const renderResult = renderArticles(data, [searchOption.category]);
 
