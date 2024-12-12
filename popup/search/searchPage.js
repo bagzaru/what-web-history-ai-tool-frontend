@@ -204,7 +204,9 @@ async function getPeriodOptions() {
 }
 
 async function getCategoryOptions() {
-    const categoryLength = 5;
+    const tempCategories = await getCategories();
+    const categoryLength = tempCategories.length;
+    console.log("카테고리옵션: " + JSON.stringify(tempCategories));
     const result = [];
     const sendData = { type: "category", k: categoryLength, startDate: "", endDate: "" };
     result.push({ type: "category", text: "모든 카테고리", tag: "all" });
@@ -431,4 +433,17 @@ function toggleSearchBoxUIUp(up = true) {
         }
     }
 
+}
+
+// 카테고리를 가져오는 함수
+function getCategories() {
+    return new Promise((resolve, reject) => {
+        chrome.storage.sync.get("categories", (result) => {
+            if (chrome.runtime.lastError) {
+                reject(chrome.runtime.lastError);
+            } else {
+                resolve(result.categories); //return token
+            }
+        });
+    });
 }
