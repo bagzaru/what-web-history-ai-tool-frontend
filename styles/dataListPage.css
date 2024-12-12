@@ -418,7 +418,7 @@ html{
     font-weight: 700;
   }
   #select-period-button {
-    margin-top: 10px;
+    margin: 5px;
     user-select: none;
     padding: 0;
     right: 0;
@@ -439,6 +439,29 @@ html{
 }
 #select-period-button:hover {
     background-color: #0056b3;
+}
+#close-period-popup-button {
+    margin: 5px;
+    user-select: none;
+    padding: 0;
+    right: 0;
+    height: 25px;
+    width: 40px;
+    background-color: #BE2E22;
+    color: #F5F5F5;
+    font-family: 'Pretendard';
+    font-weight: 400;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+}
+#close-period-popup-button:hover {
+    background-color: #F05650;
 }
 .date-selector {
     width: 120px;
@@ -477,7 +500,7 @@ html{
     left: 50%;
     transform: translate(-50%, -50%); /* 중앙 정렬 */
     width: 200px;
-    height: 200px;
+    height: 150px;
     background-color: #F5F5F5;
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
@@ -497,7 +520,7 @@ html{
     font-weight: 700;
   }
   #set-domain-button {
-    margin-top: 10px;
+    margin: 5px;
     user-select: none;
     padding: 0;
     right: 0;
@@ -519,6 +542,29 @@ html{
 #set-domain-button:hover {
     background-color: #0056b3;
 }
+#close-domain-popup-button {
+    margin: 5px;
+    user-select: none;
+    padding: 0;
+    right: 0;
+    height: 25px;
+    width: 40px;
+    background-color: #BE2E22;
+    color: #F5F5F5;
+    font-family: 'Pretendard';
+    font-weight: 400;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+}
+#close-domain-popup-button:hover {
+    background-color: #F05650;
+}
 .domain-selector {
     width: 150px;
     font-size: 13px;
@@ -537,4 +583,10 @@ html{
 .domain-selector:hover {
     background-color: #ffffff; /* 배경 색상 */
     transition: 0.3s;
+}
+
+.popup-button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

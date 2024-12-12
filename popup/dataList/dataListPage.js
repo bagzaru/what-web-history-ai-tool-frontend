@@ -137,7 +137,19 @@ document.addEventListener("DOMContentLoaded", async () => {
         currentQueries.startTime = period.startDate;
         currentQueries.endTime = period.endDate;
         parent.style.display = 'none'
-    })
+    });
+    //기간 설정 팝업 닫기 버튼
+    const closePeriodPopup = document.getElementById('close-period-popup-button');
+    closePeriodPopup.addEventListener('click', async(event) => {
+        event.stopPropagation();
+        const periodLabel = document.getElementById('period-label');
+        const setPeriodPopup = document.getElementById('select-period-overlay');
+        await updateDomainList({});
+        periodLabel.textContent = '기간';
+        setPeriodPopup.style.display = 'none';
+        currentQueries.startTime = "";
+        currentQueries.endTime = "";
+    });
 
     // 도메인 설정 버튼 리스너
     const setDomainButton = document.getElementById('set-domain-button');
@@ -156,7 +168,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         domainLabel.textContent = domainInput.value;
         setDomainPopup.style.display = 'none';
     })
-    // 도메인 설정 버튼 리스너
+    // 도메인 설정시 엔터키 리스너
     const setDomainInput = document.getElementById('domain-input');
     setDomainInput.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') {
@@ -173,7 +185,14 @@ document.addEventListener("DOMContentLoaded", async () => {
             domainLabel.textContent = event.target.value;
             setDomainPopup.style.display = 'none';
         }
-    })
+    });
+    //도메인 설정 팝업 닫기 버튼
+    const closeDomainPopup = document.getElementById('close-domain-popup-button');
+    closeDomainPopup.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const setDomainPopup = document.getElementById('set-domain-overlay');
+        setDomainPopup.style.display = 'none';
+    });
 });
 
 function getSubtractDate(date, year = 0, month = 0, day = 0, hour = 0, minute = 0, second = 0) {
