@@ -265,10 +265,8 @@ function initDropdown(items, menuName, menuText) {
     const dropdown = document.getElementById(menuName);
     console.log("initDropdown" + dropdown);
 
-    const label = document.createElement('span');
+    const label = dropdown.querySelector('.dropdown-label');
     label.textContent = menuText;
-    label.classList.add("dropdown-label");
-    dropdown.appendChild(label);
 
     const arrow = document.createElement('span');
     arrow.classList.add("dropdown-arrow");
@@ -281,6 +279,10 @@ function initDropdown(items, menuName, menuText) {
 
     const ul = document.createElement('ul');
     dropdownMenu.appendChild(ul);
+
+    //dropdown들 위로 나오게
+    dropdownMenu.style.top = "auto";
+    dropdownMenu.style.bottom = "0";
 
     //드랍다운 클릭 시 이벤트
     dropdown.addEventListener('click', (event) => {
@@ -343,13 +345,27 @@ function toggleSearchOptionUIOnOff(flag = true) {
 
 function toggleSearchBoxUIUp(up = true) {
     const searchBox = document.getElementById("search-box");
+    const optionBox = document.getElementById("search-option-box");
     if (up === true) {
         searchBox.classList.add("top");
         searchBox.classList.remove("bottom");
+
+        //dropdown들 아래로 나오게
+        const dropdowns = document.querySelectorAll('.dropdown-menu');
+        dropdowns.forEach((dropdown) => {
+            dropdown.style.top = "0";
+            dropdown.style.bottom = "auto";
+        });
     }
     else {
         searchBox.classList.add("top");
         searchBox.classList.remove("bottom");
+
+        //dropdown들 위로 나오게
+        dropdowns.forEach((dropdown) => {
+            dropdown.style.top = "auto";
+            dropdown.style.bottom = "0";
+        });
     }
 
 }
