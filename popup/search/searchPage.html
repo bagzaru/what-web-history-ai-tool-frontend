@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="../../styles/dataListPage.css">
   <link rel="stylesheet" href="../../styles/rederArticles.css">
   <link rel="stylesheet" href="../../styles/logo.css">
+  <link rel="stylesheet" href="../../styles/loading.css">
 </head>
 
 <body>
@@ -20,6 +21,11 @@
       <p>Web History AI Tool</p>
       <h3>방문한 페이지에서 검색하세요.</h3>
     </div>
+  </div>
+  <!--로딩 스피너-->
+  <div class="loading-container">
+    <div class="loading-spinner"></div>
+    <div class="hidden" id="loading-failure-text">로딩 실패, 확장프로그램을 다시 열어주세요</div>
   </div>
   <!--실제 페이지-->
   <div class="container">

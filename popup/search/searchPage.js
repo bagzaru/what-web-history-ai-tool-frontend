@@ -34,6 +34,9 @@ function loadSearchData() {
     const logo = document.querySelector(".logo-container");
     logo.style.opacity = 0;
 
+    //로딩 스피너 보이게
+    const loadingContainer = document.querySelector('.loading-container');
+    loadingContainer.style.opacity = 1;
 
     const searchOption = {
         query: searchInput.value,
@@ -69,8 +72,12 @@ function loadSearchData() {
 
     chrome.runtime.sendMessage({ senderName: "popup", action: "GET_SEARCH_DATA_LIST", data: searchOption }, (response) => {
         const data = response.data;
+        //로딩 스피너 안보이게
+        loadingContainer.style.opacity = 0;
         if (data === null) {
             console.error(`GET_SEARCH_DATA_LIST: 데이터 요청 실패: ${response.message}`);
+            const loadingFailureText = document.querySelector('#loading-failure-text');
+            loadingFailureText.classList.remove('hidden');
             return;
         }
 
