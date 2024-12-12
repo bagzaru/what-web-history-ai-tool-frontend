@@ -22,14 +22,17 @@ const onGetAllDataList = {
         console.log("queries:", message.queries);    
         const queries = message.queries || {};
 
-        let startDate = queries.startTime || defaultStartDate;
-        let endDate = queries.endTime || defaultEndDate;
+        let startDate = new Date(queries.startTime || defaultStartDate);
+        let endDate = new Date(queries.endTime || defaultEndDate);
         let domain = queries.domain || defaultDomain;
         let category = queries.category || defaultCategory;
         let page = queries.page || defaultPage;
         let size = queries.size || defaultSize;
         let orderBy = queries.sortBy || defaultOrderBy;
         let sortOrder = queries.sortOrder || defaultSortOrder;
+        startDate.setHours(0, 0, 0, 0);
+        endDate.setHours(23, 59, 59, 999);
+        console.log("GET_ALL_DATA_LIST: 수정된 start-end Date: " + startDate + " ~ " + endDate);
 
         const data = await networkManager.get.getHistories(orderBy, startDate, endDate, page, size, sortOrder, domain, category);
 

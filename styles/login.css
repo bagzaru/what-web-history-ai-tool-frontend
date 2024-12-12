@@ -3,7 +3,7 @@
     user-select: none;
 }
 .container {
-    background: #F5F5F5;
+    background: transparent;
     height: 350px;
     width: 350px;
     display: flex;
