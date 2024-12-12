@@ -7,23 +7,31 @@
   <title>Google Style Search Page</title>
   <link rel="stylesheet" href="../../styles/searchPage.css">
   <link rel="stylesheet" href="../../styles/dataListPage.css">
+  <link rel="stylesheet" href="../../styles/rederArticles.css">
+  <link rel="stylesheet" href="../../styles/logo.css">
 </head>
 
 <body>
-  <div class="container">
-    <!-- 로고 -->
+  <!-- 로고 -->
+  <div class="logo-container">
     <div id="logo" class="logo">
       <h1>WHAT</h1>
       <hr>
       <p>Web History AI Tool</p>
       <h3>방문한 페이지에서 검색하세요.</h3>
     </div>
-
+  </div>
+  <!--실제 페이지-->
+  <div class="container">
     <!-- 검색 박스 -->
-    <div class="search-box">
+    <div class="content-box" id="content-box">
+
+    </div>
+    <div class="search-box" id="search-box">
       <div class="search-box-inner">
         <!--검색창 상단 선택된 옵션-->
         <div id="search-option-box" class="search-box-inner-option">
+
         </div>
 
         <!--중앙 검색창-->
@@ -52,10 +60,6 @@
         </div>
       </div>
     </div>
-
-    <div id="option-container" class="option-container">
-    </div>
-    <div id="result-container" class="result-container"></div>
   </div>
 
   <!-- 팝업 HTML -->

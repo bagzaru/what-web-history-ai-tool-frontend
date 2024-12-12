@@ -3,7 +3,7 @@ import renderArticles from "../renderArticles/renderArticles.js";
 const searchButton = document.getElementById('search-button');
 const searchInput = document.getElementById('search-input');
 
-const resultContainer = document.getElementById('result-container');
+const contentBox = document.getElementById('content-box');
 
 let optionData = {};
 
@@ -80,10 +80,14 @@ function loadSearchData() {
 
         console.log("검색창 검색 결과 로드 완료");
 
-        const renderResult = renderArticles(data, resultContainer);
+        const contentBox = document.getElementById("content-box");
+        const articleContainer = document.createElement("div");
+        articleContainer.id = "article-container";
 
-        resultContainer.innerHTML = "";
-        resultContainer.appendChild(renderResult);
+        const renderResult = renderArticles(data, [searchOption.category]);
+
+        articleContainer.appendChild(renderResult);
+        contentBox.appendChild(articleContainer);
     });
 }
 

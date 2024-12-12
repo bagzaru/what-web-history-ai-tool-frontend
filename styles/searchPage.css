@@ -8,82 +8,60 @@
   src: url('../assets/fonts/Raleway-VariableFont_wght.ttf') format('truetype');
 }
 
+html {
+  overflow-y: scroll;
+  margin: 0;
+  background-color: #fefbee;
+}
+
 /* 페이지 전체를 가운데 정렬하고 배경 색상 설정 */
 body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+
   margin: 0;
   font-family: Arial, sans-serif, ;
   background-color: #fefbee;
-
 }
 
 /* 컨테이너 스타일 */
 .container {
+  display: flex;
   text-align: center;
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  max-width: 500px;
-  min-width: 300px;
-  max-height: 500px;
-  min-height: 250px;
-  margin-top: 300px;
-  margin-bottom: 300px;
-  margin-left: 100px;
-  margin-right: 100px;
+  height: 100%;
+  box-sizing: border-box;
+  flex-direction: column;
 }
 
-/* 로고 스타일 */
-.logo {
-  font-size: 2em;
-  color: #3e3e3e;
-  font-weight: bold;
-  margin-top: 50px;
-  font-family: 'Noto Sans KR', serif;
-}
+.container .content-box {
+  flex: 1;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
 
-.logo h1 {
-  font-size: 36px;
-  font-weight: bold;
-  font-family: "Raleway", serif;
-  margin: 0px;
-  padding: 0px;
-}
+  overflow-y: auto;
 
-.logo hr {
-  width: 120px;
-  margin: 0 auto;
-  padding: 0;
-  border: none;
-  /* 기본 테두리 제거 */
-  background: #000;
-  /* 원하는 색상으로 배경 지정 */
-  height: 1px;
-  /* 굵기 1px로 지정 */
-  box-sizing: content-box;
-}
 
-.logo p {
-  font-family: 'Noto Sans KR', serif;
-  font-size: 12px;
-  font-weight: 200;
-  margin-top: 1px;
-  margin-bottom: 0px;
-  padding: 0px;
-}
-
-.logo h3 {
-  font-family: 'Noto Sans KR', serif;
-  font-size: 16px;
-  font-weight: 500;
-  margin: 10px;
-  padding: 0px;
-  color: #3e3e3e;
+  padding: 5px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  box-sizing: border-box;
 }
 
 /* 검색창 스타일 */
 .search-box {
+  width: 100%;
+  bottom: 0;
+
+  flex: 0;
+  margin: 10px;
   display: flex;
   align-items: center;
   border: 1px solid #ddd;
@@ -91,6 +69,8 @@ body {
   padding: 10px 10px;
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
   background-color: #fff;
+
+  box-sizing: border-box;
 }
 
 .search-box-inner {
