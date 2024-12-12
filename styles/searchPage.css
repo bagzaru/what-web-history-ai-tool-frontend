@@ -66,7 +66,6 @@ body {
   align-items: center;
   border: 1px solid #ddd;
   border-radius: 2px;
-  padding: 10px 10px;
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
   background-color: #fff;
 
@@ -83,7 +82,7 @@ body {
 
 .search-box-inner-top {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   flex: 1 1 auto;
   min-height: 50px;
   border: none;
@@ -91,12 +90,11 @@ body {
   font-size: 16px;
   color: #3e3e3e;
   background-color: #fff;
-
+  padding: 8px 16px;
 }
 
 .search-box-inner-top input {
-  flex: 0 1 auto;
-  margin-top: auto;
+  flex: 1 1 auto;
   border: none;
   outline: none;
   font-size: 16px;
@@ -126,6 +124,7 @@ body {
 /* 검색 입력 필드 스타일 */
 .search-input {
   flex: 1;
+  width: 100%;
   border: none;
   outline: none;
   font-size: 16px;
@@ -138,11 +137,10 @@ body {
 .search-button {
   background-color: #fff;
   color: #5e5e5e;
-  border-radius: 1px;
   padding: 8px 16px;
   font-size: 16px;
   cursor: pointer;
-  border: 1px solid #ccc;
+  border: none;
 }
 
 /* 버튼 호버 효과 */
@@ -197,9 +195,9 @@ body {
 }
 
 .button-box {
+  flex: 0;
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
   flex-wrap: wrap;
 
 }
@@ -233,16 +231,16 @@ body {
 .option-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
+
   align-items: center;
-  margin: 10px;
+  margin: 2px;
 }
 
 .option-container div {
   display: flex;
   width: 100%;
   padding: 7px;
-  border-bottom: 1px solid #ddd;
 }
 
 .option-container div.input input {
@@ -275,6 +273,7 @@ body {
   height: 35px;
   background-color: transparent;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
+  margin-left: 16px;
   color: #121212;
 }
