@@ -84,13 +84,13 @@ body {
   display: flex;
   flex-direction: row;
   flex: 1 1 auto;
-  min-height: 50px;
   border: none;
   outline: none;
   font-size: 16px;
   color: #3e3e3e;
   background-color: #fff;
-  padding: 8px 16px;
+  padding: 5px 16px;
+  align-items: center;
 }
 
 .search-box-inner-top input {
@@ -99,6 +99,7 @@ body {
   outline: none;
   font-size: 16px;
   padding: 4px;
+  height: 16px;
 }
 
 .search-box-inner-bottom {
@@ -137,7 +138,7 @@ body {
 .search-button {
   background-color: #fff;
   color: #5e5e5e;
-  padding: 8px 16px;
+  padding: 8px 2px;
   font-size: 16px;
   cursor: pointer;
   border: none;
@@ -235,12 +236,14 @@ body {
 
   align-items: center;
   margin: 2px;
+  margin-bottom: 0px;
+  padding: 1px;
+  padding-bottom: 0px;
 }
 
 .option-container div {
   display: flex;
   width: 100%;
-  padding: 7px;
 }
 
 .option-container div.input input {
@@ -273,9 +276,10 @@ body {
   height: 35px;
   background-color: transparent;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   margin-left: 16px;
   color: #121212;
+  padding: 0px;
 }
 
 .hidden {

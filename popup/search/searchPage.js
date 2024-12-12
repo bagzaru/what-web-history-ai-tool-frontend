@@ -16,11 +16,16 @@ document.addEventListener("DOMContentLoaded", async () => {
             loadSearchData();
         }
     });
-    searchInput.addEventListener('focus', () => {
-        toggleSearchOptionUIOnOff(true);
-    });
-    searchInput.addEventListener('blur', () => {
-        toggleSearchOptionUIOnOff(false);
+
+    document.addEventListener('click', (e) => {
+        const searchBox = document.getElementById('search-box');
+
+        if (searchBox.contains(e.target) === false) {
+            toggleSearchOptionUIOnOff(false);
+        }
+        else {
+            toggleSearchOptionUIOnOff(true);
+        }
     });
 
     //옵션 초기화
