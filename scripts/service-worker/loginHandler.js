@@ -1,3 +1,5 @@
+import { defaultHost } from "./networking/networkManager";
+
 // callback 대신 promise 사용
 function googleLogin() {
     return new Promise((resolve, reject) => {
@@ -30,7 +32,7 @@ async function loginHandler() {
         const idToken = await googleLogin();
         console.log("loginHandler Active: ", idToken);
         // 로그인 요청
-        const login_response = await fetch('https://capstonepractice.site/api/auth/oauth2/google', {
+        const login_response = await fetch(`${defaultHost}/api/auth/oauth2/google`, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
@@ -62,7 +64,7 @@ async function loginHandler() {
         await storeUserInfo(email, profilePicture);
 
         // 유저 카테고리 가져오기
-        const getCategoryResponse = await fetch('https://capstonepractice.site/api/category', {
+        const getCategoryResponse = await fetch(`${defaultHost}/api/category`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${jsonTokens.accessToken}`,
