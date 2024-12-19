@@ -3,7 +3,7 @@ import { createHistoryRequestDTO, searchHistoryRequestDTO } from "./historyDTO.j
 import getJavaDateString from "../date/javaDateConverter.js";
 
 //defaultHost: 기본 연결 서버 주소
-const defaultHost = "https://capstonepractice.site";
+export const defaultHost = "https://capstonepractice.site";
 
 //networkState: true일 때만 서버와의 통신 진행
 let networkState = true;

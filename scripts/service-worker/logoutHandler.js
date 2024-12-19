@@ -1,3 +1,5 @@
+import { defaultHost } from "./networking/networkManager";
+
 async function logoutHandler(){
     try {
         const token = await getToken();
@@ -5,7 +7,7 @@ async function logoutHandler(){
             "Accept": "*/*",
             "Authorization": `Bearer ${token}`,
         };
-        const url = "https://capstonepractice.site/api/auth/logout";
+        const url = `${defaultHost}/api/auth/logout`;
         const options = {
             method: "POST",
             headers: {
