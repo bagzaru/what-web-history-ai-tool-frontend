@@ -15,19 +15,19 @@ WHAT은 LLM을 통해 방문했던 페이지를 빠르게 검색하고 확인할
 
 ### 1. 크롬 개발자 모드 켜기
 
-![./img/3-1.png](./img/3-2.png)
+![./img/3-1.jpg](./img/3-1.jpg)
 
 ### 2. 압축해제된 확장 프로그램을 로드 (clone한 메인 repo 선택)
 
-![./img/3-2.png](./img/3-2.png)
+![./img/3-2.jpg](./img/3-2.jpg)
 
 ### 3. 확장 프로그램을 상단에 고정하고 아이콘을 클릭
 
-![상단 고정 스크린샷.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/2b742df8-46ab-4276-a950-4cd1e4ed9f85/bfc79d29-8bff-439a-bfd1-720e4c5d6efe/%EC%83%81%EB%8B%A8_%EA%B3%A0%EC%A0%95_%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7.png)
+![./img/3-3.png](./img/3-3.png)
 
 ### 4. 로그인하여 시작 (로그인에는 사용자의 구글 계정이 필요합니다)
 
-![로그인.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/2b742df8-46ab-4276-a950-4cd1e4ed9f85/b95042c8-6157-4118-898d-cbcc2ffaab0c/%EB%A1%9C%EA%B7%B8%EC%9D%B8.png)
+![./img/3-4.png](./img/3-4.png)
 
 # 주요 기능 및 사용 방법
 
@@ -49,7 +49,7 @@ WHAT은 LLM을 통해 방문했던 페이지를 빠르게 검색하고 확인할
 
 ## 전체 데이터 보기
 
-![그림1.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/2b742df8-46ab-4276-a950-4cd1e4ed9f85/9d3c9b74-7ba9-4dbc-9135-a6b8438b821f/%EA%B7%B8%EB%A6%BC1.png)
+![./img/5-1.png](./img/5-1.png)
 
 ### 1. 카테고리 분류
 
@@ -63,7 +63,7 @@ WHAT은 LLM을 통해 방문했던 페이지를 빠르게 검색하고 확인할
     - 정렬 기준 (최근 방문순, 방문 횟수, 체류 시간)
     - 오름차순 또는 내림차순 정렬
 
-![그림2.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/2b742df8-46ab-4276-a950-4cd1e4ed9f85/b9bdc9be-01f3-459a-aa51-36a17bd65c0f/%EA%B7%B8%EB%A6%BC2.png)
+![./img/5-2.png](./img/5-2.png)
 
 ### 3. 브라우저에서 열기
 
@@ -77,13 +77,13 @@ WHAT은 LLM을 통해 방문했던 페이지를 빠르게 검색하고 확인할
 
 - 해당 데이터를 삭제합니다.
 
-![그림3.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/2b742df8-46ab-4276-a950-4cd1e4ed9f85/4928c874-be9a-449b-bce5-11b185364bf0/%EA%B7%B8%EB%A6%BC3.png)
+![./img/5-3.png](./img/5-3.png)
 
 ### 6 ~ 9. WHAT에서 기록한 데이터
 
 - 짧은 요약은 해당 페이지의 내용을 짧게 요약한 것으로, 전체 내용을 보려면 해당 데이터 블록을 클릭하면 펼쳐집니다.
 
-![그림4.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/2b742df8-46ab-4276-a950-4cd1e4ed9f85/f73d49b2-c5fa-4789-a9cf-da4b2eac085b/%EA%B7%B8%EB%A6%BC4.png)
+![./img/5-4.png](./img/5-4.png)
 
 ### 10 ~ 12. 데이터 블록을 펼쳤을 때 보이는 데이터
 
@@ -128,7 +128,7 @@ WHAT의 검색 탭에서 저장된 페이지를 내용을 검색할 수 있습�
 
 ## 카테고리 페이지
 
-![그림5.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/2b742df8-46ab-4276-a950-4cd1e4ed9f85/26290fa4-a903-439c-8026-b08669cc52ae/%EA%B7%B8%EB%A6%BC5.png)
+![./img/7-1.png](./img/7-1.png)
 
 ### 1. 카테고리 목록
 
@@ -141,7 +141,7 @@ WHAT의 검색 탭에서 저장된 페이지를 내용을 검색할 수 있습�
 - 사용자는 원하는 카테고리가 있으면, 텍스트 박스에 추가할 이름을 입력하고, + 버튼 또는 엔터를 눌러 추가할 수 있습니다.
 - 추가한 카테고리는 즉시 카테고리 목록에 표시됩니다.
 
-![그림6.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/2b742df8-46ab-4276-a950-4cd1e4ed9f85/d0090989-20eb-468a-b934-ab6fcde2fd8a/%EA%B7%B8%EB%A6%BC6.png)
+![./img/7-2.png](./img/7-2.png)
 
 ### 3. 수정 사항 적용
 
