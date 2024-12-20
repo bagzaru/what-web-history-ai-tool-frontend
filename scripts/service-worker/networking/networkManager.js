@@ -3,13 +3,14 @@ import { createHistoryRequestDTO, searchHistoryRequestDTO } from "./historyDTO.j
 import getJavaDateString from "../date/javaDateConverter.js";
 
 //defaultHost: 기본 연결 서버 주소
-export const defaultHost = "https://capstonepractice.site";
+const defaultHost = "https://capstonepractice.site";
 
 //networkState: true일 때만 서버와의 통신 진행
 let networkState = true;
 
 //서버와의 통신 모듈
 const networkManager = {
+    getDefaultHost: getDefaultHost,
     getNetworkState: getNetworkState,
     setNetworkState: setNetworkState,
     post: {
@@ -259,6 +260,10 @@ function getFullPath(host, path) {
 
 function getNetworkState() {
     return networkState;
+}
+
+function getDefaultHost() {
+    return defaultHost;
 }
 
 function setNetworkState(state) {

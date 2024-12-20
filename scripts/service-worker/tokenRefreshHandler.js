@@ -1,3 +1,5 @@
+import networkManager from "./networking/networkManager.js";
+
 async function tokenRefreshHandler() {
     try {
         const tokens = await getToken();
@@ -8,7 +10,7 @@ async function tokenRefreshHandler() {
             "Authorization": `Bearer ${refreshToken}`,
             "Content-Type": "application/json",
         };
-        const url = "https://capstonepractice.site/api/auth/refresh";
+        const url = networkManager.getDefaultHost();
         const options = {
             method: "POST",
             headers: {
