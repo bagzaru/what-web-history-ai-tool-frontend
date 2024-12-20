@@ -108,7 +108,7 @@ const networkManager = {
             //updateSpnetTime: 해당 사이트의 체류 시간(visitTime) 업데이트합니다.
 
             //체류 시간 계산
-            const spentTime = (endTime - startTime)/1000;
+            const spentTime = Math.floor((endTime - startTime)/1000);
             console.log(`PUT:spentTime: url: ${url}, 머문 시간: ${spentTime}`);
 
             // query string으로 방식 변경

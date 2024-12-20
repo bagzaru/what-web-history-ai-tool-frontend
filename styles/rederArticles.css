@@ -122,6 +122,14 @@
     font-weight: 700;
     margin-top: 10px;
 }
+.spent-time {
+    align-items: center;
+    justify-content: center;
+    color: #121212;
+    font-size: 13px;
+    font-weight: 700;
+    margin-top: 10px;
+}
 .show-detail-button {
     margin-top: 5px;
     height: 20px;

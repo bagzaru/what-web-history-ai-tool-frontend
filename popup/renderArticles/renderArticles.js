@@ -101,6 +101,11 @@ export default function renderArticles(data, categories) {
         visitCountContainer.className = 'visit-count';
         visitCountContainer.style.display = 'none';
 
+        // 체류 시간 표시 div
+        const spentTimeContainer = document.createElement('div');
+        spentTimeContainer.className = 'spent-time';
+        spentTimeContainer.style.display = 'none';
+
         // 바닥 메뉴 (상세보기 버튼, 해당 데이터의 카테고리를 수정하는 메뉴가 있음)
         const showDetailButton = document.createElement('button');
         showDetailButton.className = 'show-detail-button';
@@ -120,11 +125,14 @@ export default function renderArticles(data, categories) {
                     return;
                 }
                 console.log("상세 데이터 로드 성공: " + data);
+                const spentTime = data.spentTime;
                 content.style.opacity = '1';
                 content.textContent = data.longSummary;
                 showDetailButton.style.display = 'none';
                 visitCountContainer.textContent = `이 페이지를 총 ${data.visitCount}번 방문했습니다.`;
                 visitCountContainer.style.display = 'flex';
+                spentTimeContainer.textContent = `이 페이지에서 ${Math.floor(spentTime/60)}분 ${spentTime%60}초 머물렀습니다`;
+                spentTimeContainer.style.display = 'flex';
             });
         })
 
@@ -220,6 +228,7 @@ export default function renderArticles(data, categories) {
         articleDiv.appendChild(content);
         articleDiv.appendChild(showDetailButton);
         articleDiv.appendChild(visitCountContainer);
+        articleDiv.appendChild(spentTimeContainer);
         articleDiv.appendChild(modifyCategoryContainer);
 
         // 기본값 display = none
@@ -235,6 +244,7 @@ export default function renderArticles(data, categories) {
                 showDetailButton.style.pointerEvents = 'auto';
                 modifyCategoryContainer.style.display = 'none';
                 visitCountContainer.style.display = 'none';
+                spentTimeContainer.style.display = 'none';
                 if (categoryDropdown.classList.contains('open')){
                     dropdownMenu.style.display = 'none';
                     categoryDropdown.classList.remove('open');
