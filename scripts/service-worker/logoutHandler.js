@@ -1,7 +1,9 @@
-import { defaultHost } from "./networking/networkManager";
+import networkManager from "./networking/networkManager.js";
 
 async function logoutHandler(){
     try {
+        const defaultHost = networkManager.getDefaultHost();
+        // const defaultHost = "https://capstonepractice.site";
         const token = await getToken();
         const defaultHeader = {
             "Accept": "*/*",
