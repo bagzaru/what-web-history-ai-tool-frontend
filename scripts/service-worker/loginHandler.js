@@ -1,4 +1,4 @@
-import { defaultHost } from "./networking/networkManager";
+import networkManager from "./networking/networkManager.js";
 
 // callback 대신 promise 사용
 function googleLogin() {
@@ -29,6 +29,8 @@ function googleLogin() {
 
 async function loginHandler() {
     try {
+        const defaultHost = networkManager.getDefaultHost();
+        // const defaultHost = "https://capstonepractice.site";
         const idToken = await googleLogin();
         console.log("loginHandler Active: ", idToken);
         // 로그인 요청
