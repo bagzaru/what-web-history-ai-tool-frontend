@@ -101,6 +101,25 @@ const networkManager = {
             const data = await put(fullPath, stringBody);
             console.log(`PUT: updateCategory 완료, 반환된 값: ${data}`);
             return data;
+        },
+        updateSpentTime: async function ({ url, startTime = (new Date()).getTime(), endTime = (new Date()).getTime() }) {
+            if(getNetworkState() === false) throw new Error(`현재 오프라인 모드입니다.`);
+            //updateSpnetTime: 해당 사이트의 체류 시간(visitTime) 업데이트합니다.
+
+            //체류 시간 계산
+            const spentTime = endTime - startTime;
+            console.log(`PUT:spentTime: url: ${url}, 머문 시간: ${spentTime}`);
+
+            // query string으로 방식 변경
+            const path = '/api/history?';
+            const category = "";
+            let queryString = `url=${encodeURIComponent(url)}&category=${encodeURIComponent(category)}&spentTime=${spentTime}`;
+
+            const fullPath = getFullPath(defaultHost, path + queryString);
+            console.log("PUT요청 쿼리스트링:", fullPath);
+            const data = await put(fullPath);
+            console.log(`PUT: updateSpentTime 완료, 반환된 값: ${JSON.stringify(data)}`);
+            return data;
         }
     },
     get: {

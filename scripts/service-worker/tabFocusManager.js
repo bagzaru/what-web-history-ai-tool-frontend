@@ -23,14 +23,15 @@ const tabFocusManager = {
 
         //현재 시간 값 적용하여 서버에 전송
         //보낼 값이 없을 경우에는 전송하지 않는다.
-        if (this.currentFocus.url !== "") {
+        if(this.currentFocus.url.startsWith("chrome://")===true){
+            console.log("크롬 내부 페이지로 포커스 이동됨, 체류 시간 미전송"+this.currentFocus.url);
+        }else if (this.currentFocus.url !== "") {
             const toSend = {
                 ...this.currentFocus,
                 endTime: (new Date()).getTime()
             }
             console.log("포커스 변경됨, 기존: " + toSend.url + ", 체류시간: " + (toSend.endTime - toSend.startTime));
-            // networkManager.put.updateHistory(toSend)
-            //     .catch((e) => { console.log("tabFocusManager: visitTime 전송 중 에러 발생: " + e.message) });
+            networkManager.put.updateSpentTime(toSend).catch((error) => { console.log("페이지 데이터 분석 전에 페이지 떠남, 체류 시간 0으로 저장됨, message:"+ error+" ,url: "+toSend.url) });
         }
         this.currentFocus = {
             ...this.currentFocus,
