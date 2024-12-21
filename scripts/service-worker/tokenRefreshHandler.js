@@ -10,7 +10,7 @@ async function tokenRefreshHandler() {
             "Authorization": `Bearer ${refreshToken}`,
             "Content-Type": "application/json",
         };
-        const url = networkManager.getDefaultHost();
+        const url = `${networkManager.getDefaultHost()}/api/auth/refresh`;
         const options = {
             method: "POST",
             headers: {
